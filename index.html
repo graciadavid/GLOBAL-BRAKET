@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-
 <meta charset="utf-8">
-<title>Global City Cup</title>
+<title>Global Bracket</title>
 
 <style>
 
 body{
-background:#0f0f0f;
+background:#0c1a3a;
 font-family:Arial;
 color:white;
 text-align:center;
@@ -16,54 +15,87 @@ text-align:center;
 
 h1{
 margin:20px;
+letter-spacing:2px;
 }
 
 .bracket{
 display:flex;
 justify-content:center;
-align-items:flex-start;
+align-items:center;
 gap:40px;
 margin-top:40px;
 }
 
-.side{
+/* COLUMNAS */
+
+.column{
 display:flex;
+flex-direction:column;
 gap:40px;
 }
 
-.round{
-display:flex;
-flex-direction:column;
-gap:30px;
-}
+/* PARTIDOS */
 
 .match{
-background:#1e1e1e;
-padding:8px;
+background:#162b5c;
+padding:10px;
 border-radius:6px;
-width:160px;
-font-size:14px;
+width:180px;
+position:relative;
 }
 
-.city{
+.team{
 display:flex;
 justify-content:space-between;
-padding:4px 0;
+padding:4px;
 }
 
+/* BOTONES */
+
 button{
-background:#00ff88;
+background:#00ffc8;
 border:none;
-padding:2px 6px;
 border-radius:4px;
+padding:2px 6px;
 cursor:pointer;
+font-size:12px;
+}
+
+/* CONECTORES */
+
+.match::after{
+content:"";
+position:absolute;
+right:-20px;
+top:50%;
+width:20px;
+height:2px;
+background:white;
+}
+
+.column.mid .match::after{
+display:none;
+}
+
+/* CENTRO */
+
+.center{
+display:flex;
+flex-direction:column;
+align-items:center;
+gap:20px;
+}
+
+.trophy{
+font-size:80px;
 }
 
 .final{
-display:flex;
-flex-direction:column;
-justify-content:center;
-gap:30px;
+background:#00ffc8;
+color:black;
+padding:12px 20px;
+border-radius:10px;
+font-weight:bold;
 }
 
 </style>
@@ -72,42 +104,38 @@ gap:30px;
 
 <body>
 
-<h1>🌍 GLOBAL CITY CUP</h1>
+<h1>GLOBAL CITY CUP</h1>
 
 <div class="bracket">
 
 <!-- LEFT SIDE -->
 
-<div class="side">
+<div class="column">
 
-<div class="round">
-<h3>Round 64</h3>
+<div class="match">
+<div class="team">Tokyo <button>Vote</button></div>
+<div class="team">New York <button>Vote</button></div>
+</div>
 
-<div class="match"><div class="city">Tokyo <button>Vote</button></div><div class="city">New York <button>Vote</button></div></div>
-<div class="match"><div class="city">London <button>Vote</button></div><div class="city">Paris <button>Vote</button></div></div>
-<div class="match"><div class="city">Madrid <button>Vote</button></div><div class="city">Barcelona <button>Vote</button></div></div>
-<div class="match"><div class="city">Rome <button>Vote</button></div><div class="city">Berlin <button>Vote</button></div></div>
-<div class="match"><div class="city">Amsterdam <button>Vote</button></div><div class="city">Lisbon <button>Vote</button></div></div>
-<div class="match"><div class="city">Vienna <button>Vote</button></div><div class="city">Prague <button>Vote</button></div></div>
-<div class="match"><div class="city">Budapest <button>Vote</button></div><div class="city">Athens <button>Vote</button></div></div>
-<div class="match"><div class="city">Istanbul <button>Vote</button></div><div class="city">Dubai <button>Vote</button></div></div>
+<div class="match">
+<div class="team">London <button>Vote</button></div>
+<div class="team">Paris <button>Vote</button></div>
+</div>
+
+<div class="match">
+<div class="team">Madrid <button>Vote</button></div>
+<div class="team">Barcelona <button>Vote</button></div>
+</div>
+
+<div class="match">
+<div class="team">Rome <button>Vote</button></div>
+<div class="team">Berlin <button>Vote</button></div>
+</div>
 
 </div>
 
 
-<div class="round">
-<h3>Round 32</h3>
-
-<div class="match">Winner</div>
-<div class="match">Winner</div>
-<div class="match">Winner</div>
-<div class="match">Winner</div>
-
-</div>
-
-
-<div class="round">
-<h3>Round 16</h3>
+<div class="column">
 
 <div class="match">Winner</div>
 <div class="match">Winner</div>
@@ -115,66 +143,54 @@ gap:30px;
 </div>
 
 
-<div class="round">
-<h3>Quarter</h3>
+<div class="column">
 
 <div class="match">Winner</div>
 
 </div>
 
 
-<div class="round">
-<h3>Semi</h3>
+<!-- CENTER -->
 
-<div class="match">Winner</div>
+<div class="center">
 
-</div>
-
-</div>
-
-<!-- FINAL -->
+<div class="trophy">🏆</div>
 
 <div class="final">
-
-<h3>FINAL</h3>
-
-<div class="match">Winner</div>
+FINAL
+</div>
 
 </div>
 
 
 <!-- RIGHT SIDE -->
 
-<div class="side">
+<div class="column mid">
 
-<div class="round">
-<h3>Round 64</h3>
+<div class="match">
+<div class="team">Sydney <button>Vote</button></div>
+<div class="team">Melbourne <button>Vote</button></div>
+</div>
 
-<div class="match"><div class="city">Sydney <button>Vote</button></div><div class="city">Melbourne <button>Vote</button></div></div>
-<div class="match"><div class="city">Toronto <button>Vote</button></div><div class="city">Vancouver <button>Vote</button></div></div>
-<div class="match"><div class="city">Los Angeles <button>Vote</button></div><div class="city">Chicago <button>Vote</button></div></div>
-<div class="match"><div class="city">Miami <button>Vote</button></div><div class="city">Mexico City <button>Vote</button></div></div>
-<div class="match"><div class="city">Sao Paulo <button>Vote</button></div><div class="city">Rio <button>Vote</button></div></div>
-<div class="match"><div class="city">Buenos Aires <button>Vote</button></div><div class="city">Santiago <button>Vote</button></div></div>
-<div class="match"><div class="city">Seoul <button>Vote</button></div><div class="city">Shanghai <button>Vote</button></div></div>
-<div class="match"><div class="city">Singapore <button>Vote</button></div><div class="city">Bangkok <button>Vote</button></div></div>
+<div class="match">
+<div class="team">Toronto <button>Vote</button></div>
+<div class="team">Vancouver <button>Vote</button></div>
+</div>
+
+<div class="match">
+<div class="team">Seoul <button>Vote</button></div>
+<div class="team">Shanghai <button>Vote</button></div>
+</div>
+
+<div class="match">
+<div class="team">Singapore <button>Vote</button></div>
+<div class="team">Bangkok <button>Vote</button></div>
+</div>
 
 </div>
 
 
-<div class="round">
-<h3>Round 32</h3>
-
-<div class="match">Winner</div>
-<div class="match">Winner</div>
-<div class="match">Winner</div>
-<div class="match">Winner</div>
-
-</div>
-
-
-<div class="round">
-<h3>Round 16</h3>
+<div class="column mid">
 
 <div class="match">Winner</div>
 <div class="match">Winner</div>
@@ -182,20 +198,9 @@ gap:30px;
 </div>
 
 
-<div class="round">
-<h3>Quarter</h3>
+<div class="column mid">
 
 <div class="match">Winner</div>
-
-</div>
-
-
-<div class="round">
-<h3>Semi</h3>
-
-<div class="match">Winner</div>
-
-</div>
 
 </div>
 
