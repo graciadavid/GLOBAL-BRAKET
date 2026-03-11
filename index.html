@@ -2,20 +2,14 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>Global City Cup</title>
 
 <style>
 
 body{
-margin:0;
-font-family:Arial;
-background:linear-gradient(180deg,#3b36b6,#000);
+background:linear-gradient(#3a36b0,#000);
+font-family:sans-serif;
 color:white;
 text-align:center;
-}
-
-h1{
-margin-top:30px;
 }
 
 .bracket{
@@ -27,53 +21,54 @@ margin-top:60px;
 
 /* COLUMNAS */
 
-.round{
+.col{
 display:flex;
 flex-direction:column;
 }
 
-/* GAP POR RONDA */
+/* SEPARACIÓN REAL DE RONDAS */
 
-.r16{gap:20px;}
-.qf{gap:60px;}
-.sf{gap:120px;}
+.r16{ gap:20px }
+.qf{ gap:80px }
+.sf{ gap:180px }
+
+/* PARTIDOS */
+
+.match{
+width:140px;
+height:32px;
+background:#ddd;
+border-radius:20px;
+display:flex;
+align-items:center;
+justify-content:center;
+color:#000;
+font-size:12px;
+}
+
+/* FINAL */
 
 .final{
 display:flex;
 align-items:center;
 }
 
-/* MATCH */
-
-.match{
-width:140px;
-height:32px;
-background:linear-gradient(90deg,#eee,#bbb);
-border-radius:20px;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:12px;
-color:black;
+.champion{
+background:#00e7b2;
 font-weight:bold;
 }
 
-.champion{
-background:#00e7b2;
-}
-
 </style>
+
 </head>
 
 <body>
 
-<h1>GLOBAL CITY CUP</h1>
+<h2>GLOBAL CITY CUP</h2>
 
 <div class="bracket">
 
-<!-- LEFT R16 -->
-
-<div class="round r16">
+<div class="col r16">
 <div class="match">Tokyo</div>
 <div class="match">London</div>
 <div class="match">Madrid</div>
@@ -84,47 +79,35 @@ background:#00e7b2;
 <div class="match">Athens</div>
 </div>
 
-<!-- LEFT QF -->
-
-<div class="round qf">
+<div class="col qf">
 <div class="match">Winner</div>
 <div class="match">Winner</div>
 <div class="match">Winner</div>
 <div class="match">Winner</div>
 </div>
 
-<!-- LEFT SF -->
-
-<div class="round sf">
+<div class="col sf">
 <div class="match">Winner</div>
 <div class="match">Winner</div>
 </div>
 
-<!-- FINAL -->
-
-<div class="round final">
+<div class="col final">
 <div class="match champion">CHAMPION</div>
 </div>
 
-<!-- RIGHT SF -->
-
-<div class="round sf">
+<div class="col sf">
 <div class="match">Winner</div>
 <div class="match">Winner</div>
 </div>
 
-<!-- RIGHT QF -->
-
-<div class="round qf">
+<div class="col qf">
 <div class="match">Winner</div>
 <div class="match">Winner</div>
 <div class="match">Winner</div>
 <div class="match">Winner</div>
 </div>
 
-<!-- RIGHT R16 -->
-
-<div class="round r16">
+<div class="col r16">
 <div class="match">Sydney</div>
 <div class="match">Toronto</div>
 <div class="match">Seoul</div>
