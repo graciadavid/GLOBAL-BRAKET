@@ -1,34 +1,42 @@
 <!DOCTYPE html>
 <html>
 <head>
+
 <meta charset="utf-8">
-<title>Global Bracket</title>
+<title>Global City Cup</title>
 
 <style>
 
 body{
-background:#0c1a3a;
+margin:0;
 font-family:Arial;
+background:#0b1c3d;
 color:white;
 text-align:center;
 }
 
 h1{
 margin:20px;
-letter-spacing:2px;
+letter-spacing:3px;
+}
+
+/* SCROLL BRACKET */
+
+.wrapper{
+overflow-x:auto;
+padding:40px;
 }
 
 .bracket{
 display:flex;
-justify-content:center;
+gap:80px;
 align-items:center;
-gap:40px;
-margin-top:40px;
+min-width:1200px;
 }
 
 /* COLUMNAS */
 
-.column{
+.round{
 display:flex;
 flex-direction:column;
 gap:40px;
@@ -37,44 +45,24 @@ gap:40px;
 /* PARTIDOS */
 
 .match{
-background:#162b5c;
-padding:10px;
-border-radius:6px;
+background:#1c2f5e;
+padding:12px;
+border-radius:8px;
 width:180px;
-position:relative;
 }
 
 .team{
 display:flex;
 justify-content:space-between;
-padding:4px;
+margin:4px 0;
 }
-
-/* BOTONES */
 
 button{
-background:#00ffc8;
+background:#00e7b2;
 border:none;
 border-radius:4px;
-padding:2px 6px;
+padding:3px 8px;
 cursor:pointer;
-font-size:12px;
-}
-
-/* CONECTORES */
-
-.match::after{
-content:"";
-position:absolute;
-right:-20px;
-top:50%;
-width:20px;
-height:2px;
-background:white;
-}
-
-.column.mid .match::after{
-display:none;
 }
 
 /* CENTRO */
@@ -87,13 +75,13 @@ gap:20px;
 }
 
 .trophy{
-font-size:80px;
+font-size:70px;
 }
 
 .final{
-background:#00ffc8;
+background:#00e7b2;
 color:black;
-padding:12px 20px;
+padding:12px 24px;
 border-radius:10px;
 font-weight:bold;
 }
@@ -106,11 +94,13 @@ font-weight:bold;
 
 <h1>GLOBAL CITY CUP</h1>
 
+<div class="wrapper">
+
 <div class="bracket">
 
 <!-- LEFT SIDE -->
 
-<div class="column">
+<div class="round">
 
 <div class="match">
 <div class="team">Tokyo <button>Vote</button></div>
@@ -135,7 +125,7 @@ font-weight:bold;
 </div>
 
 
-<div class="column">
+<div class="round">
 
 <div class="match">Winner</div>
 <div class="match">Winner</div>
@@ -143,7 +133,7 @@ font-weight:bold;
 </div>
 
 
-<div class="column">
+<div class="round">
 
 <div class="match">Winner</div>
 
@@ -165,7 +155,7 @@ FINAL
 
 <!-- RIGHT SIDE -->
 
-<div class="column mid">
+<div class="round">
 
 <div class="match">
 <div class="team">Sydney <button>Vote</button></div>
@@ -190,7 +180,7 @@ FINAL
 </div>
 
 
-<div class="column mid">
+<div class="round">
 
 <div class="match">Winner</div>
 <div class="match">Winner</div>
@@ -198,9 +188,12 @@ FINAL
 </div>
 
 
-<div class="column mid">
+<div class="round">
 
 <div class="match">Winner</div>
+
+</div>
+
 
 </div>
 
