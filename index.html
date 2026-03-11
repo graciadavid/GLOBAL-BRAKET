@@ -9,82 +9,55 @@
 body{
 margin:0;
 font-family:Arial;
-background:#0a1c3d;
+background:linear-gradient(180deg,#3b36b6,#000);
 color:white;
 text-align:center;
 }
 
 h1{
-margin:20px;
-letter-spacing:3px;
+margin-top:40px;
+letter-spacing:4px;
 }
 
 .wrapper{
 overflow-x:auto;
-padding:40px;
+padding:60px;
 }
 
 .bracket{
-display:flex;
+display:grid;
+grid-template-columns:
+220px 220px 220px 220px 200px 220px 220px 220px 220px;
+gap:30px;
 align-items:center;
-gap:70px;
-min-width:1100px;
+min-width:1400px;
 }
 
-/* RONDAS */
-
-.round{
-display:flex;
-flex-direction:column;
-gap:50px;
-}
-
-/* PARTIDOS */
+/* MATCH BOX */
 
 .match{
-background:#1c2f5e;
-padding:10px;
-border-radius:8px;
-width:170px;
-}
-
-.team{
+background:linear-gradient(90deg,#eee,#bbb);
+border-radius:40px;
+height:45px;
 display:flex;
-justify-content:space-between;
-margin:5px 0;
-}
-
-button{
-background:#00e7b2;
-border:none;
-border-radius:4px;
-padding:3px 8px;
-cursor:pointer;
-}
-
-/* CENTRO */
-
-.center{
-display:flex;
-flex-direction:column;
 align-items:center;
-gap:20px;
-}
-
-.trophy{
-font-size:70px;
-}
-
-.final{
-background:#00e7b2;
+justify-content:center;
 color:black;
-padding:12px 22px;
-border-radius:10px;
 font-weight:bold;
 }
 
-</style>
+/* SPACING */
 
+.r32 .match{margin:25px 0;}
+.r16 .match{margin:70px 0;}
+.qf .match{margin:140px 0;}
+.sf .match{margin:220px 0;}
+
+.final{
+margin-top:200px;
+}
+
+</style>
 </head>
 
 <body>
@@ -95,106 +68,71 @@ font-weight:bold;
 
 <div class="bracket">
 
+<!-- LEFT R32 -->
+<div class="round r32">
+<div class="match">Tokyo</div>
+<div class="match">London</div>
+<div class="match">Madrid</div>
+<div class="match">Rome</div>
+<div class="match">Amsterdam</div>
+<div class="match">Vienna</div>
+<div class="match">Budapest</div>
+<div class="match">Athens</div>
+</div>
+
 <!-- LEFT R16 -->
-
-<div class="round">
-
-<div class="match">
-<div class="team">Tokyo <button>Vote</button></div>
-<div class="team">New York <button>Vote</button></div>
-</div>
-
-<div class="match">
-<div class="team">London <button>Vote</button></div>
-<div class="team">Paris <button>Vote</button></div>
-</div>
-
-<div class="match">
-<div class="team">Madrid <button>Vote</button></div>
-<div class="team">Barcelona <button>Vote</button></div>
-</div>
-
-<div class="match">
-<div class="team">Rome <button>Vote</button></div>
-<div class="team">Berlin <button>Vote</button></div>
-</div>
-
-</div>
-
-
-<!-- LEFT QUARTER -->
-
-<div class="round">
-
+<div class="round r16">
 <div class="match">Winner</div>
 <div class="match">Winner</div>
-
-</div>
-
-
-<!-- LEFT SEMI -->
-
-<div class="round">
-
-<div class="match">Winner</div>
-
-</div>
-
-
-<!-- CENTER -->
-
-<div class="center">
-
-<div class="trophy">🏆</div>
-
-<div class="final">FINAL</div>
-
-</div>
-
-
-<!-- RIGHT SEMI -->
-
-<div class="round">
-
-<div class="match">Winner</div>
-
-</div>
-
-
-<!-- RIGHT QUARTER -->
-
-<div class="round">
-
 <div class="match">Winner</div>
 <div class="match">Winner</div>
-
 </div>
 
+<!-- LEFT QF -->
+<div class="round qf">
+<div class="match">Winner</div>
+<div class="match">Winner</div>
+</div>
+
+<!-- LEFT SF -->
+<div class="round sf">
+<div class="match">Winner</div>
+</div>
+
+<!-- FINAL -->
+<div class="round final">
+<div class="match">CHAMPION</div>
+</div>
+
+<!-- RIGHT SF -->
+<div class="round sf">
+<div class="match">Winner</div>
+</div>
+
+<!-- RIGHT QF -->
+<div class="round qf">
+<div class="match">Winner</div>
+<div class="match">Winner</div>
+</div>
 
 <!-- RIGHT R16 -->
-
-<div class="round">
-
-<div class="match">
-<div class="team">Sydney <button>Vote</button></div>
-<div class="team">Melbourne <button>Vote</button></div>
+<div class="round r16">
+<div class="match">Winner</div>
+<div class="match">Winner</div>
+<div class="match">Winner</div>
+<div class="match">Winner</div>
 </div>
 
-<div class="match">
-<div class="team">Toronto <button>Vote</button></div>
-<div class="team">Vancouver <button>Vote</button></div>
-</div>
-
-<div class="match">
-<div class="team">Seoul <button>Vote</button></div>
-<div class="team">Shanghai <button>Vote</button></div>
-</div>
-
-<div class="match">
-<div class="team">Singapore <button>Vote</button></div>
-<div class="team">Bangkok <button>Vote</button></div>
-</div>
-
+<!-- RIGHT R32 -->
+<div class="round r32">
+<div class="match">Sydney</div>
+<div class="match">Toronto</div>
+<div class="match">Seoul</div>
+<div class="match">Singapore</div>
+<div class="match">Dubai</div>
+<div class="match">Bangkok</div>
+<div class="match">Shanghai</div>
+<div class="match">Hong Kong</div>
 </div>
 
 </div>
