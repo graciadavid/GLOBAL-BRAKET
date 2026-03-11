@@ -1,90 +1,118 @@
 <!DOCTYPE html>
 <html>
 <head>
+
 <meta charset="utf-8">
 <title>Global City Cup</title>
 
 <style>
 
 body{
+background:#0e0e0e;
 font-family:Arial;
-background:#111;
 color:white;
 text-align:center;
 }
 
 h1{
-margin-top:30px;
+margin:30px;
+}
+
+.bracket{
+display:flex;
+justify-content:center;
+gap:60px;
+}
+
+.round{
+display:flex;
+flex-direction:column;
+gap:40px;
 }
 
 .match{
+background:#1a1a1a;
+padding:10px;
+border-radius:8px;
+width:160px;
+}
+
+.city{
 display:flex;
 justify-content:space-between;
-align-items:center;
-background:#222;
-margin:10px auto;
-padding:15px;
-width:320px;
-border-radius:8px;
+padding:5px 0;
 }
 
 button{
 background:#00ff88;
 border:none;
-padding:6px 12px;
-cursor:pointer;
 border-radius:4px;
+padding:2px 6px;
+cursor:pointer;
 }
 
 </style>
+
 </head>
 
 <body>
 
 <h1>🌍 GLOBAL CITY CUP</h1>
 
-<div id="matches"></div>
+<div class="bracket">
 
-<script>
+<div class="round">
+<h3>Round of 16</h3>
 
-const cities=[
-"Tokyo","New York","London","Paris","Madrid","Barcelona","Rome","Berlin",
-"Amsterdam","Lisbon","Vienna","Prague","Budapest","Athens","Istanbul","Dubai",
-"Sydney","Melbourne","Toronto","Vancouver","Los Angeles","Chicago","Miami","Mexico City",
-"Sao Paulo","Rio","Buenos Aires","Santiago","Lima","Bogota","Caracas","Panama",
-"Seoul","Shanghai","Beijing","Hong Kong","Bangkok","Singapore","Jakarta","Manila",
-"Delhi","Mumbai","Bangalore","Kuala Lumpur","Hanoi","Ho Chi Minh","Taipei","Osaka",
-"Stockholm","Copenhagen","Oslo","Helsinki","Warsaw","Krakow","Zurich","Geneva",
-"Brussels","Dublin","Edinburgh","Glasgow","Monaco","Nice","Florence","Venice"
-]
+<div class="match">
+<div class="city">Tokyo <button>Vote</button></div>
+<div class="city">New York <button>Vote</button></div>
+</div>
 
-const matchesDiv=document.getElementById("matches")
+<div class="match">
+<div class="city">London <button>Vote</button></div>
+<div class="city">Paris <button>Vote</button></div>
+</div>
 
-for(let i=0;i<cities.length;i+=2){
+<div class="match">
+<div class="city">Madrid <button>Vote</button></div>
+<div class="city">Barcelona <button>Vote</button></div>
+</div>
 
-const a=cities[i]
-const b=cities[i+1]
+<div class="match">
+<div class="city">Rome <button>Vote</button></div>
+<div class="city">Berlin <button>Vote</button></div>
+</div>
 
-const div=document.createElement("div")
-div.className="match"
+</div>
 
-div.innerHTML=`
-<span>${a}</span>
-<button onclick="vote('${a}','${b}')">Vote</button>
-<span>${b}</span>
-`
 
-matchesDiv.appendChild(div)
+<div class="round">
+<h3>Quarterfinal</h3>
 
-}
+<div class="match">Winner</div>
+<div class="match">Winner</div>
 
-function vote(a,b){
+</div>
 
-alert("You voted!")
 
-}
+<div class="round">
+<h3>Semifinal</h3>
 
-</script>
+<div class="match">Winner</div>
+
+</div>
+
+
+<div class="round">
+<h3>Final</h3>
+
+<div class="match">Winner</div>
+
+</div>
+
+
+</div>
 
 </body>
 </html>
