@@ -8,47 +8,62 @@
 <style>
 
 body{
-background:#0e0e0e;
+background:#0f0f0f;
 font-family:Arial;
 color:white;
 text-align:center;
 }
 
 h1{
-margin:30px;
+margin:20px;
 }
 
 .bracket{
 display:flex;
 justify-content:center;
-gap:60px;
+align-items:flex-start;
+gap:40px;
+margin-top:40px;
+}
+
+.side{
+display:flex;
+gap:40px;
 }
 
 .round{
 display:flex;
 flex-direction:column;
-gap:40px;
+gap:30px;
 }
 
 .match{
-background:#1a1a1a;
-padding:10px;
-border-radius:8px;
+background:#1e1e1e;
+padding:8px;
+border-radius:6px;
 width:160px;
+font-size:14px;
 }
 
 .city{
 display:flex;
 justify-content:space-between;
-padding:5px 0;
+padding:4px 0;
 }
 
 button{
 background:#00ff88;
 border:none;
-border-radius:4px;
 padding:2px 6px;
+border-radius:4px;
 cursor:pointer;
+}
+
+.final{
+display:flex;
+flex-direction:column;
+justify-content:center;
+gap:30px;
 }
 
 </style>
@@ -61,34 +76,38 @@ cursor:pointer;
 
 <div class="bracket">
 
+<!-- LEFT SIDE -->
+
+<div class="side">
+
 <div class="round">
-<h3>Round of 16</h3>
+<h3>Round 64</h3>
 
-<div class="match">
-<div class="city">Tokyo <button>Vote</button></div>
-<div class="city">New York <button>Vote</button></div>
-</div>
-
-<div class="match">
-<div class="city">London <button>Vote</button></div>
-<div class="city">Paris <button>Vote</button></div>
-</div>
-
-<div class="match">
-<div class="city">Madrid <button>Vote</button></div>
-<div class="city">Barcelona <button>Vote</button></div>
-</div>
-
-<div class="match">
-<div class="city">Rome <button>Vote</button></div>
-<div class="city">Berlin <button>Vote</button></div>
-</div>
+<div class="match"><div class="city">Tokyo <button>Vote</button></div><div class="city">New York <button>Vote</button></div></div>
+<div class="match"><div class="city">London <button>Vote</button></div><div class="city">Paris <button>Vote</button></div></div>
+<div class="match"><div class="city">Madrid <button>Vote</button></div><div class="city">Barcelona <button>Vote</button></div></div>
+<div class="match"><div class="city">Rome <button>Vote</button></div><div class="city">Berlin <button>Vote</button></div></div>
+<div class="match"><div class="city">Amsterdam <button>Vote</button></div><div class="city">Lisbon <button>Vote</button></div></div>
+<div class="match"><div class="city">Vienna <button>Vote</button></div><div class="city">Prague <button>Vote</button></div></div>
+<div class="match"><div class="city">Budapest <button>Vote</button></div><div class="city">Athens <button>Vote</button></div></div>
+<div class="match"><div class="city">Istanbul <button>Vote</button></div><div class="city">Dubai <button>Vote</button></div></div>
 
 </div>
 
 
 <div class="round">
-<h3>Quarterfinal</h3>
+<h3>Round 32</h3>
+
+<div class="match">Winner</div>
+<div class="match">Winner</div>
+<div class="match">Winner</div>
+<div class="match">Winner</div>
+
+</div>
+
+
+<div class="round">
+<h3>Round 16</h3>
 
 <div class="match">Winner</div>
 <div class="match">Winner</div>
@@ -97,7 +116,7 @@ cursor:pointer;
 
 
 <div class="round">
-<h3>Semifinal</h3>
+<h3>Quarter</h3>
 
 <div class="match">Winner</div>
 
@@ -105,12 +124,80 @@ cursor:pointer;
 
 
 <div class="round">
-<h3>Final</h3>
+<h3>Semi</h3>
 
 <div class="match">Winner</div>
 
 </div>
 
+</div>
+
+<!-- FINAL -->
+
+<div class="final">
+
+<h3>FINAL</h3>
+
+<div class="match">Winner</div>
+
+</div>
+
+
+<!-- RIGHT SIDE -->
+
+<div class="side">
+
+<div class="round">
+<h3>Round 64</h3>
+
+<div class="match"><div class="city">Sydney <button>Vote</button></div><div class="city">Melbourne <button>Vote</button></div></div>
+<div class="match"><div class="city">Toronto <button>Vote</button></div><div class="city">Vancouver <button>Vote</button></div></div>
+<div class="match"><div class="city">Los Angeles <button>Vote</button></div><div class="city">Chicago <button>Vote</button></div></div>
+<div class="match"><div class="city">Miami <button>Vote</button></div><div class="city">Mexico City <button>Vote</button></div></div>
+<div class="match"><div class="city">Sao Paulo <button>Vote</button></div><div class="city">Rio <button>Vote</button></div></div>
+<div class="match"><div class="city">Buenos Aires <button>Vote</button></div><div class="city">Santiago <button>Vote</button></div></div>
+<div class="match"><div class="city">Seoul <button>Vote</button></div><div class="city">Shanghai <button>Vote</button></div></div>
+<div class="match"><div class="city">Singapore <button>Vote</button></div><div class="city">Bangkok <button>Vote</button></div></div>
+
+</div>
+
+
+<div class="round">
+<h3>Round 32</h3>
+
+<div class="match">Winner</div>
+<div class="match">Winner</div>
+<div class="match">Winner</div>
+<div class="match">Winner</div>
+
+</div>
+
+
+<div class="round">
+<h3>Round 16</h3>
+
+<div class="match">Winner</div>
+<div class="match">Winner</div>
+
+</div>
+
+
+<div class="round">
+<h3>Quarter</h3>
+
+<div class="match">Winner</div>
+
+</div>
+
+
+<div class="round">
+<h3>Semi</h3>
+
+<div class="match">Winner</div>
+
+</div>
+
+</div>
 
 </div>
 
