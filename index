@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Global City Cup</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#111;
+color:white;
+text-align:center;
+}
+
+h1{
+margin-top:30px;
+}
+
+.match{
+display:flex;
+justify-content:space-between;
+align-items:center;
+background:#222;
+margin:10px auto;
+padding:15px;
+width:320px;
+border-radius:8px;
+}
+
+button{
+background:#00ff88;
+border:none;
+padding:6px 12px;
+cursor:pointer;
+border-radius:4px;
+}
+
+</style>
+</head>
+
+<body>
+
+<h1>🌍 GLOBAL CITY CUP</h1>
+
+<div id="matches"></div>
+
+<script>
+
+const cities=[
+"Tokyo","New York","London","Paris","Madrid","Barcelona","Rome","Berlin",
+"Amsterdam","Lisbon","Vienna","Prague","Budapest","Athens","Istanbul","Dubai",
+"Sydney","Melbourne","Toronto","Vancouver","Los Angeles","Chicago","Miami","Mexico City",
+"Sao Paulo","Rio","Buenos Aires","Santiago","Lima","Bogota","Caracas","Panama",
+"Seoul","Shanghai","Beijing","Hong Kong","Bangkok","Singapore","Jakarta","Manila",
+"Delhi","Mumbai","Bangalore","Kuala Lumpur","Hanoi","Ho Chi Minh","Taipei","Osaka",
+"Stockholm","Copenhagen","Oslo","Helsinki","Warsaw","Krakow","Zurich","Geneva",
+"Brussels","Dublin","Edinburgh","Glasgow","Monaco","Nice","Florence","Venice"
+]
+
+const matchesDiv=document.getElementById("matches")
+
+for(let i=0;i<cities.length;i+=2){
+
+const a=cities[i]
+const b=cities[i+1]
+
+const div=document.createElement("div")
+div.className="match"
+
+div.innerHTML=`
+<span>${a}</span>
+<button onclick="vote('${a}','${b}')">Vote</button>
+<span>${b}</span>
+`
+
+matchesDiv.appendChild(div)
+
+}
+
+function vote(a,b){
+
+alert("You voted!")
+
+}
+
+</script>
+
+</body>
+</html>
