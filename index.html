@@ -2,60 +2,29 @@
 <html>
 <head>
 <meta charset="utf-8">
+<title>Global City Cup</title>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bracketry/dist/bracketry.css">
 
 <style>
 
 body{
+margin:0;
+font-family:Arial;
 background:linear-gradient(#3a36b0,#000);
-font-family:sans-serif;
 color:white;
 text-align:center;
 }
 
-.bracket{
-display:flex;
-justify-content:center;
-gap:40px;
-margin-top:60px;
+h1{
+margin-top:40px;
+letter-spacing:3px;
 }
 
-/* COLUMNAS */
-
-.col{
-display:flex;
-flex-direction:column;
-}
-
-/* SEPARACIÓN REAL DE RONDAS */
-
-.r16{ gap:20px }
-.qf{ gap:80px }
-.sf{ gap:180px }
-
-/* PARTIDOS */
-
-.match{
-width:140px;
-height:32px;
-background:#ddd;
-border-radius:20px;
-display:flex;
-align-items:center;
-justify-content:center;
-color:#000;
-font-size:12px;
-}
-
-/* FINAL */
-
-.final{
-display:flex;
-align-items:center;
-}
-
-.champion{
-background:#00e7b2;
-font-weight:bold;
+#bracket{
+width:100%;
+max-width:1200px;
+margin:40px auto;
 }
 
 </style>
@@ -64,61 +33,37 @@ font-weight:bold;
 
 <body>
 
-<h2>GLOBAL CITY CUP</h2>
+<h1>GLOBAL CITY CUP</h1>
 
-<div class="bracket">
+<div id="bracket"></div>
 
-<div class="col r16">
-<div class="match">Tokyo</div>
-<div class="match">London</div>
-<div class="match">Madrid</div>
-<div class="match">Rome</div>
-<div class="match">Amsterdam</div>
-<div class="match">Vienna</div>
-<div class="match">Budapest</div>
-<div class="match">Athens</div>
-</div>
+<script src="https://cdn.jsdelivr.net/npm/bracketry/dist/bracketry.min.js"></script>
 
-<div class="col qf">
-<div class="match">Winner</div>
-<div class="match">Winner</div>
-<div class="match">Winner</div>
-<div class="match">Winner</div>
-</div>
+<script>
 
-<div class="col sf">
-<div class="match">Winner</div>
-<div class="match">Winner</div>
-</div>
+const data = {
+  rounds: [
+    {
+      matches: [
+        { players: ["Tokyo", "London"] },
+        { players: ["Madrid", "Rome"] },
+        { players: ["Amsterdam", "Vienna"] },
+        { players: ["Budapest", "Athens"] },
+        { players: ["Sydney", "Toronto"] },
+        { players: ["Seoul", "Singapore"] },
+        { players: ["Dubai", "Bangkok"] },
+        { players: ["Shanghai", "Hong Kong"] }
+      ]
+    }
+  ]
+};
 
-<div class="col final">
-<div class="match champion">CHAMPION</div>
-</div>
+Bracketry.render({
+  element: document.getElementById("bracket"),
+  data: data
+});
 
-<div class="col sf">
-<div class="match">Winner</div>
-<div class="match">Winner</div>
-</div>
-
-<div class="col qf">
-<div class="match">Winner</div>
-<div class="match">Winner</div>
-<div class="match">Winner</div>
-<div class="match">Winner</div>
-</div>
-
-<div class="col r16">
-<div class="match">Sydney</div>
-<div class="match">Toronto</div>
-<div class="match">Seoul</div>
-<div class="match">Singapore</div>
-<div class="match">Dubai</div>
-<div class="match">Bangkok</div>
-<div class="match">Shanghai</div>
-<div class="match">Hong Kong</div>
-</div>
-
-</div>
+</script>
 
 </body>
 </html>
