@@ -16,85 +16,51 @@ text-align:center;
 
 h1{
 margin-top:30px;
-letter-spacing:3px;
 }
 
 .bracket{
-display:grid;
-grid-template-columns: repeat(9,120px);
-grid-template-rows: repeat(8,70px);
+display:flex;
 justify-content:center;
-gap:10px;
-margin-top:40px;
+gap:40px;
+margin-top:60px;
 }
 
+/* COLUMNAS */
+
+.round{
+display:flex;
+flex-direction:column;
+}
+
+/* GAP POR RONDA */
+
+.r16{gap:20px;}
+.qf{gap:60px;}
+.sf{gap:120px;}
+
+.final{
+display:flex;
+align-items:center;
+}
+
+/* MATCH */
+
 .match{
+width:140px;
+height:32px;
 background:linear-gradient(90deg,#eee,#bbb);
-border-radius:25px;
+border-radius:20px;
 display:flex;
 align-items:center;
 justify-content:center;
 font-size:12px;
 color:black;
 font-weight:bold;
-height:32px;
 }
 
-/* LEFT R32 */
-
-.l1{grid-column:1; grid-row:1;}
-.l2{grid-column:1; grid-row:2;}
-.l3{grid-column:1; grid-row:3;}
-.l4{grid-column:1; grid-row:4;}
-.l5{grid-column:1; grid-row:5;}
-.l6{grid-column:1; grid-row:6;}
-.l7{grid-column:1; grid-row:7;}
-.l8{grid-column:1; grid-row:8;}
-
-/* LEFT R16 */
-
-.l9{grid-column:2; grid-row:1.5;}
-.l10{grid-column:2; grid-row:3.5;}
-.l11{grid-column:2; grid-row:5.5;}
-.l12{grid-column:2; grid-row:7.5;}
-
-/* LEFT QF */
-
-.l13{grid-column:3; grid-row:2.5;}
-.l14{grid-column:3; grid-row:6.5;}
-
-/* LEFT SF */
-
-.l15{grid-column:4; grid-row:4.5;}
-
-/* FINAL */
-
-.final{
-grid-column:5;
-grid-row:4.5;
+.champion{
 background:#00e7b2;
 }
-
-/* RIGHT SIDE */
-
-.r1{grid-column:9; grid-row:1;}
-.r2{grid-column:9; grid-row:2;}
-.r3{grid-column:9; grid-row:3;}
-.r4{grid-column:9; grid-row:4;}
-.r5{grid-column:9; grid-row:5;}
-.r6{grid-column:9; grid-row:6;}
-.r7{grid-column:9; grid-row:7;}
-.r8{grid-column:9; grid-row:8;}
-
-.r9{grid-column:8; grid-row:1.5;}
-.r10{grid-column:8; grid-row:3.5;}
-.r11{grid-column:8; grid-row:5.5;}
-.r12{grid-column:8; grid-row:7.5;}
-
-.r13{grid-column:7; grid-row:2.5;}
-.r14{grid-column:7; grid-row:6.5;}
-
-.r15{grid-column:6; grid-row:4.5;}
 
 </style>
 </head>
@@ -105,45 +71,69 @@ background:#00e7b2;
 
 <div class="bracket">
 
-<div class="match l1">Tokyo</div>
-<div class="match l2">London</div>
-<div class="match l3">Madrid</div>
-<div class="match l4">Rome</div>
-<div class="match l5">Amsterdam</div>
-<div class="match l6">Vienna</div>
-<div class="match l7">Budapest</div>
-<div class="match l8">Athens</div>
+<!-- LEFT R16 -->
 
-<div class="match l9">Winner</div>
-<div class="match l10">Winner</div>
-<div class="match l11">Winner</div>
-<div class="match l12">Winner</div>
+<div class="round r16">
+<div class="match">Tokyo</div>
+<div class="match">London</div>
+<div class="match">Madrid</div>
+<div class="match">Rome</div>
+<div class="match">Amsterdam</div>
+<div class="match">Vienna</div>
+<div class="match">Budapest</div>
+<div class="match">Athens</div>
+</div>
 
-<div class="match l13">Winner</div>
-<div class="match l14">Winner</div>
+<!-- LEFT QF -->
 
-<div class="match l15">Winner</div>
+<div class="round qf">
+<div class="match">Winner</div>
+<div class="match">Winner</div>
+<div class="match">Winner</div>
+<div class="match">Winner</div>
+</div>
 
-<div class="match final">CHAMPION</div>
+<!-- LEFT SF -->
 
-<div class="match r1">Sydney</div>
-<div class="match r2">Toronto</div>
-<div class="match r3">Seoul</div>
-<div class="match r4">Singapore</div>
-<div class="match r5">Dubai</div>
-<div class="match r6">Bangkok</div>
-<div class="match r7">Shanghai</div>
-<div class="match r8">Hong Kong</div>
+<div class="round sf">
+<div class="match">Winner</div>
+<div class="match">Winner</div>
+</div>
 
-<div class="match r9">Winner</div>
-<div class="match r10">Winner</div>
-<div class="match r11">Winner</div>
-<div class="match r12">Winner</div>
+<!-- FINAL -->
 
-<div class="match r13">Winner</div>
-<div class="match r14">Winner</div>
+<div class="round final">
+<div class="match champion">CHAMPION</div>
+</div>
 
-<div class="match r15">Winner</div>
+<!-- RIGHT SF -->
+
+<div class="round sf">
+<div class="match">Winner</div>
+<div class="match">Winner</div>
+</div>
+
+<!-- RIGHT QF -->
+
+<div class="round qf">
+<div class="match">Winner</div>
+<div class="match">Winner</div>
+<div class="match">Winner</div>
+<div class="match">Winner</div>
+</div>
+
+<!-- RIGHT R16 -->
+
+<div class="round r16">
+<div class="match">Sydney</div>
+<div class="match">Toronto</div>
+<div class="match">Seoul</div>
+<div class="match">Singapore</div>
+<div class="match">Dubai</div>
+<div class="match">Bangkok</div>
+<div class="match">Shanghai</div>
+<div class="match">Hong Kong</div>
+</div>
 
 </div>
 
