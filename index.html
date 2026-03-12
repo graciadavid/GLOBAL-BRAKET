@@ -2,51 +2,55 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Best Male Name</title>
+<title>Bracket 32</title>
 
 <style>
 
 body{
+margin:0;
 font-family:Arial;
-background:#f5f5f5;
-padding:40px;
+background:linear-gradient(#3c3ccf,#000);
+color:white;
 }
 
-h1{
+.title{
 text-align:center;
+font-size:40px;
+padding:30px;
 }
 
 .bracket{
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:20px;
-max-width:800px;
-margin:auto;
+display:flex;
+justify-content:center;
+align-items:center;
+gap:40px;
+}
+
+.column{
+display:flex;
+flex-direction:column;
+gap:25px;
 }
 
 .match{
-background:white;
-padding:20px;
-border-radius:10px;
-box-shadow:0 5px 15px rgba(0,0,0,0.1);
+width:180px;
+height:40px;
+background:linear-gradient(#eee,#bbb);
+border-radius:20px;
 }
 
-.name{
-margin:5px 0;
+.center{
+display:flex;
+flex-direction:column;
+align-items:center;
+gap:40px;
 }
 
-.vote{
-margin-top:10px;
-display:inline-block;
-background:#0070f3;
-color:white;
-padding:8px 15px;
-border-radius:6px;
-text-decoration:none;
-}
-
-.vote:hover{
-background:#005ad1;
+.champion{
+width:200px;
+height:50px;
+background:linear-gradient(#eee,#bbb);
+border-radius:25px;
 }
 
 </style>
@@ -55,32 +59,90 @@ background:#005ad1;
 
 <body>
 
-<h1>Best Male Name</h1>
+<div class="title">CHAMPION</div>
 
 <div class="bracket">
 
-<div class="match">
-<div class="name">Alejandro</div>
-<div class="name">Daniel</div>
-<a class="vote" href="duel.html">Vote</a>
+<!-- LEFT SIDE -->
+
+<div class="column">
+
+<div class="match"></div>
+<div class="match"></div>
+<div class="match"></div>
+<div class="match"></div>
+<div class="match"></div>
+<div class="match"></div>
+<div class="match"></div>
+<div class="match"></div>
+
 </div>
 
-<div class="match">
-<div class="name">Mateo</div>
-<div class="name">Lucas</div>
-<a class="vote" href="duel.html">Vote</a>
+<div class="column">
+
+<div class="match"></div>
+<div class="match"></div>
+<div class="match"></div>
+<div class="match"></div>
+
 </div>
 
-<div class="match">
-<div class="name">Hugo</div>
-<div class="name">Adrián</div>
-<a class="vote" href="duel.html">Vote</a>
+<div class="column">
+
+<div class="match"></div>
+<div class="match"></div>
+
 </div>
 
-<div class="match">
-<div class="name">Pablo</div>
-<div class="name">Bruno</div>
-<a class="vote" href="duel.html">Vote</a>
+<div class="column">
+
+<div class="match"></div>
+
+</div>
+
+<!-- CENTER -->
+
+<div class="center">
+
+<div class="champion"></div>
+
+</div>
+
+<!-- RIGHT SIDE -->
+
+<div class="column">
+
+<div class="match"></div>
+
+</div>
+
+<div class="column">
+
+<div class="match"></div>
+<div class="match"></div>
+
+</div>
+
+<div class="column">
+
+<div class="match"></div>
+<div class="match"></div>
+<div class="match"></div>
+<div class="match"></div>
+
+</div>
+
+<div class="column">
+
+<div class="match"></div>
+<div class="match"></div>
+<div class="match"></div>
+<div class="match"></div>
+<div class="match"></div>
+<div class="match"></div>
+<div class="match"></div>
+<div class="match"></div>
+
 </div>
 
 </div>
