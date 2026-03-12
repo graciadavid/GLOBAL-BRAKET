@@ -1,39 +1,11 @@
-<!DOCTYPE html>
-<html>
-<head>
-
-<title>Vote</title>
-
-<style>
-
-body{
-font-family:Arial;
-text-align:center;
-padding:60px;
-}
-
-button{
-padding:20px;
-font-size:20px;
-margin:20px;
-cursor:pointer;
-}
-
-</style>
-
-</head>
-
-<body>
-
-<h1>Vote</h1>
-
-<h2 id="teamA"></h2>
-<button onclick="vote('A')">Vote</button>
-
-<h2 id="teamB"></h2>
-<button onclick="vote('B')">Vote</button>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
+
+const supabase = window.supabase.createClient(
+"https://okaprbdbtnyiutztibcs.supabase.co",
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9rYXByYmRidG55aXV0enRpYmNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzMDgyNjgsImV4cCI6MjA4ODg4NDI2OH0.8tfmypajrsLVbrD3-PUwkJvrM1h9aQ8UN2IP3btoNLE"
+)
 
 const params = new URLSearchParams(window.location.search)
 const match = params.get("match")
@@ -46,13 +18,33 @@ const teams = {
 document.getElementById("teamA").innerText = teams[match][0]
 document.getElementById("teamB").innerText = teams[match][1]
 
-function vote(team){
+async function vote(team){
 
-alert("Vote registered")
+let teamName
+
+if(team === "A"){
+teamName = teams[match][0].toLowerCase()
+}else{
+teamName = teams[match][1].toLowerCase()
+}
+
+const { error } = await supabase
+.from("votes")
+.insert({
+match: match,
+choice: teamName
+})
+
+if(error){
+
+alert("Error saving vote")
+
+}else{
+
+alert("Vote registered!")
+
+}
 
 }
 
 </script>
-
-</body>
-</html>
