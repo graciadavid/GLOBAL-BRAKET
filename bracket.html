@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
+
 <meta charset="UTF-8">
 <title>Best Male Name</title>
+
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
 <style>
@@ -12,7 +14,6 @@ margin:0;
 font-family:Arial;
 background:linear-gradient(#3c3ccf,#000);
 color:white;
-overflow:hidden;
 }
 
 .title{
@@ -22,8 +23,7 @@ margin-top:20px;
 }
 
 .bracket{
-width:1400px;
-height:750px;
+width:1500px;
 margin:40px auto;
 display:grid;
 grid-template-columns:repeat(9,1fr);
@@ -34,14 +34,13 @@ align-items:center;
 display:flex;
 flex-direction:column;
 justify-content:space-around;
-height:100%;
 }
 
 .box{
 background:linear-gradient(#eee,#bbb);
 color:black;
-padding:8px 12px;
 border-radius:10px;
+padding:8px 10px;
 margin:6px;
 display:flex;
 justify-content:space-between;
@@ -61,10 +60,10 @@ font-weight:bold;
 .champion{
 background:gold;
 color:black;
-padding:16px 28px;
-border-radius:18px;
-font-weight:bold;
+padding:18px;
 text-align:center;
+border-radius:16px;
+font-weight:bold;
 }
 
 </style>
@@ -96,7 +95,7 @@ const { createClient } = supabase
 
 const supabaseClient = createClient(
 "https://okaprbdbtnyiutztibcs.supabase.co",
-"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9rYXByYmRidG55aXV0enRpYmNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzMDgyNjgsImV4cCI6MjA4ODg4NDI2OH0.8tfmypajrsLVbrD3-PUwkJvrM1h9aQ8UN2IP3btoNLE"
+"TU_ANON_KEY"
 )
 
 function percent(v1,v2){
@@ -113,7 +112,7 @@ Math.round(v2*100/total)
 
 }
 
-function box(name,perc,matchId){
+function createBox(name,pct,matchId){
 
 const div=document.createElement("div")
 
@@ -128,7 +127,7 @@ div.className="box"
 
 div.innerHTML=`
 <span>${name}</span>
-<span class="percent">${perc}%</span>
+<span class="percent">${pct}%</span>
 `
 
 div.onclick=()=>{
@@ -147,7 +146,8 @@ const { data:matches } = await supabaseClient
 .from("matches")
 .select("*")
 .eq("tournament_id",1)
-.order("id")
+.order("round")
+.order("position")
 
 const { data:players } = await supabaseClient
 .from("participants")
@@ -160,65 +160,49 @@ function name(id){
 return names[id] || "TBD"
 }
 
-function winner(m){
-
-if(!m.player1_id || !m.player2_id) return null
-
-if((m.votes1||1) > (m.votes2||1)) return m.player1_id
-if((m.votes2||1) > (m.votes1||1)) return m.player2_id
-
-return null
+function pct(m){
+return percent(m.votes1,m.votes2)
 }
 
-function clear(){
+const r1=matches.filter(m=>m.round===1)
+const r2=matches.filter(m=>m.round===2)
+const r3=matches.filter(m=>m.round===3)
+const r4=matches.filter(m=>m.round===4)
+
 document.querySelectorAll(".round").forEach(r=>r.innerHTML="")
-}
-
-clear()
-
-const r1 = matches.slice(0,8)
-const r2 = matches.slice(8,12)
-const r3 = matches.slice(12,14)
-const r4 = matches.slice(14,15)
 
 /* ROUND 1 */
 
 r1.slice(0,4).forEach(m=>{
-const p=percent(m.votes1,m.votes2)
-document.getElementById("r1l").appendChild(box(name(m.player1_id),p[0],m.id))
-document.getElementById("r1l").appendChild(box(name(m.player2_id),p[1],m.id))
+const p=pct(m)
+document.getElementById("r1l").appendChild(createBox(name(m.player1_id),p[0],m.id))
+document.getElementById("r1l").appendChild(createBox(name(m.player2_id),p[1],m.id))
 })
 
 r1.slice(4,8).forEach(m=>{
-const p=percent(m.votes1,m.votes2)
-document.getElementById("r1r").appendChild(box(name(m.player1_id),p[0],m.id))
-document.getElementById("r1r").appendChild(box(name(m.player2_id),p[1],m.id))
+const p=pct(m)
+document.getElementById("r1r").appendChild(createBox(name(m.player1_id),p[0],m.id))
+document.getElementById("r1r").appendChild(createBox(name(m.player2_id),p[1],m.id))
 })
 
 /* ROUND 2 */
 
-r2.slice(0,2).forEach(()=>{
-document.getElementById("r2l").appendChild(box("TBD"))
-})
-
-r2.slice(2,4).forEach(()=>{
-document.getElementById("r2r").appendChild(box("TBD"))
-})
+for(let i=0;i<4;i++){
+document.getElementById("r2l").appendChild(createBox("TBD"))
+document.getElementById("r2r").appendChild(createBox("TBD"))
+}
 
 /* ROUND 3 */
 
-r3.slice(0,1).forEach(()=>{
-document.getElementById("r3l").appendChild(box("TBD"))
-})
-
-r3.slice(1,2).forEach(()=>{
-document.getElementById("r3r").appendChild(box("TBD"))
-})
+for(let i=0;i<2;i++){
+document.getElementById("r3l").appendChild(createBox("TBD"))
+document.getElementById("r3r").appendChild(createBox("TBD"))
+}
 
 /* FINAL */
 
-document.getElementById("r4l").appendChild(box("TBD"))
-document.getElementById("r4r").appendChild(box("TBD"))
+document.getElementById("r4l").appendChild(createBox("TBD"))
+document.getElementById("r4r").appendChild(createBox("TBD"))
 
 }
 
