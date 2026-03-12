@@ -14,7 +14,17 @@ overflow:hidden;
 color:white;
 }
 
-/* SCALING STAGE */
+/* TITLE */
+
+.title{
+position:absolute;
+top:20px;
+width:100%;
+text-align:center;
+font-size:36px;
+}
+
+/* SCALE STAGE */
 
 .stage{
 position:absolute;
@@ -23,20 +33,21 @@ top:50%;
 transform-origin:center;
 }
 
-/* BRACKET GRID */
+/* GRID */
 
 .bracket{
-width:1600px;
+width:1700px;
 height:900px;
 
 display:grid;
 grid-template-columns:
-180px 180px 180px 180px 220px 180px 180px 180px 180px;
+160px 160px 160px 160px 160px 220px
+160px 160px 160px 160px 160px;
 
 align-items:center;
 }
 
-/* ROUNDS */
+/* ROUND */
 
 .round{
 position:relative;
@@ -47,7 +58,7 @@ height:800px;
 
 .match{
 position:absolute;
-width:160px;
+width:150px;
 transform:translateY(-50%);
 }
 
@@ -62,6 +73,11 @@ margin:3px 0;
 display:flex;
 justify-content:space-between;
 font-size:12px;
+cursor:pointer;
+}
+
+.player:hover{
+background:white;
 }
 
 /* CHAMPION */
@@ -73,16 +89,6 @@ border-radius:30px;
 color:black;
 font-weight:bold;
 text-align:center;
-}
-
-/* TITLE */
-
-.title{
-position:absolute;
-top:20px;
-width:100%;
-text-align:center;
-font-size:36px;
 }
 
 </style>
@@ -100,11 +106,13 @@ font-size:36px;
 <div class="round" id="r2L"></div>
 <div class="round" id="r3L"></div>
 <div class="round" id="r4L"></div>
+<div class="round" id="r5L"></div>
 
 <div style="display:flex;align-items:center;justify-content:center;">
 <div class="champion">Champion</div>
 </div>
 
+<div class="round" id="r5R"></div>
 <div class="round" id="r4R"></div>
 <div class="round" id="r3R"></div>
 <div class="round" id="r2R"></div>
@@ -124,20 +132,30 @@ const players = [
 "Martin","Joel","Samuel","Enzo","Tomas","Gonzalo","Luis","Ruben"
 ]
 
-/* CREATE MATCH */
+/* CREATE PLAYER */
 
-function createMatch(p1,p2){
+function playerBox(name,opponent){
 
 return `
-<div class="match">
-<div class="player">${p1}<span>50%</span></div>
-<div class="player">${p2}<span>50%</span></div>
+<div class="player" onclick="openDuel('${name}','${opponent}')">
+${name}<span>50%</span>
 </div>
 `
 
 }
 
-/* POSITIONS */
+/* CREATE MATCH */
+
+function matchBox(p1,p2){
+
+return `
+<div class="player" onclick="openDuel('${p1}','${p2}')">${p1}<span>50%</span></div>
+<div class="player" onclick="openDuel('${p1}','${p2}')">${p2}<span>50%</span></div>
+`
+
+}
+
+/* CENTERS */
 
 function centers(count,height){
 
@@ -151,7 +169,7 @@ return arr
 
 }
 
-/* RENDER ROUND */
+/* RENDER */
 
 function renderRound(id,matches){
 
@@ -173,7 +191,7 @@ container.appendChild(el)
 
 }
 
-/* BUILD */
+/* LEFT SIDE */
 
 let left=players.slice(0,16)
 let right=players.slice(16)
@@ -184,10 +202,10 @@ let r1L=[]
 let r1R=[]
 
 for(let i=0;i<16;i+=2)
-r1L.push(createMatch(left[i],left[i+1]))
+r1L.push(matchBox(left[i],left[i+1]))
 
 for(let i=0;i<16;i+=2)
-r1R.push(createMatch(right[i],right[i+1]))
+r1R.push(matchBox(right[i],right[i+1]))
 
 renderRound("r1L",r1L)
 renderRound("r1R",r1R)
@@ -195,22 +213,40 @@ renderRound("r1R",r1R)
 /* EMPTY ROUNDS */
 
 function empty(count){
-return new Array(count).fill(`<div class="player">&nbsp;</div>`)
+
+let arr=[]
+
+for(let i=0;i<count;i++)
+arr.push(`<div class="player">&nbsp;</div>`)
+
+return arr
+
 }
 
 renderRound("r2L",empty(4))
 renderRound("r3L",empty(2))
 renderRound("r4L",empty(1))
+renderRound("r5L",empty(1))
 
 renderRound("r2R",empty(4))
 renderRound("r3R",empty(2))
 renderRound("r4R",empty(1))
+renderRound("r5R",empty(1))
+
+/* OPEN DUEL */
+
+function openDuel(a,b){
+
+window.location.href =
+"duel.html?name1="+encodeURIComponent(a)+"&name2="+encodeURIComponent(b)
+
+}
 
 /* SCALE */
 
 function scale(){
 
-let w=1600
+let w=1700
 let h=900
 
 let s=Math.min(
