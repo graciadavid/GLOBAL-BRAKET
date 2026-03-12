@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
 <title>Best Male Name</title>
@@ -7,51 +7,46 @@
 <style>
 
 body{
-font-family: Arial;
-background:#f4f4f4;
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
-}
-
-.container{
-background:white;
+font-family:Arial;
+background:#f5f5f5;
 padding:40px;
-border-radius:10px;
-text-align:center;
-width:400px;
-box-shadow:0 10px 30px rgba(0,0,0,0.1);
 }
 
 h1{
-margin-bottom:30px;
+text-align:center;
+}
+
+.bracket{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:20px;
+max-width:800px;
+margin:auto;
+}
+
+.match{
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
 }
 
 .name{
-font-size:28px;
-margin:20px 0;
+margin:5px 0;
 }
 
-button{
-width:100%;
-padding:15px;
-margin:10px 0;
-font-size:18px;
-cursor:pointer;
-border:none;
-border-radius:8px;
+.vote{
+margin-top:10px;
+display:inline-block;
 background:#0070f3;
 color:white;
+padding:8px 15px;
+border-radius:6px;
+text-decoration:none;
 }
 
-button:hover{
+.vote:hover{
 background:#005ad1;
-}
-
-.progress{
-margin-top:20px;
-color:#777;
 }
 
 </style>
@@ -60,69 +55,35 @@ color:#777;
 
 <body>
 
-<div class="container">
+<h1>Best Male Name</h1>
 
-<h1>Who do you prefer?</h1>
+<div class="bracket">
 
-<div id="name1" class="name"></div>
-
-<div>VS</div>
-
-<div id="name2" class="name"></div>
-
-<button onclick="vote(1)">Vote</button>
-<button onclick="vote(2)">Vote</button>
-
-<div class="progress" id="progress"></div>
-
+<div class="match">
+<div class="name">Alejandro</div>
+<div class="name">Daniel</div>
+<a class="vote" href="duel.html">Vote</a>
 </div>
 
-<script>
+<div class="match">
+<div class="name">Mateo</div>
+<div class="name">Lucas</div>
+<a class="vote" href="duel.html">Vote</a>
+</div>
 
-const names = [
-"Alejandro","Daniel","Mateo","Lucas",
-"Hugo","Adrián","Pablo","Bruno",
-"Diego","Javier","Carlos","Álvaro",
-"Marco","Nicolás","Iván","Sergio",
-"Gabriel","Leo","Mario","Andrés",
-"David","Eric","Oscar","Raúl",
-"Martín","Joel","Samuel","Enzo",
-"Tomás","Gonzalo","Luis","Rubén"
-];
+<div class="match">
+<div class="name">Hugo</div>
+<div class="name">Adrián</div>
+<a class="vote" href="duel.html">Vote</a>
+</div>
 
-let matches = [];
-let currentMatch = 0;
+<div class="match">
+<div class="name">Pablo</div>
+<div class="name">Bruno</div>
+<a class="vote" href="duel.html">Vote</a>
+</div>
 
-for(let i=0;i<names.length;i+=2){
-matches.push([names[i],names[i+1]]);
-}
-
-function loadMatch(){
-
-if(currentMatch >= matches.length){
-document.querySelector(".container").innerHTML="<h1>Round finished!</h1>";
-return;
-}
-
-document.getElementById("name1").innerText = matches[currentMatch][0];
-document.getElementById("name2").innerText = matches[currentMatch][1];
-
-document.getElementById("progress").innerText =
-"Match " + (currentMatch+1) + " of " + matches.length;
-
-}
-
-function vote(choice){
-
-currentMatch++;
-
-loadMatch();
-
-}
-
-loadMatch();
-
-</script>
+</div>
 
 </body>
 </html>
