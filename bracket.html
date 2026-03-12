@@ -1,8 +1,12 @@
 <!DOCTYPE html>
 <html>
+
 <head>
+
 <meta charset="UTF-8">
 <title>Bracket</title>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
 <style>
 
@@ -10,282 +14,146 @@ body{
 margin:0;
 font-family:Arial;
 background:linear-gradient(#3c3ccf,#000);
-overflow:hidden;
 color:white;
 }
 
 .title{
-position:absolute;
-top:20px;
-width:100%;
 text-align:center;
-font-size:36px;
+font-size:40px;
+padding:30px;
 }
-
-.stage{
-position:absolute;
-left:50%;
-top:50%;
-transform-origin:center;
-}
-
-/* GRID */
 
 .bracket{
-
-width:1500px;
-height:850px;
-
-display:grid;
-
-grid-template-columns:
-160px 160px 160px 180px
-220px
-180px 160px 160px 160px;
-
-align-items:center;
-
-}
-
-/* COLUMN */
-
-.col{
-position:relative;
-height:700px;
-}
-
-/* PLAYER BOX */
-
-.player{
-
-position:absolute;
-width:140px;
-
-background:linear-gradient(#eee,#bbb);
-color:black;
-
-border-radius:10px;
-
-padding:8px 10px;
-
 display:flex;
-justify-content:space-between;
-
-font-size:14px;
-
-transform:translateY(-50%);
-
+justify-content:center;
+gap:60px;
+padding:40px;
 }
 
-.clickable{
-cursor:pointer;
+.round{
+display:flex;
+flex-direction:column;
+gap:20px;
 }
 
-.clickable:hover{
+.match{
 background:white;
+color:black;
+padding:10px 20px;
+border-radius:10px;
+cursor:pointer;
+text-align:center;
+min-width:160px;
 }
 
-/* CHAMPION */
+.match:hover{
+background:#eee;
+}
 
-.champion{
-
-background:gold;
-color:black;
-
-padding:20px 40px;
-
-border-radius:30px;
-
-font-weight:bold;
-text-align:center;
-
+.empty{
+opacity:.3;
+cursor:default;
 }
 
 </style>
+
 </head>
 
 <body>
 
-<div class="title">BEST MALE NAME</div>
+<div class="title">Best Male Name</div>
 
-<div class="stage" id="stage">
-
-<div class="bracket">
-
-<div class="col" id="c1"></div>
-<div class="col" id="c2"></div>
-<div class="col" id="c3"></div>
-<div class="col" id="c4"></div>
-
-<div style="display:flex;align-items:center;justify-content:center;">
-<div class="champion">Champion</div>
-</div>
-
-<div class="col" id="c6"></div>
-<div class="col" id="c7"></div>
-<div class="col" id="c8"></div>
-<div class="col" id="c9"></div>
-
-</div>
-</div>
+<div class="bracket" id="bracket"></div>
 
 <script>
 
-/* PLAYERS */
+/* SUPABASE */
 
-const players=[
+const { createClient } = supabase
 
-"Alejandro","Daniel",
-"Mateo","Lucas",
-"Hugo","Adrian",
-"Pablo","Bruno",
+const supabaseClient = createClient(
+"https://okaprbdbtnyiutztibcs.supabase.co",
+"TU_ANON_PUBLIC_KEY"
+)
 
-"Diego","Javier",
-"Carlos","Alvaro",
-"Marco","Nicolas",
-"Ivan","Sergio"
+/* LOAD BRACKET */
 
-]
+async function loadBracket(){
 
-/* OPEN DUEL */
+const { data:matches } = await supabaseClient
+.from("matches")
+.select("*")
+.order("id")
 
-function openDuel(a,b){
+const { data:participants } = await supabaseClient
+.from("participants")
+.select("*")
 
-const slugA=a.toLowerCase().replaceAll(" ","-")
-const slugB=b.toLowerCase().replaceAll(" ","-")
+const players = {}
 
-window.location.href=
-"/names/"+slugA+"-vs-"+slugB
+participants.forEach(p=>{
+players[p.id] = p.name
+})
+
+const rounds = {
+1:[],
+2:[],
+3:[],
+4:[]
+}
+
+matches.forEach(m=>{
+rounds[m.round_number].push(m)
+})
+
+const container = document.getElementById("bracket")
+
+for(const r in rounds){
+
+const col = document.createElement("div")
+col.className = "round"
+
+rounds[r].forEach(match=>{
+
+const div = document.createElement("div")
+
+if(match.player1_id && match.player2_id){
+
+const name1 = players[match.player1_id]
+const name2 = players[match.player2_id]
+
+div.className = "match"
+
+div.innerText = name1 + " vs " + name2
+
+div.onclick = () => {
+
+window.location.href =
+"/names/" + match.seo_slug
 
 }
 
-/* PLAYER BOX */
+}else{
 
-function playerBox(name,opponent,top){
-
-let div=document.createElement("div")
-
-div.className="player"
-
-div.style.top=top+"px"
-
-div.innerHTML=`${name}<span>50%</span>`
-
-if(opponent){
-
-div.classList.add("clickable")
-
-div.onclick=()=>openDuel(name,opponent)
+div.className = "match empty"
+div.innerText = "TBD"
 
 }
 
-return div
-
-}
-
-/* POSITIONS */
-
-function positions(count){
-
-let height=700
-let space=height/count
-
-let arr=[]
-
-for(let i=0;i<count;i++)
-arr.push(space*i + space/2)
-
-return arr
-
-}
-
-/* RENDER COLUMN */
-
-function renderColumn(id,names,opponents){
-
-let col=document.getElementById(id)
-
-let pos=positions(names.length)
-
-names.forEach((name,i)=>{
-
-let opponent=opponents?opponents[i]:null
-
-col.appendChild(playerBox(name,opponent,pos[i]))
+col.appendChild(div)
 
 })
 
-}
-
-/* LEFT SIDE */
-
-let left=players.slice(0,8)
-
-/* RIGHT SIDE */
-
-let right=players.slice(8)
-
-/* R1 */
-
-renderColumn("c1",left,[
-"Daniel","Alejandro",
-"Lucas","Mateo",
-"Adrian","Hugo",
-"Bruno","Pablo"
-])
-
-renderColumn("c9",right,[
-"Javier","Diego",
-"Alvaro","Carlos",
-"Nicolas","Marco",
-"Sergio","Ivan"
-])
-
-/* EMPTY FUTURE ROUNDS */
-
-function empty(count){
-
-let arr=[]
-
-for(let i=0;i<count;i++)
-arr.push("")
-
-return arr
+container.appendChild(col)
 
 }
 
-renderColumn("c2",empty(4))
-renderColumn("c3",empty(2))
-renderColumn("c4",empty(1))
-
-renderColumn("c6",empty(1))
-renderColumn("c7",empty(2))
-renderColumn("c8",empty(4))
-
-/* SCALE */
-
-function scale(){
-
-let w=1500
-let h=850
-
-let s=Math.min(
-
-window.innerWidth/w,
-window.innerHeight/h
-
-)
-
-document.getElementById("stage").style.transform=
-`translate(-50%,-50%) scale(${s})`
-
 }
 
-window.addEventListener("resize",scale)
-
-scale()
+loadBracket()
 
 </script>
 
 </body>
+
 </html>
