@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-
 <meta charset="UTF-8">
 <title>Best Male Name</title>
-
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
 <style>
@@ -24,35 +22,26 @@ margin-top:20px;
 }
 
 .bracket{
-position:relative;
-width:1500px;
-height:800px;
+width:1400px;
+height:750px;
 margin:40px auto;
+display:grid;
+grid-template-columns:repeat(9,1fr);
+align-items:center;
 }
 
-.col{
-position:absolute;
+.round{
 display:flex;
 flex-direction:column;
 justify-content:space-around;
 height:100%;
 }
 
-.r1{ left:0px; width:200px; }
-.r2{ left:250px; width:200px; }
-.r3{ left:500px; width:200px; }
-.r4{ left:750px; width:200px; }
-
-.r4r{ right:750px; width:200px; }
-.r3r{ right:500px; width:200px; }
-.r2r{ right:250px; width:200px; }
-.r1r{ right:0px; width:200px; }
-
 .box{
 background:linear-gradient(#eee,#bbb);
 color:black;
-border-radius:12px;
-padding:10px;
+padding:8px 12px;
+border-radius:10px;
 margin:6px;
 display:flex;
 justify-content:space-between;
@@ -70,15 +59,12 @@ font-weight:bold;
 }
 
 .champion{
-position:absolute;
-left:50%;
-top:50%;
-transform:translate(-50%,-50%);
 background:gold;
-padding:15px 40px;
-border-radius:20px;
 color:black;
+padding:16px 28px;
+border-radius:18px;
 font-weight:bold;
+text-align:center;
 }
 
 </style>
@@ -90,17 +76,17 @@ font-weight:bold;
 
 <div class="bracket">
 
-<div class="col r1" id="r1l"></div>
-<div class="col r2" id="r2l"></div>
-<div class="col r3" id="r3l"></div>
-<div class="col r4" id="r4l"></div>
+<div class="round" id="r1l"></div>
+<div class="round" id="r2l"></div>
+<div class="round" id="r3l"></div>
+<div class="round" id="r4l"></div>
 
 <div class="champion">Champion</div>
 
-<div class="col r4r" id="r4r"></div>
-<div class="col r3r" id="r3r"></div>
-<div class="col r2r" id="r2r"></div>
-<div class="col r1r" id="r1r"></div>
+<div class="round" id="r4r"></div>
+<div class="round" id="r3r"></div>
+<div class="round" id="r2r"></div>
+<div class="round" id="r1r"></div>
 
 </div>
 
@@ -127,7 +113,7 @@ Math.round(v2*100/total)
 
 }
 
-function playerBox(name,perc,matchId){
+function box(name,perc,matchId){
 
 const div=document.createElement("div")
 
@@ -171,80 +157,68 @@ const names={}
 players.forEach(p=>names[p.id]=p.name)
 
 function name(id){
-return names[id]||"TBD"
+return names[id] || "TBD"
 }
 
-function perc(m){
-return percent(m.votes1,m.votes2)
+function winner(m){
+
+if(!m.player1_id || !m.player2_id) return null
+
+if((m.votes1||1) > (m.votes2||1)) return m.player1_id
+if((m.votes2||1) > (m.votes1||1)) return m.player2_id
+
+return null
 }
 
-/* rounds */
+function clear(){
+document.querySelectorAll(".round").forEach(r=>r.innerHTML="")
+}
 
-const r1=matches.slice(0,8)
-const r2=matches.slice(8,12)
-const r3=matches.slice(12,14)
-const r4=matches.slice(14,15)
+clear()
 
-/* LEFT */
-
-const r1l=r1.slice(0,4)
-const r1r=r1.slice(4,8)
-
-const r2l=r2.slice(0,2)
-const r2r=r2.slice(2,4)
-
-const r3l=r3.slice(0,1)
-const r3r=r3.slice(1,2)
-
-const final=r4[0]
-
-/* clear */
-
-document.querySelectorAll(".col").forEach(c=>c.innerHTML="")
+const r1 = matches.slice(0,8)
+const r2 = matches.slice(8,12)
+const r3 = matches.slice(12,14)
+const r4 = matches.slice(14,15)
 
 /* ROUND 1 */
 
-r1l.forEach(m=>{
-const p=perc(m)
-document.getElementById("r1l").appendChild(playerBox(name(m.player1_id),p[0],m.id))
-document.getElementById("r1l").appendChild(playerBox(name(m.player2_id),p[1],m.id))
+r1.slice(0,4).forEach(m=>{
+const p=percent(m.votes1,m.votes2)
+document.getElementById("r1l").appendChild(box(name(m.player1_id),p[0],m.id))
+document.getElementById("r1l").appendChild(box(name(m.player2_id),p[1],m.id))
 })
 
-r1r.forEach(m=>{
-const p=perc(m)
-document.getElementById("r1r").appendChild(playerBox(name(m.player1_id),p[0],m.id))
-document.getElementById("r1r").appendChild(playerBox(name(m.player2_id),p[1],m.id))
+r1.slice(4,8).forEach(m=>{
+const p=percent(m.votes1,m.votes2)
+document.getElementById("r1r").appendChild(box(name(m.player1_id),p[0],m.id))
+document.getElementById("r1r").appendChild(box(name(m.player2_id),p[1],m.id))
 })
 
 /* ROUND 2 */
 
-r2l.forEach(m=>{
-document.getElementById("r2l").appendChild(playerBox(name(m.player1_id)+" vs "+name(m.player2_id),"",m.id))
+r2.slice(0,2).forEach(()=>{
+document.getElementById("r2l").appendChild(box("TBD"))
 })
 
-r2r.forEach(m=>{
-document.getElementById("r2r").appendChild(playerBox(name(m.player1_id)+" vs "+name(m.player2_id),"",m.id))
+r2.slice(2,4).forEach(()=>{
+document.getElementById("r2r").appendChild(box("TBD"))
 })
 
 /* ROUND 3 */
 
-r3l.forEach(m=>{
-document.getElementById("r3l").appendChild(playerBox(name(m.player1_id)+" vs "+name(m.player2_id),"",m.id))
+r3.slice(0,1).forEach(()=>{
+document.getElementById("r3l").appendChild(box("TBD"))
 })
 
-r3r.forEach(m=>{
-document.getElementById("r3r").appendChild(playerBox(name(m.player1_id)+" vs "+name(m.player2_id),"",m.id))
+r3.slice(1,2).forEach(()=>{
+document.getElementById("r3r").appendChild(box("TBD"))
 })
 
 /* FINAL */
 
-document.getElementById("r4l").appendChild(
-playerBox(name(final?.player1_id),"",final?.id)
-)
-
-document.getElementById("r4r").appendChild(
-playerBox(name(final?.player2_id),"",final?.id)
-)
+document.getElementById("r4l").appendChild(box("TBD"))
+document.getElementById("r4r").appendChild(box("TBD"))
 
 }
 
