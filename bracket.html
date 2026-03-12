@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
-
 <head>
+
 <meta charset="UTF-8">
 <title>Best Male Name</title>
 
@@ -26,7 +26,7 @@ padding:30px;
 display:flex;
 justify-content:center;
 align-items:center;
-gap:40px;
+gap:50px;
 height:80vh;
 }
 
@@ -34,16 +34,16 @@ height:80vh;
 display:flex;
 flex-direction:column;
 justify-content:space-around;
-height:520px;
+height:600px;
 }
 
 .player{
 display:flex;
 justify-content:space-between;
 align-items:center;
-width:180px;
+width:200px;
 padding:10px;
-border-radius:10px;
+border-radius:12px;
 background:linear-gradient(#eee,#bbb);
 color:black;
 margin:4px;
@@ -54,6 +54,10 @@ cursor:pointer;
 font-weight:bold;
 }
 
+.match{
+margin-bottom:15px;
+}
+
 .tbd{
 opacity:.4;
 cursor:default;
@@ -61,7 +65,7 @@ cursor:default;
 
 .final{
 background:gold;
-padding:14px;
+padding:16px;
 border-radius:20px;
 color:black;
 font-weight:bold;
@@ -103,24 +107,21 @@ const supabaseClient = createClient(
 
 async function vote(matchId,player){
 
-const { data: match } = await supabaseClient
+const { data } = await supabaseClient
 .from("matches")
 .select("*")
 .eq("id",matchId)
 .single()
 
-let v1 = match.votes1
-let v2 = match.votes2
+let v1=data.votes1
+let v2=data.votes2
 
 if(player==1) v1++
 if(player==2) v2++
 
 await supabaseClient
 .from("matches")
-.update({
-votes1:v1,
-votes2:v2
-})
+.update({votes1:v1,votes2:v2})
 .eq("id",matchId)
 
 loadBracket()
@@ -134,6 +135,23 @@ return [
 Math.round(v1*100/total),
 Math.round(v2*100/total)
 ]
+
+}
+
+function createPlayer(name,perc,click){
+
+const div=document.createElement("div")
+
+div.className="player"
+
+div.innerHTML=`
+<span>${name}</span>
+<span class="percent">${perc}%</span>
+`
+
+div.onclick=click
+
+return div
 
 }
 
@@ -153,30 +171,12 @@ const { data: players } = await supabaseClient
 .select("*")
 
 const names={}
-
 players.forEach(p=>names[p.id]=p.name)
 
-const round1 = matches.slice(0,8)
+const round1=matches.slice(0,8)
 
-const left = round1.slice(0,4)
-const right = round1.slice(4,8)
-
-function createPlayer(name,perc,click){
-
-const div=document.createElement("div")
-
-div.className="player"
-
-div.innerHTML=`
-<span>${name}</span>
-<span class="percent">${perc}%</span>
-`
-
-div.onclick=click
-
-return div
-
-}
+const left=round1.slice(0,4)
+const right=round1.slice(4,8)
 
 function render(matches,container){
 
@@ -184,23 +184,15 @@ const el=document.getElementById(container)
 
 matches.forEach(m=>{
 
-const p = percent(m.votes1,m.votes2)
+const p=percent(m.votes1,m.votes2)
 
-el.appendChild(
-createPlayer(
-names[m.player1_id],
-p[0],
-()=>vote(m.id,1)
-)
-)
+const match=document.createElement("div")
+match.className="match"
 
-el.appendChild(
-createPlayer(
-names[m.player2_id],
-p[1],
-()=>vote(m.id,2)
-)
-)
+match.appendChild(createPlayer(names[m.player1_id],p[0],()=>vote(m.id,1)))
+match.appendChild(createPlayer(names[m.player2_id],p[1],()=>vote(m.id,2)))
+
+el.appendChild(match)
 
 })
 
