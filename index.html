@@ -15,13 +15,14 @@ padding:20px;
 
 h1{
 text-align:center;
-margin-bottom:20px;
+margin-bottom:30px;
 }
 
 .status{
 text-align:center;
-margin-bottom:20px;
+margin-bottom:30px;
 color:#93c5fd;
+font-weight:bold;
 }
 
 .bracket{
@@ -55,12 +56,11 @@ color:#38bdf8;
 }
 
 .round-1{gap:18px}
+
 .round-2 .match:first-child{margin-top:36px}
 .round-2 .match:last-child{margin-top:90px}
 
-.round-3 .match{
-margin-top:108px;
-}
+.round-3 .match{margin-top:108px}
 
 .round-final .match{
 margin-top:108px;
@@ -79,51 +79,49 @@ font-weight:bold;
 
 <div class="bracket">
 
-<!-- LEFT OCTAVOS -->
+<!-- OCTAVOS IZQUIERDA -->
 
 <div class="round round-1">
 
 <div class="match">
-<div class="team" onclick="openOct('madrid-barcelona')">Madrid <span id="madrid">50%</span></div>
-<div class="team" onclick="openOct('madrid-barcelona')">Barcelona <span id="barcelona">50%</span></div>
+<div class="team" onclick="voteOct('madrid-barcelona')">Madrid <span id="madrid">50%</span></div>
+<div class="team" onclick="voteOct('madrid-barcelona')">Barcelona <span id="barcelona">50%</span></div>
 </div>
 
 <div class="match">
-<div class="team" onclick="openOct('paris-rome')">Paris <span id="paris">50%</span></div>
-<div class="team" onclick="openOct('paris-rome')">Rome <span id="rome">50%</span></div>
+<div class="team" onclick="voteOct('paris-rome')">Paris <span id="paris">50%</span></div>
+<div class="team" onclick="voteOct('paris-rome')">Rome <span id="rome">50%</span></div>
 </div>
 
 <div class="match">
-<div class="team" onclick="openOct('london-berlin')">London <span id="london">50%</span></div>
-<div class="team" onclick="openOct('london-berlin')">Berlin <span id="berlin">50%</span></div>
+<div class="team" onclick="voteOct('london-berlin')">London <span id="london">50%</span></div>
+<div class="team" onclick="voteOct('london-berlin')">Berlin <span id="berlin">50%</span></div>
 </div>
 
 <div class="match">
-<div class="team" onclick="openOct('lisbon-amsterdam')">Lisbon <span id="lisbon">50%</span></div>
-<div class="team" onclick="openOct('lisbon-amsterdam')">Amsterdam <span id="amsterdam">50%</span></div>
+<div class="team" onclick="voteOct('lisbon-amsterdam')">Lisbon <span id="lisbon">50%</span></div>
+<div class="team" onclick="voteOct('lisbon-amsterdam')">Amsterdam <span id="amsterdam">50%</span></div>
 </div>
 
 </div>
 
-
-<!-- LEFT QUARTERS -->
+<!-- CUARTOS IZQUIERDA -->
 
 <div class="round round-2">
 
 <div class="match">
-<div class="team" id="qf1a" onclick="openQuarter('qf1')">TBD</div>
-<div class="team" id="qf1b" onclick="openQuarter('qf1')">TBD</div>
+<div class="team" id="qf1a">TBD</div>
+<div class="team" id="qf1b">TBD</div>
 </div>
 
 <div class="match">
-<div class="team" id="qf2a" onclick="openQuarter('qf2')">TBD</div>
-<div class="team" id="qf2b" onclick="openQuarter('qf2')">TBD</div>
+<div class="team" id="qf2a">TBD</div>
+<div class="team" id="qf2b">TBD</div>
 </div>
 
 </div>
 
-
-<!-- SEMI LEFT -->
+<!-- SEMI IZQUIERDA -->
 
 <div class="round round-3">
 <div class="match">
@@ -131,7 +129,6 @@ font-weight:bold;
 <div class="team">TBD</div>
 </div>
 </div>
-
 
 <!-- FINAL -->
 
@@ -143,8 +140,7 @@ FINAL
 </div>
 </div>
 
-
-<!-- SEMI RIGHT -->
+<!-- SEMI DERECHA -->
 
 <div class="round round-3">
 <div class="match">
@@ -153,46 +149,44 @@ FINAL
 </div>
 </div>
 
-
-<!-- RIGHT QUARTERS -->
+<!-- CUARTOS DERECHA -->
 
 <div class="round round-2">
 
 <div class="match">
-<div class="team" id="qf3a" onclick="openQuarter('qf3')">TBD</div>
-<div class="team" id="qf3b" onclick="openQuarter('qf3')">TBD</div>
+<div class="team" id="qf3a">TBD</div>
+<div class="team" id="qf3b">TBD</div>
 </div>
 
 <div class="match">
-<div class="team" id="qf4a" onclick="openQuarter('qf4')">TBD</div>
-<div class="team" id="qf4b" onclick="openQuarter('qf4')">TBD</div>
+<div class="team" id="qf4a">TBD</div>
+<div class="team" id="qf4b">TBD</div>
 </div>
 
 </div>
 
-
-<!-- RIGHT OCTAVOS -->
+<!-- OCTAVOS DERECHA -->
 
 <div class="round round-1">
 
 <div class="match">
-<div class="team" onclick="openOct('prague-vienna')">Prague <span id="prague">50%</span></div>
-<div class="team" onclick="openOct('prague-vienna')">Vienna <span id="vienna">50%</span></div>
+<div class="team" onclick="voteOct('prague-vienna')">Prague <span id="prague">50%</span></div>
+<div class="team" onclick="voteOct('prague-vienna')">Vienna <span id="vienna">50%</span></div>
 </div>
 
 <div class="match">
-<div class="team" onclick="openOct('budapest-dublin')">Budapest <span id="budapest">50%</span></div>
-<div class="team" onclick="openOct('budapest-dublin')">Dublin <span id="dublin">50%</span></div>
+<div class="team" onclick="voteOct('budapest-dublin')">Budapest <span id="budapest">50%</span></div>
+<div class="team" onclick="voteOct('budapest-dublin')">Dublin <span id="dublin">50%</span></div>
 </div>
 
 <div class="match">
-<div class="team" onclick="openOct('copenhagen-florence')">Copenhagen <span id="copenhagen">50%</span></div>
-<div class="team" onclick="openOct('copenhagen-florence')">Florence <span id="florence">50%</span></div>
+<div class="team" onclick="voteOct('copenhagen-florence')">Copenhagen <span id="copenhagen">50%</span></div>
+<div class="team" onclick="voteOct('copenhagen-florence')">Florence <span id="florence">50%</span></div>
 </div>
 
 <div class="match">
-<div class="team" onclick="openOct('seville-milan')">Seville <span id="seville">50%</span></div>
-<div class="team" onclick="openOct('seville-milan')">Milan <span id="milan">50%</span></div>
+<div class="team" onclick="voteOct('seville-milan')">Seville <span id="seville">50%</span></div>
+<div class="team" onclick="voteOct('seville-milan')">Milan <span id="milan">50%</span></div>
 </div>
 
 </div>
@@ -204,65 +198,37 @@ FINAL
 
 <script>
 
-const supabase = window.supabase.createClient(
+const supabaseClient = window.supabase.createClient(
 "https://okaprbdbtnyiutztibcs.supabase.co",
 "TU_ANON_KEY"
 )
 
-function cutoffPassed(){
+function voteOct(match){
+
 const cutoff=new Date()
 cutoff.setHours(19,5,0,0)
-return new Date()>=cutoff
-}
 
-function openOct(match){
-
-if(cutoffPassed()){
+if(new Date()>=cutoff){
 alert("Round of 16 closed")
 return
 }
 
 window.location.href="/duel.html?match="+match
-}
 
-function openQuarter(id){
-
-if(!cutoffPassed()){
-alert("Quarterfinals not open yet")
-return
-}
-
-let a=document.getElementById(id+"a").innerText.toLowerCase()
-let b=document.getElementById(id+"b").innerText.toLowerCase()
-
-window.location.href="/duel.html?match="+a+"-"+b
 }
 
 function percent(a,b){
-let t=a+b
-return[Math.round(a/t*100),Math.round(b/t*100)]
+let total=a+b
+return[Math.round(a/total*100),Math.round(b/total*100)]
 }
 
-async function update(){
+async function updatePercentages(){
 
-const {data}=await supabase.from("votes").select("*")
+const {data}=await supabaseClient
+.from("votes")
+.select("*")
 
 if(!data)return
-
-function votes(match,a,b){
-
-let va=0
-let vb=0
-
-data.forEach(v=>{
-if(v.match===match){
-if(v.choice===a)va++
-if(v.choice===b)vb++
-}
-})
-
-return[va,vb]
-}
 
 const matches={
 "madrid-barcelona":["madrid","barcelona"],
@@ -275,51 +241,36 @@ const matches={
 "seville-milan":["seville","milan"]
 }
 
-Object.keys(matches).forEach(m=>{
+Object.keys(matches).forEach(match=>{
 
-let[a,b]=matches[m]
+let[a,b]=matches[match]
 
-let[va,vb]=votes(m,a,b)
+let votesA=0
+let votesB=0
 
-if(va===0&&vb===0){va=1;vb=1}
+data.forEach(v=>{
+if(v.match===match){
+if(v.choice===a)votesA++
+if(v.choice===b)votesB++
+}
+})
 
-let[pA,pB]=percent(va,vb)
+if(votesA===0 && votesB===0){
+votesA=1
+votesB=1
+}
+
+let[pA,pB]=percent(votesA,votesB)
 
 document.getElementById(a).innerText=pA+"%"
 document.getElementById(b).innerText=pB+"%"
 
 })
 
-
-if(cutoffPassed()){
-
-document.getElementById("status").innerText="Round of 16 closed — Quarterfinals open"
-
-function winner(match,a,b){
-
-let[va,vb]=votes(match,a,b)
-
-return va>=vb?a:b
 }
 
-document.getElementById("qf1a").innerText=winner("madrid-barcelona","madrid","barcelona")
-document.getElementById("qf1b").innerText=winner("paris-rome","paris","rome")
-
-document.getElementById("qf2a").innerText=winner("london-berlin","london","berlin")
-document.getElementById("qf2b").innerText=winner("lisbon-amsterdam","lisbon","amsterdam")
-
-document.getElementById("qf3a").innerText=winner("prague-vienna","prague","vienna")
-document.getElementById("qf3b").innerText=winner("budapest-dublin","budapest","dublin")
-
-document.getElementById("qf4a").innerText=winner("copenhagen-florence","copenhagen","florence")
-document.getElementById("qf4b").innerText=winner("seville-milan","seville","milan")
-
-}
-
-}
-
-update()
-setInterval(update,1000)
+updatePercentages()
+setInterval(updatePercentages,2000)
 
 </script>
 
