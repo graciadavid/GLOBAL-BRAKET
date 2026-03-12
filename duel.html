@@ -39,12 +39,11 @@ background:#0ea5e9;
 
 <h1>Vote</h1>
 
-<h2 id="teamA">Loading...</h2>
-<button onclick="vote('A')">Vote</button>
+<h2 id="teamA"></h2>
+<button id="btnA">Vote</button>
 
-<h2 id="teamB">Loading...</h2>
-<button onclick="vote('B')">Vote</button>
-
+<h2 id="teamB"></h2>
+<button id="btnB">Vote</button>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -60,36 +59,31 @@ const match = params.get("match")
 
 const teams = {
 "madrid-barcelona":["Madrid","Barcelona"],
-"paris-rome":["Paris","Rome"]
+"paris-rome":["Paris","Rome"],
+"london-berlin":["London","Berlin"],
+"lisbon-amsterdam":["Lisbon","Amsterdam"],
+"prague-vienna":["Prague","Vienna"],
+"budapest-dublin":["Budapest","Dublin"],
+"copenhagen-florence":["Copenhagen","Florence"],
+"seville-milan":["Seville","Milan"]
 }
 
-if(teams[match]){
+const teamA = teams[match][0]
+const teamB = teams[match][1]
 
-document.getElementById("teamA").innerText = teams[match][0]
-document.getElementById("teamB").innerText = teams[match][1]
+document.getElementById("teamA").innerText = teamA
+document.getElementById("teamB").innerText = teamB
 
-}else{
-
-document.getElementById("teamA").innerText = "Match not found"
-document.getElementById("teamB").innerText = ""
-
-}
+document.getElementById("btnA").onclick = () => vote(teamA)
+document.getElementById("btnB").onclick = () => vote(teamB)
 
 async function vote(team){
-
-let teamName
-
-if(team === "A"){
-teamName = teams[match][0].toLowerCase()
-}else{
-teamName = teams[match][1].toLowerCase()
-}
 
 const { error } = await supabase
 .from("votes")
 .insert({
 match: match,
-choice: teamName
+choice: team.toLowerCase()
 })
 
 if(error){
