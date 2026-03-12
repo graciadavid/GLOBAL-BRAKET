@@ -1,104 +1,96 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Champions Votes</title>
-  <style>
-    *{
-      box-sizing:border-box;
-    }
 
-    body{
-      margin:0;
-      font-family:Arial, Helvetica, sans-serif;
-      background:linear-gradient(180deg,#3c3ccf 0%, #111 100%);
-      color:white;
-      min-height:100vh;
-    }
+<title>Best Cities in Europe</title>
 
-    .page{
-      max-width:1100px;
-      margin:0 auto;
-      padding:40px 20px 60px;
-    }
+<style>
 
-    h1{
-      text-align:center;
-      font-size:48px;
-      margin:0 0 10px;
-      font-weight:300;
-      letter-spacing:1px;
-    }
+body{
+font-family:Arial;
+background:#0f172a;
+color:white;
+padding:40px;
+}
 
-    .subtitle{
-      text-align:center;
-      color:#d8d8ff;
-      margin-bottom:40px;
-      font-size:18px;
-    }
+.bracket{
+display:flex;
+gap:40px;
+}
 
-    .grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));
-      gap:20px;
-    }
+.round{
+display:flex;
+flex-direction:column;
+gap:20px;
+}
 
-    .card{
-      background:rgba(255,255,255,0.1);
-      border:1px solid rgba(255,255,255,0.18);
-      border-radius:18px;
-      padding:24px;
-      backdrop-filter:blur(8px);
-      cursor:pointer;
-      transition:transform .15s ease, background .15s ease;
-    }
+.match{
+background:#1e293b;
+padding:15px;
+border-radius:10px;
+width:220px;
+}
 
-    .card:hover{
-      transform:translateY(-4px);
-      background:rgba(255,255,255,0.16);
-    }
+.team{
+display:flex;
+justify-content:space-between;
+padding:6px 0;
+cursor:pointer;
+}
 
-    .card h2{
-      margin:0 0 10px;
-      font-size:26px;
-      font-weight:700;
-    }
+.team:hover{
+color:#38bdf8;
+}
 
-    .card p{
-      margin:0;
-      color:#e9e9ff;
-      line-height:1.4;
-    }
-  </style>
+</style>
+
 </head>
+
 <body>
-  <div class="page">
-    <h1>CHAMPIONS VOTES</h1>
-    <div class="subtitle">Choose a competition</div>
 
-    <div class="grid">
-      <div class="card" onclick="openBracket('names')">
-        <h2>Best Male Name</h2>
-        <p>32 names. Full bracket. Click to open the tournament.</p>
-      </div>
+<h1>Best Cities in Europe</h1>
 
-      <div class="card" onclick="openBracket('female-names')">
-        <h2>Best Female Name</h2>
-        <p>Another 32-player bracket.</p>
-      </div>
+<div class="bracket">
 
-      <div class="card" onclick="openBracket('cities')">
-        <h2>Best City</h2>
-        <p>Cities compete in direct elimination duels.</p>
-      </div>
-    </div>
-  </div>
+<div class="round">
 
-  <script>
-    function openBracket(competition){
-      window.location.href = "bracket.html?competition=" + encodeURIComponent(competition);
-    }
-  </script>
+<div class="match">
+
+<div class="team" onclick="openDuel('madrid-barcelona')">
+Madrid <span id="madrid">50%</span>
+</div>
+
+<div class="team" onclick="openDuel('madrid-barcelona')">
+Barcelona <span id="barcelona">50%</span>
+</div>
+
+</div>
+
+<div class="match">
+
+<div class="team" onclick="openDuel('paris-rome')">
+Paris <span id="paris">50%</span>
+</div>
+
+<div class="team" onclick="openDuel('paris-rome')">
+Rome <span id="rome">50%</span>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+function openDuel(slug){
+
+window.location.href="duel.html?match="+slug
+
+}
+
+</script>
+
 </body>
 </html>
