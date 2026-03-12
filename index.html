@@ -22,13 +22,12 @@ margin-bottom:40px;
 .bracket{
 display:flex;
 justify-content:center;
-gap:30px;
+gap:40px;
 }
 
 .round{
 display:flex;
 flex-direction:column;
-gap:20px;
 }
 
 .match{
@@ -37,6 +36,7 @@ padding:6px;
 border-radius:6px;
 width:130px;
 font-size:12px;
+margin:20px 0;
 }
 
 .team{
@@ -50,13 +50,22 @@ cursor:pointer;
 color:#38bdf8;
 }
 
-.center{
-display:flex;
-flex-direction:column;
-gap:60px;
+/* ROUND SPACING */
+
+.round-1 .match:nth-child(1){margin-top:0;}
+.round-1 .match:nth-child(2){margin-top:40px;}
+.round-1 .match:nth-child(3){margin-top:40px;}
+.round-1 .match:nth-child(4){margin-top:40px;}
+
+.round-2 .match:nth-child(1){margin-top:40px;}
+.round-2 .match:nth-child(2){margin-top:120px;}
+
+.round-3 .match{
+margin-top:120px;
 }
 
-.final{
+.round-final .match{
+margin-top:160px;
 background:#38bdf8;
 color:black;
 font-weight:bold;
@@ -72,7 +81,9 @@ text-align:center;
 
 <div class="bracket">
 
-<div class="round">
+<!-- ROUND 1 -->
+
+<div class="round round-1">
 
 <div class="match">
 <div class="team" onclick="openDuel('madrid-barcelona')">Madrid <span id="madrid">50%</span></div>
@@ -96,22 +107,41 @@ text-align:center;
 
 </div>
 
-<div class="round">
 
-<div class="match"><div class="team">TBD</div><div class="team">TBD</div></div>
-<div class="match"><div class="team">TBD</div><div class="team">TBD</div></div>
+<!-- QUARTERFINALS -->
+
+<div class="round round-2">
+
+<div class="match">
+<div class="team">TBD</div>
+<div class="team">TBD</div>
+</div>
+
+<div class="match">
+<div class="team">TBD</div>
+<div class="team">TBD</div>
+</div>
 
 </div>
 
-<div class="round">
 
-<div class="match"><div class="team">TBD</div><div class="team">TBD</div></div>
+<!-- SEMIFINAL -->
+
+<div class="round round-3">
+
+<div class="match">
+<div class="team">TBD</div>
+<div class="team">TBD</div>
+</div>
 
 </div>
 
-<div class="round center">
 
-<div class="match final">
+<!-- FINAL -->
+
+<div class="round round-final">
+
+<div class="match">
 FINAL
 <div class="team">TBD</div>
 <div class="team">TBD</div>
@@ -119,20 +149,34 @@ FINAL
 
 </div>
 
-<div class="round">
 
-<div class="match"><div class="team">TBD</div><div class="team">TBD</div></div>
+<!-- RIGHT SIDE -->
+
+<div class="round round-3">
+
+<div class="match">
+<div class="team">TBD</div>
+<div class="team">TBD</div>
+</div>
 
 </div>
 
-<div class="round">
+<div class="round round-2">
 
-<div class="match"><div class="team">TBD</div><div class="team">TBD</div></div>
-<div class="match"><div class="team">TBD</div><div class="team">TBD</div></div>
+<div class="match">
+<div class="team">TBD</div>
+<div class="team">TBD</div>
+</div>
+
+<div class="match">
+<div class="team">TBD</div>
+<div class="team">TBD</div>
+</div>
 
 </div>
 
-<div class="round">
+
+<div class="round round-1">
 
 <div class="match">
 <div class="team" onclick="openDuel('prague-vienna')">Prague <span id="prague">50%</span></div>
@@ -158,75 +202,12 @@ FINAL
 
 </div>
 
+
 <script>
 
 function openDuel(slug){
 window.location.href="/duel.html?match="+slug
 }
-
-</script>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script>
-
-const supabaseClient = window.supabase.createClient(
-"https://okaprbdbtnyiutztibcs.supabase.co",
-"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9rYXByYmRidG55aXV0enRpYmNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzMDgyNjgsImV4cCI6MjA4ODg4NDI2OH0.8tfmypajrsLVbrD3-PUwkJvrM1h9aQ8UN2IP3btoNLE"
-)
-
-async function updatePercentages(){
-
-const { data } = await supabaseClient
-.from("votes")
-.select("*")
-
-if(!data) return
-
-const matches = {
-"madrid-barcelona":["madrid","barcelona"],
-"paris-rome":["paris","rome"],
-"london-berlin":["london","berlin"],
-"lisbon-amsterdam":["lisbon","amsterdam"],
-"prague-vienna":["prague","vienna"],
-"budapest-dublin":["budapest","dublin"],
-"copenhagen-florence":["copenhagen","florence"],
-"seville-milan":["seville","milan"]
-}
-
-Object.keys(matches).forEach(match=>{
-
-const [a,b]=matches[match]
-
-let votesA=0
-let votesB=0
-
-data.forEach(v=>{
-if(v.match===match){
-
-if(v.choice===a) votesA++
-if(v.choice===b) votesB++
-
-}
-})
-
-if(votesA===0 && votesB===0){
-votesA=1
-votesB=1
-}
-
-let total=votesA+votesB
-
-document.getElementById(a).innerText=Math.round(votesA/total*100)+"%"
-document.getElementById(b).innerText=Math.round(votesB/total*100)+"%"
-
-})
-
-}
-
-updatePercentages()
-
-setInterval(updatePercentages,1000)
 
 </script>
 
