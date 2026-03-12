@@ -33,15 +33,15 @@ transform-origin:center;
 
 .bracket{
 
-width:1800px;
-height:900px;
+width:1500px;
+height:850px;
 
 display:grid;
 
 grid-template-columns:
-140px 140px 140px 140px 140px
-200px
-140px 140px 140px 140px 140px;
+160px 160px 160px 180px
+220px
+180px 160px 160px 160px;
 
 align-items:center;
 
@@ -51,7 +51,7 @@ align-items:center;
 
 .col{
 position:relative;
-height:800px;
+height:700px;
 }
 
 /* PLAYER BOX */
@@ -59,19 +59,19 @@ height:800px;
 .player{
 
 position:absolute;
-width:120px;
+width:140px;
 
 background:linear-gradient(#eee,#bbb);
 color:black;
 
-border-radius:8px;
+border-radius:10px;
 
-padding:6px 8px;
+padding:8px 10px;
 
 display:flex;
 justify-content:space-between;
 
-font-size:12px;
+font-size:14px;
 
 transform:translateY(-50%);
 
@@ -92,7 +92,7 @@ background:white;
 background:gold;
 color:black;
 
-padding:18px 40px;
+padding:20px 40px;
 
 border-radius:30px;
 
@@ -116,17 +116,15 @@ text-align:center;
 <div class="col" id="c2"></div>
 <div class="col" id="c3"></div>
 <div class="col" id="c4"></div>
-<div class="col" id="c5"></div>
 
 <div style="display:flex;align-items:center;justify-content:center;">
 <div class="champion">Champion</div>
 </div>
 
+<div class="col" id="c6"></div>
 <div class="col" id="c7"></div>
 <div class="col" id="c8"></div>
 <div class="col" id="c9"></div>
-<div class="col" id="c10"></div>
-<div class="col" id="c11"></div>
 
 </div>
 </div>
@@ -137,11 +135,15 @@ text-align:center;
 
 const players=[
 
-"Alejandro","Daniel","Mateo","Lucas","Hugo","Adrian","Pablo","Bruno",
-"Diego","Javier","Carlos","Alvaro","Marco","Nicolas","Ivan","Sergio",
+"Alejandro","Daniel",
+"Mateo","Lucas",
+"Hugo","Adrian",
+"Pablo","Bruno",
 
-"Gabriel","Leo","Mario","Andres","David","Eric","Oscar","Raul",
-"Martin","Joel","Samuel","Enzo","Tomas","Gonzalo","Luis","Ruben"
+"Diego","Javier",
+"Carlos","Alvaro",
+"Marco","Nicolas",
+"Ivan","Sergio"
 
 ]
 
@@ -149,12 +151,15 @@ const players=[
 
 function openDuel(a,b){
 
+const slugA=a.toLowerCase().replaceAll(" ","-")
+const slugB=b.toLowerCase().replaceAll(" ","-")
+
 window.location.href=
-"duel.html?name1="+encodeURIComponent(a)+"&name2="+encodeURIComponent(b)
+"/names/"+slugA+"-vs-"+slugB
 
 }
 
-/* CREATE PLAYER */
+/* PLAYER BOX */
 
 function playerBox(name,opponent,top){
 
@@ -178,11 +183,11 @@ return div
 
 }
 
-/* CALCULATE POSITIONS */
+/* POSITIONS */
 
 function positions(count){
 
-let height=800
+let height=700
 let space=height/count
 
 let arr=[]
@@ -214,11 +219,11 @@ col.appendChild(playerBox(name,opponent,pos[i]))
 
 /* LEFT SIDE */
 
-let left=players.slice(0,16)
+let left=players.slice(0,8)
 
 /* RIGHT SIDE */
 
-let right=players.slice(16)
+let right=players.slice(8)
 
 /* R1 */
 
@@ -226,22 +231,14 @@ renderColumn("c1",left,[
 "Daniel","Alejandro",
 "Lucas","Mateo",
 "Adrian","Hugo",
-"Bruno","Pablo",
+"Bruno","Pablo"
+])
+
+renderColumn("c9",right,[
 "Javier","Diego",
 "Alvaro","Carlos",
 "Nicolas","Marco",
 "Sergio","Ivan"
-])
-
-renderColumn("c11",right,[
-"Leo","Gabriel",
-"Andres","Mario",
-"Eric","David",
-"Raul","Oscar",
-"Joel","Martin",
-"Enzo","Samuel",
-"Gonzalo","Tomas",
-"Ruben","Luis"
 ])
 
 /* EMPTY FUTURE ROUNDS */
@@ -257,22 +254,20 @@ return arr
 
 }
 
-renderColumn("c2",empty(8))
-renderColumn("c3",empty(4))
-renderColumn("c4",empty(2))
-renderColumn("c5",empty(1))
+renderColumn("c2",empty(4))
+renderColumn("c3",empty(2))
+renderColumn("c4",empty(1))
 
-renderColumn("c7",empty(1))
-renderColumn("c8",empty(2))
-renderColumn("c9",empty(4))
-renderColumn("c10",empty(8))
+renderColumn("c6",empty(1))
+renderColumn("c7",empty(2))
+renderColumn("c8",empty(4))
 
 /* SCALE */
 
 function scale(){
 
-let w=1800
-let h=900
+let w=1500
+let h=850
 
 let s=Math.min(
 
