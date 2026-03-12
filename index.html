@@ -1,347 +1,262 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
 <title>Best Male Name</title>
 
 <style>
-*{
-  box-sizing:border-box;
-}
 
-html,body{
-  margin:0;
-  width:100%;
-  height:100%;
-  overflow:hidden;
-  font-family:Arial, Helvetica, sans-serif;
-  background:linear-gradient(180deg,#3c3ccf 0%, #1e1e8f 45%, #050514 100%);
-  color:white;
-}
-
-:root{
-  --design-width: 1500;
-  --design-height: 860;
-}
-
-.page{
-  width:100vw;
-  height:100vh;
-  overflow:hidden;
-  position:relative;
-}
-
-.scale-stage{
-  position:absolute;
-  left:50%;
-  top:50%;
-  transform:translate(-50%,-50%) scale(1);
-  transform-origin:center center;
-  width:calc(var(--design-width) * 1px);
-  height:calc(var(--design-height) * 1px);
+body{
+margin:0;
+font-family:Arial;
+background:linear-gradient(#3c3ccf,#000);
+color:white;
+overflow:hidden;
 }
 
 .title{
-  text-align:center;
-  font-size:52px;
-  font-weight:300;
-  letter-spacing:1px;
-  margin:18px 0 8px 0;
+text-align:center;
+font-size:40px;
+padding:30px;
 }
+
+/* BRACKET */
 
 .bracket{
-  width:100%;
-  height:760px;
-  display:grid;
-  grid-template-columns: 560px 220px 560px;
-  align-items:center;
-  justify-items:center;
-  padding:10px 20px 20px;
+display:flex;
+justify-content:center;
+align-items:center;
+gap:80px;
+height:80vh;
 }
 
-/* LEFT + RIGHT BLOCKS */
+/* SIDES */
 
 .side{
-  width:100%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:22px;
+display:flex;
+gap:40px;
 }
 
 /* ROUNDS */
 
 .round{
-  display:flex;
-  flex-direction:column;
-  justify-content:flex-start;
+display:flex;
+flex-direction:column;
 }
 
-/* LEFT SIDE */
-.left .r1,
-.right .r1{
-  gap:14px;
+.r1{ gap:10px; }
+
+.r2{
+gap:55px;
+margin-top:25px;
 }
 
-.left .r2,
-.right .r2{
-  gap:56px;
-  margin-top:21px;
+.r3{
+gap:140px;
+margin-top:80px;
 }
 
-.left .r3,
-.right .r3{
-  gap:138px;
-  margin-top:78px;
+.r4{
+gap:300px;
+margin-top:180px;
 }
 
-.left .r4,
-.right .r4{
-  gap:0;
-  margin-top:246px;
+/* PLAYER BOX */
+
+.player{
+width:170px;
+padding:6px;
+display:flex;
+justify-content:space-between;
+background:linear-gradient(#eee,#bbb);
+border-radius:10px;
+color:black;
+font-size:13px;
 }
 
-/* MATCHES */
+.name{
+padding-left:8px;
+}
+
+.percent{
+padding-right:8px;
+font-weight:bold;
+}
+
+/* MATCH GROUP */
 
 .match{
-  width:222px;
-  height:44px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  padding:0 12px;
-  border-radius:14px;
-  background:linear-gradient(180deg,#ededed 0%, #c9c9c9 100%);
-  color:#111;
-  font-size:17px;
-  line-height:1;
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.75),
-    0 2px 8px rgba(0,0,0,0.15);
-  white-space:nowrap;
-}
-
-.match.clickable{
-  cursor:pointer;
-  transition:transform .15s ease, background .15s ease, box-shadow .15s ease;
-}
-
-.match.clickable:hover{
-  background:linear-gradient(180deg,#ffffff 0%, #dcdcdc 100%);
-  transform:scale(1.03);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.9),
-    0 4px 14px rgba(0,0,0,0.2);
-}
-
-.match.empty{
-  color:transparent;
+display:flex;
+flex-direction:column;
+gap:4px;
 }
 
 /* CENTER */
 
 .center{
-  width:100%;
-  height:100%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+display:flex;
+align-items:center;
 }
 
 .champion{
-  width:290px;
-  height:66px;
-  border-radius:999px;
-  background:#ffd700;
-  color:#000;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:28px;
-  font-weight:700;
-  box-shadow:0 8px 24px rgba(0,0,0,0.18);
+background:gold;
+padding:18px 40px;
+border-radius:30px;
+font-weight:bold;
+font-size:20px;
+color:black;
 }
 
-/* Small screens fallback */
-@media (max-width: 900px){
-  html,body{
-    overflow:auto;
-  }
-
-  .page{
-    height:auto;
-    min-height:100vh;
-    overflow:auto;
-  }
-
-  .scale-stage{
-    position:relative;
-    left:auto;
-    top:auto;
-    transform:none !important;
-    width:100%;
-    height:auto;
-    padding:20px 14px 40px;
-  }
-
-  .title{
-    font-size:36px;
-    margin:8px 0 20px;
-  }
-
-  .bracket{
-    width:100%;
-    height:auto;
-    display:flex;
-    flex-direction:column;
-    gap:24px;
-    padding:0;
-  }
-
-  .side{
-    width:100%;
-    flex-direction:column;
-    gap:18px;
-  }
-
-  .round{
-    width:100%;
-    align-items:center;
-    gap:10px !important;
-    margin-top:0 !important;
-  }
-
-  .match{
-    width:min(92vw, 320px);
-    font-size:16px;
-  }
-
-  .center{
-    height:auto;
-  }
-
-  .champion{
-    width:min(92vw, 320px);
-    height:60px;
-    font-size:26px;
-  }
-}
 </style>
 </head>
+
 <body>
 
-<div class="page">
-  <div class="scale-stage" id="scaleStage">
+<div class="title">BEST MALE NAME</div>
 
-    <div class="title">BEST MALE NAME</div>
+<div class="bracket">
 
-    <div class="bracket">
+<!-- LEFT -->
 
-      <!-- LEFT SIDE -->
-      <div class="side left">
+<div class="side">
 
-        <div class="round r1">
-          <div class="match clickable" onclick="openDuel('Alejandro','Daniel')">Alejandro vs Daniel</div>
-          <div class="match clickable" onclick="openDuel('Mateo','Lucas')">Mateo vs Lucas</div>
-          <div class="match clickable" onclick="openDuel('Hugo','Adrian')">Hugo vs Adrian</div>
-          <div class="match clickable" onclick="openDuel('Pablo','Bruno')">Pablo vs Bruno</div>
-          <div class="match clickable" onclick="openDuel('Diego','Javier')">Diego vs Javier</div>
-          <div class="match clickable" onclick="openDuel('Carlos','Alvaro')">Carlos vs Alvaro</div>
-          <div class="match clickable" onclick="openDuel('Marco','Nicolas')">Marco vs Nicolas</div>
-          <div class="match clickable" onclick="openDuel('Ivan','Sergio')">Ivan vs Sergio</div>
-        </div>
+<div class="round r1">
 
-        <div class="round r2">
-          <div class="match empty"> </div>
-          <div class="match empty"> </div>
-          <div class="match empty"> </div>
-          <div class="match empty"> </div>
-        </div>
-
-        <div class="round r3">
-          <div class="match empty"> </div>
-          <div class="match empty"> </div>
-        </div>
-
-        <div class="round r4">
-          <div class="match empty"> </div>
-        </div>
-
-      </div>
-
-      <!-- CENTER -->
-      <div class="center">
-        <div class="champion">Champion</div>
-      </div>
-
-      <!-- RIGHT SIDE -->
-      <div class="side right">
-
-        <div class="round r4">
-          <div class="match empty"> </div>
-        </div>
-
-        <div class="round r3">
-          <div class="match empty"> </div>
-          <div class="match empty"> </div>
-        </div>
-
-        <div class="round r2">
-          <div class="match empty"> </div>
-          <div class="match empty"> </div>
-          <div class="match empty"> </div>
-          <div class="match empty"> </div>
-        </div>
-
-        <div class="round r1">
-          <div class="match clickable" onclick="openDuel('Gabriel','Leo')">Gabriel vs Leo</div>
-          <div class="match clickable" onclick="openDuel('Mario','Andres')">Mario vs Andres</div>
-          <div class="match clickable" onclick="openDuel('David','Eric')">David vs Eric</div>
-          <div class="match clickable" onclick="openDuel('Oscar','Raul')">Oscar vs Raul</div>
-          <div class="match clickable" onclick="openDuel('Martin','Joel')">Martin vs Joel</div>
-          <div class="match clickable" onclick="openDuel('Samuel','Enzo')">Samuel vs Enzo</div>
-          <div class="match clickable" onclick="openDuel('Tomas','Gonzalo')">Tomas vs Gonzalo</div>
-          <div class="match clickable" onclick="openDuel('Luis','Ruben')">Luis vs Ruben</div>
-        </div>
-
-      </div>
-
-    </div>
-  </div>
+<div class="match">
+<div class="player"><span class="name">Alejandro</span><span class="percent">50%</span></div>
+<div class="player"><span class="name">Daniel</span><span class="percent">50%</span></div>
 </div>
 
-<script>
-function openDuel(name1, name2){
-  window.location.href =
-    "duel.html?name1=" + encodeURIComponent(name1) +
-    "&name2=" + encodeURIComponent(name2);
-}
+<div class="match">
+<div class="player"><span class="name">Mateo</span><span class="percent">50%</span></div>
+<div class="player"><span class="name">Lucas</span><span class="percent">50%</span></div>
+</div>
 
-function fitBracket(){
-  const stage = document.getElementById("scaleStage");
-  const designWidth = 1500;
-  const designHeight = 860;
+<div class="match">
+<div class="player"><span class="name">Hugo</span><span class="percent">50%</span></div>
+<div class="player"><span class="name">Adrian</span><span class="percent">50%</span></div>
+</div>
 
-  if (window.innerWidth <= 900){
-    stage.style.transform = "none";
-    return;
-  }
+<div class="match">
+<div class="player"><span class="name">Pablo</span><span class="percent">50%</span></div>
+<div class="player"><span class="name">Bruno</span><span class="percent">50%</span></div>
+</div>
 
-  const availableWidth = window.innerWidth - 24;
-  const availableHeight = window.innerHeight - 24;
+<div class="match">
+<div class="player"><span class="name">Diego</span><span class="percent">50%</span></div>
+<div class="player"><span class="name">Javier</span><span class="percent">50%</span></div>
+</div>
 
-  const scaleX = availableWidth / designWidth;
-  const scaleY = availableHeight / designHeight;
-  const scale = Math.min(scaleX, scaleY, 1);
+<div class="match">
+<div class="player"><span class="name">Carlos</span><span class="percent">50%</span></div>
+<div class="player"><span class="name">Alvaro</span><span class="percent">50%</span></div>
+</div>
 
-  stage.style.transform = `translate(-50%, -50%) scale(${scale})`;
-}
+<div class="match">
+<div class="player"><span class="name">Marco</span><span class="percent">50%</span></div>
+<div class="player"><span class="name">Nicolas</span><span class="percent">50%</span></div>
+</div>
 
-window.addEventListener("load", fitBracket);
-window.addEventListener("resize", fitBracket);
-</script>
+<div class="match">
+<div class="player"><span class="name">Ivan</span><span class="percent">50%</span></div>
+<div class="player"><span class="name">Sergio</span><span class="percent">50%</span></div>
+</div>
+
+</div>
+
+<div class="round r2">
+<div class="player"></div>
+<div class="player"></div>
+<div class="player"></div>
+<div class="player"></div>
+</div>
+
+<div class="round r3">
+<div class="player"></div>
+<div class="player"></div>
+</div>
+
+<div class="round r4">
+<div class="player"></div>
+</div>
+
+</div>
+
+
+<!-- CENTER -->
+
+<div class="center">
+<div class="champion">Champion</div>
+</div>
+
+
+<!-- RIGHT -->
+
+<div class="side">
+
+<div class="round r4">
+<div class="player"></div>
+</div>
+
+<div class="round r3">
+<div class="player"></div>
+<div class="player"></div>
+</div>
+
+<div class="round r2">
+<div class="player"></div>
+<div class="player"></div>
+<div class="player"></div>
+<div class="player"></div>
+</div>
+
+<div class="round r1">
+
+<div class="match">
+<div class="player"><span class="name">Gabriel</span><span class="percent">50%</span></div>
+<div class="player"><span class="name">Leo</span><span class="percent">50%</span></div>
+</div>
+
+<div class="match">
+<div class="player"><span class="name">Mario</span><span class="percent">50%</span></div>
+<div class="player"><span class="name">Andres</span><span class="percent">50%</span></div>
+</div>
+
+<div class="match">
+<div class="player"><span class="name">David</span><span class="percent">50%</span></div>
+<div class="player"><span class="name">Eric</span><span class="percent">50%</span></div>
+</div>
+
+<div class="match">
+<div class="player"><span class="name">Oscar</span><span class="percent">50%</span></div>
+<div class="player"><span class="name">Raul</span><span class="percent">50%</span></div>
+</div>
+
+<div class="match">
+<div class="player"><span class="name">Martin</span><span class="percent">50%</span></div>
+<div class="player"><span class="name">Joel</span><span class="percent">50%</span></div>
+</div>
+
+<div class="match">
+<div class="player"><span class="name">Samuel</span><span class="percent">50%</span></div>
+<div class="player"><span class="name">Enzo</span><span class="percent">50%</span></div>
+</div>
+
+<div class="match">
+<div class="player"><span class="name">Tomas</span><span class="percent">50%</span></div>
+<div class="player"><span class="name">Gonzalo</span><span class="percent">50%</span></div>
+</div>
+
+<div class="match">
+<div class="player"><span class="name">Luis</span><span class="percent">50%</span></div>
+<div class="player"><span class="name">Ruben</span><span class="percent">50%</span></div>
+</div>
+
+</div>
+
+</div>
+
+</div>
 
 </body>
 </html>
