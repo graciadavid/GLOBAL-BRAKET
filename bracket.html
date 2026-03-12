@@ -73,7 +73,7 @@ font-weight:bold;
 
 <body>
 
-<div class="title" id="title">Bracket</div>
+<div class="title" id="title">Loading bracket...</div>
 
 <div class="bracket">
 
@@ -102,10 +102,10 @@ const supabaseClient = createClient(
 
 function percent(v1,v2){
 
-v1 = v1 || 1
-v2 = v2 || 1
+v1=v1||1
+v2=v2||1
 
-const total = v1 + v2
+const total=v1+v2
 
 return [
 Math.round(v1*100/total),
@@ -144,33 +144,43 @@ return div
 
 async function loadBracket(){
 
-/* leer slug de la URL */
+/******** leer slug ********/
 
 const params = new URLSearchParams(window.location.search)
 const slug = params.get("competition")
 
+console.log("URL slug:", slug)
+
 document.getElementById("title").innerText = slug
 
 
-/***** buscar competition *****/
+/******** buscar competition ********/
 
-const { data:competition } = await supabaseClient
+const { data, error } = await supabaseClient
 .from("competitions")
 .select("*")
-.eq("slug",slug)
-.single()
+.eq("slug", slug)
 
-if(!competition){
+if(error){
 
-alert("Competition not found")
+console.error(error)
+alert("DB error")
+
 return
 
 }
 
-const competitionId = competition.id
+if(!data || data.length === 0){
+
+alert("Competition not found: " + slug)
+return
+
+}
+
+const competitionId = data[0].id
 
 
-/***** cargar matches *****/
+/******** cargar matches ********/
 
 const { data:matches } = await supabaseClient
 .from("matches")
@@ -178,7 +188,7 @@ const { data:matches } = await supabaseClient
 .eq("competition_id",competitionId)
 
 
-/***** cargar participantes *****/
+/******** cargar participantes ********/
 
 const { data:players } = await supabaseClient
 .from("participants")
@@ -191,11 +201,9 @@ players.forEach(p=>{
 names[p.id]=p.name
 })
 
-
 function getName(id){
 return names[id] || "TBD"
 }
-
 
 matches.sort((a,b)=>{
 
@@ -207,18 +215,9 @@ return a.round-b.round
 
 })
 
-
 const round1 = matches.filter(m=>m.round==1)
-const round2 = matches.filter(m=>m.round==2)
-const round3 = matches.filter(m=>m.round==3)
-const round4 = matches.filter(m=>m.round==4)
-
 
 document.querySelectorAll(".round").forEach(r=>r.innerHTML="")
-
-
-
-/***** ROUND 1 *****/
 
 round1.forEach((m,i)=>{
 
@@ -243,32 +242,6 @@ document.getElementById("r1r")
 }
 
 })
-
-
-/***** ROUND 2 *****/
-
-for(let i=0;i<4;i++){
-
-document.getElementById("r2l").appendChild(createBox("TBD"))
-document.getElementById("r2r").appendChild(createBox("TBD"))
-
-}
-
-
-/***** ROUND 3 *****/
-
-for(let i=0;i<2;i++){
-
-document.getElementById("r3l").appendChild(createBox("TBD"))
-document.getElementById("r3r").appendChild(createBox("TBD"))
-
-}
-
-
-/***** FINAL *****/
-
-document.getElementById("r4l").appendChild(createBox("TBD"))
-document.getElementById("r4r").appendChild(createBox("TBD"))
 
 }
 
