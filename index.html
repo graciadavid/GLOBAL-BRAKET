@@ -208,19 +208,25 @@ async function updatePercentages(){
 
 const { data } = await supabase
 .from("votes")
-.select("*")
+.select("match,choice")
 
 if(!data) return
 
 const counts = {}
 
 data.forEach(v=>{
-if(!counts[v.match]) counts[v.match]={}
-if(!counts[v.match][v.choice]) counts[v.match][v.choice]=0
-counts[v.match][v.choice]++
+
+const match = v.match.toLowerCase()
+const choice = v.choice.toLowerCase()
+
+if(!counts[match]) counts[match]={}
+if(!counts[match][choice]) counts[match][choice]=0
+
+counts[match][choice]++
+
 })
 
-const matches = [
+const matches=[
 "madrid-barcelona",
 "paris-rome",
 "london-berlin",
@@ -233,11 +239,11 @@ const matches = [
 
 matches.forEach(match=>{
 
-let teamA = match.split("-")[0]
-let teamB = match.split("-")[1]
+let teamA=match.split("-")[0]
+let teamB=match.split("-")[1]
 
-let votesA = counts[match]?.[teamA] || 0
-let votesB = counts[match]?.[teamB] || 0
+let votesA=counts[match]?.[teamA]||0
+let votesB=counts[match]?.[teamB]||0
 
 if(votesA===0 && votesB===0){
 votesA=1
