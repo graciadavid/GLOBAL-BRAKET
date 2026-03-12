@@ -89,44 +89,44 @@ text-align:center;
 
 <div class="bracket">
 
-<!-- ROUND 1 -->
+<!-- LEFT ROUND 1 -->
 
 <div class="round round-1">
 
 <div class="match">
-<div class="team" id="oct1a" onclick="openOct('madrid-barcelona')">Madrid <span id="madrid">50%</span></div>
-<div class="team" id="oct1b" onclick="openOct('madrid-barcelona')">Barcelona <span id="barcelona">50%</span></div>
+<div class="team" onclick="voteOct('madrid-barcelona')">Madrid <span id="madrid">50%</span></div>
+<div class="team" onclick="voteOct('madrid-barcelona')">Barcelona <span id="barcelona">50%</span></div>
 </div>
 
 <div class="match">
-<div class="team" id="oct2a" onclick="openOct('paris-rome')">Paris <span id="paris">50%</span></div>
-<div class="team" id="oct2b" onclick="openOct('paris-rome')">Rome <span id="rome">50%</span></div>
+<div class="team" onclick="voteOct('paris-rome')">Paris <span id="paris">50%</span></div>
+<div class="team" onclick="voteOct('paris-rome')">Rome <span id="rome">50%</span></div>
 </div>
 
 <div class="match">
-<div class="team" id="oct3a" onclick="openOct('london-berlin')">London <span id="london">50%</span></div>
-<div class="team" id="oct3b" onclick="openOct('london-berlin')">Berlin <span id="berlin">50%</span></div>
+<div class="team" onclick="voteOct('london-berlin')">London <span id="london">50%</span></div>
+<div class="team" onclick="voteOct('london-berlin')">Berlin <span id="berlin">50%</span></div>
 </div>
 
 <div class="match">
-<div class="team" id="oct4a" onclick="openOct('lisbon-amsterdam')">Lisbon <span id="lisbon">50%</span></div>
-<div class="team" id="oct4b" onclick="openOct('lisbon-amsterdam')">Amsterdam <span id="amsterdam">50%</span></div>
+<div class="team" onclick="voteOct('lisbon-amsterdam')">Lisbon <span id="lisbon">50%</span></div>
+<div class="team" onclick="voteOct('lisbon-amsterdam')">Amsterdam <span id="amsterdam">50%</span></div>
 </div>
 
 </div>
 
-<!-- QUARTERS -->
+<!-- LEFT QUARTERS -->
 
 <div class="round round-2">
 
 <div class="match">
-<div class="team" id="qf1a" onclick="openQuarter('qf1')">TBD <span id="qf1ap">-</span></div>
-<div class="team" id="qf1b" onclick="openQuarter('qf1')">TBD <span id="qf1bp">-</span></div>
+<div class="team" id="qf1a" onclick="voteQuarter('qf1')">TBD</div>
+<div class="team" id="qf1b" onclick="voteQuarter('qf1')">TBD</div>
 </div>
 
 <div class="match">
-<div class="team" id="qf2a" onclick="openQuarter('qf2')">TBD <span id="qf2ap">-</span></div>
-<div class="team" id="qf2b" onclick="openQuarter('qf2')">TBD <span id="qf2bp">-</span></div>
+<div class="team" id="qf2a" onclick="voteQuarter('qf2')">TBD</div>
+<div class="team" id="qf2b" onclick="voteQuarter('qf2')">TBD</div>
 </div>
 
 </div>
@@ -150,6 +150,57 @@ FINAL
 </div>
 </div>
 
+<!-- RIGHT SEMI -->
+
+<div class="round round-3">
+<div class="match">
+<div class="team">TBD</div>
+<div class="team">TBD</div>
+</div>
+</div>
+
+<!-- RIGHT QUARTERS -->
+
+<div class="round round-2">
+
+<div class="match">
+<div class="team" id="qf3a" onclick="voteQuarter('qf3')">TBD</div>
+<div class="team" id="qf3b" onclick="voteQuarter('qf3')">TBD</div>
+</div>
+
+<div class="match">
+<div class="team" id="qf4a" onclick="voteQuarter('qf4')">TBD</div>
+<div class="team" id="qf4b" onclick="voteQuarter('qf4')">TBD</div>
+</div>
+
+</div>
+
+<!-- RIGHT ROUND 1 -->
+
+<div class="round round-1">
+
+<div class="match">
+<div class="team" onclick="voteOct('prague-vienna')">Prague <span id="prague">50%</span></div>
+<div class="team" onclick="voteOct('prague-vienna')">Vienna <span id="vienna">50%</span></div>
+</div>
+
+<div class="match">
+<div class="team" onclick="voteOct('budapest-dublin')">Budapest <span id="budapest">50%</span></div>
+<div class="team" onclick="voteOct('budapest-dublin')">Dublin <span id="dublin">50%</span></div>
+</div>
+
+<div class="match">
+<div class="team" onclick="voteOct('copenhagen-florence')">Copenhagen <span id="copenhagen">50%</span></div>
+<div class="team" onclick="voteOct('copenhagen-florence')">Florence <span id="florence">50%</span></div>
+</div>
+
+<div class="match">
+<div class="team" onclick="voteOct('seville-milan')">Seville <span id="seville">50%</span></div>
+<div class="team" onclick="voteOct('seville-milan')">Milan <span id="milan">50%</span></div>
+</div>
+
+</div>
+
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -158,7 +209,7 @@ FINAL
 
 const supabaseClient = window.supabase.createClient(
 "https://okaprbdbtnyiutztibcs.supabase.co",
-"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9rYXByYmRidG55aXV0enRpYmNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzMDgyNjgsImV4cCI6MjA4ODg4NDI2OH0.8tfmypajrsLVbrD3-PUwkJvrM1h9aQ8UN2IP3btoNLE"
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 )
 
 function cutoffPassed(){
@@ -167,27 +218,27 @@ cutoff.setHours(19,5,0,0)
 return new Date()>=cutoff
 }
 
-function openOct(match){
+function voteOct(match){
 
 if(cutoffPassed()){
-alert("Round of 16 is closed")
+alert("Round of 16 closed")
 return
 }
 
 window.location.href="/duel.html?match="+match
 }
 
-function openQuarter(id){
+function voteQuarter(id){
 
 if(!cutoffPassed()){
 alert("Quarterfinals not open yet")
 return
 }
 
-const team1=document.getElementById(id+"a").innerText.split(" ")[0].toLowerCase()
-const team2=document.getElementById(id+"b").innerText.split(" ")[0].toLowerCase()
+let a=document.getElementById(id+"a").innerText.toLowerCase()
+let b=document.getElementById(id+"b").innerText.toLowerCase()
 
-window.location.href="/duel.html?match="+team1+"-"+team2
+window.location.href="/duel.html?match="+a+"-"+b
 }
 
 function winner(data,match,a,b){
@@ -209,56 +260,31 @@ return va>=vb?a:b
 
 async function updateBracket(){
 
-const {data}=await supabaseClient
-.from("votes")
-.select("*")
+const {data}=await supabaseClient.from("votes").select("*")
 
 if(!data)return
 
-const matches={
-"madrid-barcelona":["madrid","barcelona"],
-"paris-rome":["paris","rome"],
-"london-berlin":["london","berlin"],
-"lisbon-amsterdam":["lisbon","amsterdam"]
-}
-
-Object.keys(matches).forEach(m=>{
-let[a,b]=matches[m]
-
-let va=0
-let vb=0
-
-data.forEach(v=>{
-if(v.match===m){
-if(v.choice===a)va++
-if(v.choice===b)vb++
-}
-})
-
-if(va===0&&vb===0){va=1;vb=1}
-
-let total=va+vb
-
-document.getElementById(a).innerText=Math.round(va/total*100)+"%"
-document.getElementById(b).innerText=Math.round(vb/total*100)+"%"
-})
-
 if(cutoffPassed()){
-
-document.getElementById("statusText").innerText="Round of 16 finished. Quarterfinals open."
-
-document.querySelectorAll(".round-1 .team").forEach(t=>t.classList.add("locked"))
 
 let w1=winner(data,"madrid-barcelona","madrid","barcelona")
 let w2=winner(data,"paris-rome","paris","rome")
 let w3=winner(data,"london-berlin","london","berlin")
 let w4=winner(data,"lisbon-amsterdam","lisbon","amsterdam")
 
-document.getElementById("qf1a").innerHTML=w1+" <span id='qf1ap'>50%</span>"
-document.getElementById("qf1b").innerHTML=w2+" <span id='qf1bp'>50%</span>"
+let w5=winner(data,"prague-vienna","prague","vienna")
+let w6=winner(data,"budapest-dublin","budapest","dublin")
+let w7=winner(data,"copenhagen-florence","copenhagen","florence")
+let w8=winner(data,"seville-milan","seville","milan")
 
-document.getElementById("qf2a").innerHTML=w3+" <span id='qf2ap'>50%</span>"
-document.getElementById("qf2b").innerHTML=w4+" <span id='qf2bp'>50%</span>"
+document.getElementById("qf1a").innerText=w1
+document.getElementById("qf1b").innerText=w2
+document.getElementById("qf2a").innerText=w3
+document.getElementById("qf2b").innerText=w4
+
+document.getElementById("qf3a").innerText=w5
+document.getElementById("qf3b").innerText=w6
+document.getElementById("qf4a").innerText=w7
+document.getElementById("qf4b").innerText=w8
 
 }
 
