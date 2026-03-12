@@ -1,233 +1,263 @@
 <!DOCTYPE html>
 <html>
 <head>
-
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Duel</title>
-
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
 <style>
+*{
+  box-sizing:border-box;
+}
 
 body{
-margin:0;
-font-family:Arial;
-background:linear-gradient(#3c3ccf,#000);
-color:white;
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
+  margin:0;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:Arial, Helvetica, sans-serif;
+  background:linear-gradient(180deg,#3c3ccf 0%, #15156f 45%, #020214 100%);
+  color:white;
+  padding:20px;
 }
 
-.container{
-text-align:center;
+.card{
+  width:min(760px, 100%);
+  background:rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.14);
+  border-radius:24px;
+  padding:28px;
+  text-align:center;
+  backdrop-filter:blur(8px);
 }
 
-.title{
-font-size:48px;
-margin-bottom:50px;
+h1{
+  margin:0 0 12px;
+  font-size:40px;
+  font-weight:400;
+}
+
+.sub{
+  color:#dfdfff;
+  margin-bottom:26px;
 }
 
 .duel{
-display:flex;
-gap:120px;
-align-items:center;
-justify-content:center;
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  gap:18px;
+  align-items:center;
 }
 
 .player{
-background:white;
-color:black;
-padding:30px 60px;
-border-radius:14px;
-font-size:26px;
-font-weight:bold;
-cursor:pointer;
-transition:.2s;
+  background:white;
+  color:#111;
+  border-radius:18px;
+  padding:26px 18px;
+  cursor:pointer;
+  transition:transform .15s ease;
 }
 
 .player:hover{
-transform:scale(1.06);
+  transform:translateY(-2px);
 }
 
-.percent{
-margin-top:12px;
-font-size:18px;
+.name{
+  font-size:28px;
+  font-weight:700;
+  margin-bottom:10px;
+}
+
+.pct{
+  font-size:18px;
+  font-weight:700;
 }
 
 .vs{
-font-size:32px;
+  font-size:34px;
+  font-weight:700;
 }
 
-.message{
-margin-top:30px;
-font-size:18px;
+.msg{
+  margin-top:22px;
+  min-height:24px;
+  color:#ffe96e;
 }
 
+.back{
+  margin-top:24px;
+  background:#ffd700;
+  color:#111;
+  border:none;
+  border-radius:999px;
+  padding:12px 18px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+@media (max-width: 700px){
+  .duel{
+    grid-template-columns:1fr;
+  }
+  .vs{
+    display:none;
+  }
+}
 </style>
-
 </head>
 
 <body>
+<div class="card">
+  <h1 id="title">Loading...</h1>
+  <div class="sub" id="sub"></div>
 
-<div class="container">
+  <div class="duel">
+    <div class="player" id="p1">
+      <div class="name" id="n1">...</div>
+      <div class="pct" id="pct1">50%</div>
+    </div>
 
-<div class="title" id="title">Loading...</div>
+    <div class="vs">VS</div>
 
-<div class="duel">
+    <div class="player" id="p2">
+      <div class="name" id="n2">...</div>
+      <div class="pct" id="pct2">50%</div>
+    </div>
+  </div>
 
-<div>
-<div class="player" id="p1">...</div>
-<div class="percent" id="percent1"></div>
-</div>
+  <div class="msg" id="msg"></div>
 
-<div class="vs">VS</div>
-
-<div>
-<div class="player" id="p2">...</div>
-<div class="percent" id="percent2"></div>
-</div>
-
-</div>
-
-<div class="message" id="message"></div>
-
+  <button class="back" onclick="goBack()">← Back to bracket</button>
 </div>
 
 <script>
-
-/* SUPABASE */
-
-const { createClient } = supabase
+const { createClient } = supabase;
 
 const supabaseClient = createClient(
-"https://okaprbdbtnyiutztibcs.supabase.co",
-"TU_ANON_PUBLIC_KEY"
-)
+  "https://okaprbdbtnyiutztibcs.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9rYXByYmRidG55aXV0enRpYmNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzMDgyNjgsImV4cCI6MjA4ODg4NDI2OH0.8tfmypajrsLVbrD3-PUwkJvrM1h9aQ8UN2IP3btoNLE"
+);
 
-/* SESSION */
-
-let session_id = localStorage.getItem("session_id")
-
-if(!session_id){
-session_id = crypto.randomUUID()
-localStorage.setItem("session_id",session_id)
+let sessionId = localStorage.getItem("session_id");
+if(!sessionId){
+  sessionId = crypto.randomUUID();
+  localStorage.setItem("session_id", sessionId);
 }
 
-/* EXTRAER MATCH ID DE LA URL SEO */
+const params = new URLSearchParams(window.location.search);
+const matchId = Number(params.get("match"));
 
-const path = window.location.pathname
+let currentMatch = null;
+let player1 = null;
+let player2 = null;
 
-const slug = path.split("/").pop()
-
-const match_id = slug.split("-").pop()
-
-/* CARGAR MATCH */
-
-async function loadMatch(){
-
-const { data:match } = await supabaseClient
-.from("matches")
-.select("*")
-.eq("id",match_id)
-.single()
-
-const { data:p1 } = await supabaseClient
-.from("participants")
-.select("name")
-.eq("id",match.player1_id)
-.single()
-
-const { data:p2 } = await supabaseClient
-.from("participants")
-.select("name")
-.eq("id",match.player2_id)
-.single()
-
-document.getElementById("title").innerText = p1.name + " vs " + p2.name
-
-document.getElementById("p1").innerText = p1.name
-document.getElementById("p2").innerText = p2.name
-
-updatePercent(match.votes1, match.votes2)
-
+function calcPct(v1, v2){
+  const total = (v1 || 0) + (v2 || 0);
+  if(total <= 0) return [50, 50];
+  return [
+    Math.round((v1 * 100) / total),
+    Math.round((v2 * 100) / total)
+  ];
 }
 
-/* PORCENTAJE */
+async function loadDuel(){
+  if(!matchId){
+    document.getElementById("title").textContent = "Match not found";
+    return;
+  }
 
-function updatePercent(v1,v2){
+  const { data: match, error: matchError } = await supabaseClient
+    .from("matches")
+    .select("*")
+    .eq("id", matchId)
+    .single();
 
-const total = v1 + v2
+  if(matchError || !match){
+    document.getElementById("title").textContent = "Match not found";
+    return;
+  }
 
-const p1 = Math.round(v1/total*100)
-const p2 = Math.round(v2/total*100)
+  currentMatch = match;
 
-document.getElementById("percent1").innerText = p1 + "%"
-document.getElementById("percent2").innerText = p2 + "%"
+  const { data: p1 } = await supabaseClient
+    .from("participants")
+    .select("id,name")
+    .eq("id", match.player1_id)
+    .single();
 
+  const { data: p2 } = await supabaseClient
+    .from("participants")
+    .select("id,name")
+    .eq("id", match.player2_id)
+    .single();
+
+  player1 = p1;
+  player2 = p2;
+
+  document.getElementById("title").textContent = `${p1.name} vs ${p2.name}`;
+  document.getElementById("sub").textContent = `Match #${match.id}`;
+
+  document.getElementById("n1").textContent = p1.name;
+  document.getElementById("n2").textContent = p2.name;
+
+  const pcts = calcPct(match.votes1 || 1, match.votes2 || 1);
+  document.getElementById("pct1").textContent = `${pcts[0]}%`;
+  document.getElementById("pct2").textContent = `${pcts[1]}%`;
 }
 
-/* VOTAR */
+async function vote(which){
+  if(!currentMatch || !player1 || !player2) return;
 
-async function vote(player){
+  const voteKey = `vote_match_${currentMatch.id}`;
+  const already = localStorage.getItem(voteKey);
 
-const { data:existing } = await supabaseClient
-.from("votes")
-.select("*")
-.eq("session_id",session_id)
-.eq("match_id",match_id)
+  if(already){
+    document.getElementById("msg").textContent = "You already voted in this duel";
+    return;
+  }
 
-if(existing.length > 0){
+  const newVotes1 = which === 1 ? (currentMatch.votes1 || 1) + 1 : (currentMatch.votes1 || 1);
+  const newVotes2 = which === 2 ? (currentMatch.votes2 || 1) + 1 : (currentMatch.votes2 || 1);
 
-document.getElementById("message").innerText = "You already voted in this duel"
+  const { error: updateError } = await supabaseClient
+    .from("matches")
+    .update({
+      votes1: newVotes1,
+      votes2: newVotes2
+    })
+    .eq("id", currentMatch.id);
 
-return
+  if(updateError){
+    document.getElementById("msg").textContent = "Error recording vote";
+    return;
+  }
 
+  const votedPlayerId = which === 1 ? player1.id : player2.id;
+
+  await supabaseClient
+    .from("votes")
+    .insert({
+      match_id: currentMatch.id,
+      session_id: sessionId,
+      player_id: votedPlayerId
+    });
+
+  localStorage.setItem(voteKey, "1");
+  document.getElementById("msg").textContent = "Vote recorded!";
+
+  await loadDuel();
 }
 
-await supabaseClient
-.from("votes")
-.insert({
-
-match_id:match_id,
-session_id:session_id,
-player_id:player
-
-})
-
-const { data:match } = await supabaseClient
-.from("matches")
-.select("*")
-.eq("id",match_id)
-.single()
-
-if(player == 1){
-match.votes1++
-await supabaseClient.from("matches").update({votes1:match.votes1}).eq("id",match_id)
+function goBack(){
+  window.history.back();
 }
 
-if(player == 2){
-match.votes2++
-await supabaseClient.from("matches").update({votes2:match.votes2}).eq("id",match_id)
-}
+document.getElementById("p1").onclick = () => vote(1);
+document.getElementById("p2").onclick = () => vote(2);
 
-updatePercent(match.votes1, match.votes2)
-
-document.getElementById("message").innerText = "Vote recorded!"
-
-}
-
-/* EVENTOS */
-
-document.getElementById("p1").onclick = () => vote(1)
-document.getElementById("p2").onclick = () => vote(2)
-
-/* INIT */
-
-loadMatch()
-
+loadDuel();
 </script>
-
 </body>
 </html>
