@@ -1,219 +1,435 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Best Male Name</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bracket</title>
+  <style>
+    *{
+      box-sizing:border-box;
+    }
 
-<style>
+    html, body{
+      margin:0;
+      width:100%;
+      height:100%;
+      overflow:hidden;
+      font-family:Arial, Helvetica, sans-serif;
+      background:linear-gradient(180deg,#3c3ccf 0%, #111 100%);
+      color:white;
+    }
 
-body{
-margin:0;
-font-family:Arial;
-background:linear-gradient(#3c3ccf,#000);
-color:white;
-overflow:hidden;
-}
+    :root{
+      --design-width: 1680;
+      --design-height: 920;
+      --match-width: 180px;
+      --match-height: 44px;
+      --round-gap: 28px;
+    }
 
-.title{
-text-align:center;
-font-size:34px;
-padding:20px;
-letter-spacing:3px;
-}
+    .page{
+      width:100vw;
+      height:100vh;
+      position:relative;
+      overflow:hidden;
+    }
 
-.bracket{
-display:flex;
-justify-content:center;
-align-items:center;
-height:90vh;
-gap:40px;
-}
+    .scale-stage{
+      position:absolute;
+      left:50%;
+      top:50%;
+      transform:translate(-50%, -50%) scale(1);
+      transform-origin:center center;
+      width:calc(var(--design-width) * 1px);
+      height:calc(var(--design-height) * 1px);
+    }
 
-.side{
-display:flex;
-align-items:center;
-gap:20px;
-}
+    .title{
+      text-align:center;
+      font-size:42px;
+      font-weight:300;
+      margin:20px 0 10px;
+    }
 
-.round{
-display:flex;
-flex-direction:column;
-justify-content:space-around;
-height:80vh;
-}
+    .topbar{
+      width:1500px;
+      margin:0 auto 12px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+    }
 
-.match{
-width:130px;
-padding:4px;
-background:linear-gradient(#eee,#bbb);
-border-radius:10px;
-margin:4px 0;
-text-align:center;
-font-size:13px;
-color:black;
-cursor:pointer;
-}
+    .back{
+      background:white;
+      color:#111;
+      border:none;
+      border-radius:999px;
+      padding:10px 16px;
+      font-weight:700;
+      cursor:pointer;
+    }
 
-.match:hover{
-background:#fff;
-}
+    .competition-label{
+      color:#e6e6ff;
+      font-size:16px;
+    }
 
-.connector{
-width:30px;
-border-top:2px solid white;
-}
+    .bracket{
+      width:1500px;
+      height:760px;
+      margin:0 auto;
+      display:grid;
+      grid-template-columns: 190px 190px 190px 190px 220px 190px 190px 190px 190px;
+      column-gap:var(--round-gap);
+      align-items:start;
+    }
 
-.champion{
-width:150px;
-padding:10px;
-text-align:center;
-background:linear-gradient(#eee,#bbb);
-border-radius:15px;
-color:black;
-font-weight:bold;
-}
+    .round{
+      height:100%;
+      position:relative;
+    }
 
-.center{
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
-}
+    .match{
+      width:var(--match-width);
+      position:absolute;
+      left:0;
+      transform:translateY(-50%);
+    }
 
-@media(max-width:900px){
+    .player{
+      height:var(--match-height);
+      border-radius:10px;
+      background:linear-gradient(180deg,#efefef 0%, #cfcfcf 100%);
+      color:#111;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 12px;
+      font-size:14px;
+      box-shadow:0 2px 8px rgba(0,0,0,0.15);
+      white-space:nowrap;
+      overflow:hidden;
+    }
 
-body{
-overflow:auto;
-}
+    .player + .player{
+      margin-top:4px;
+    }
 
-.bracket{
-flex-direction:column;
-height:auto;
-}
+    .name{
+      overflow:hidden;
+      text-overflow:ellipsis;
+      margin-right:8px;
+    }
 
-.round{
-height:auto;
-flex-direction:row;
-flex-wrap:wrap;
-}
+    .percent{
+      font-weight:700;
+      flex-shrink:0;
+    }
 
-}
+    .clickable{
+      cursor:pointer;
+      transition:transform .15s ease, box-shadow .15s ease;
+    }
 
-</style>
+    .clickable:hover{
+      transform:scale(1.03);
+      box-shadow:0 4px 14px rgba(0,0,0,0.2);
+    }
 
+    .single{
+      height:var(--match-height);
+      justify-content:center;
+      font-weight:700;
+    }
+
+    .champion-wrap{
+      position:relative;
+      height:100%;
+    }
+
+    .champion{
+      position:absolute;
+      left:20px;
+      top:50%;
+      transform:translateY(-50%);
+      width:180px;
+      height:64px;
+      border-radius:999px;
+      background:gold;
+      color:#111;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:18px;
+      font-weight:700;
+      box-shadow:0 8px 24px rgba(0,0,0,0.18);
+    }
+
+    @media (max-width: 900px){
+      html, body{
+        overflow:auto;
+      }
+
+      .page{
+        height:auto;
+        min-height:100vh;
+      }
+
+      .scale-stage{
+        position:relative;
+        left:auto;
+        top:auto;
+        transform:none !important;
+        width:100%;
+        height:auto;
+        padding:20px;
+      }
+
+      .topbar,
+      .bracket{
+        width:100%;
+      }
+
+      .bracket{
+        display:flex;
+        flex-direction:column;
+        gap:20px;
+        height:auto;
+      }
+
+      .round{
+        height:auto;
+      }
+
+      .match{
+        position:relative;
+        transform:none;
+        margin-bottom:12px;
+      }
+
+      .champion{
+        position:relative;
+        left:auto;
+        top:auto;
+        transform:none;
+        margin:10px 0 0;
+      }
+    }
+  </style>
 </head>
-
 <body>
+  <div class="page">
+    <div class="scale-stage" id="scaleStage">
+      <div class="title" id="title">BRACKET</div>
 
-<div class="title">BEST MALE NAME</div>
+      <div class="topbar">
+        <button class="back" onclick="goHome()">← Home</button>
+        <div class="competition-label" id="competitionLabel"></div>
+      </div>
 
-<div class="bracket">
+      <div class="bracket">
+        <div class="round" id="left-r1"></div>
+        <div class="round" id="left-r2"></div>
+        <div class="round" id="left-r3"></div>
+        <div class="round" id="left-r4"></div>
 
-<!-- LEFT SIDE -->
+        <div class="champion-wrap">
+          <div class="champion">Champion</div>
+        </div>
 
-<div class="side">
+        <div class="round" id="right-r4"></div>
+        <div class="round" id="right-r3"></div>
+        <div class="round" id="right-r2"></div>
+        <div class="round" id="right-r1"></div>
+      </div>
+    </div>
+  </div>
 
-<div class="round">
+  <script>
+    const competitions = {
+      "names": {
+        title: "BEST MALE NAME",
+        players: [
+          "Alejandro","Daniel","Mateo","Lucas","Hugo","Adrian","Pablo","Bruno",
+          "Diego","Javier","Carlos","Alvaro","Marco","Nicolas","Ivan","Sergio",
+          "Gabriel","Leo","Mario","Andres","David","Eric","Oscar","Raul",
+          "Martin","Joel","Samuel","Enzo","Tomas","Gonzalo","Luis","Ruben"
+        ]
+      },
+      "female-names": {
+        title: "BEST FEMALE NAME",
+        players: [
+          "Lucia","Sofia","Martina","Valeria","Paula","Noa","Emma","Julia",
+          "Daniela","Carla","Sara","Alma","Vega","Lola","Chloe","Aitana",
+          "Elena","Mia","Olivia","Claudia","Jimena","Laura","Abril","Ariadna",
+          "Andrea","Irene","Mara","Leire","Blanca","Nora","Elsa","Celia"
+        ]
+      },
+      "cities": {
+        title: "BEST CITY",
+        players: [
+          "Madrid","Barcelona","Paris","London","Rome","Berlin","Lisbon","Vienna",
+          "Prague","Budapest","Dublin","Amsterdam","Seville","Valencia","Milan","Naples",
+          "Tokyo","Seoul","Bangkok","Istanbul","New York","Chicago","Miami","Boston",
+          "Mexico City","Buenos Aires","Lima","Santiago","Bogota","Quito","Montevideo","Sao Paulo"
+        ]
+      }
+    };
 
-<div class="match" onclick="openDuel('alejandro','daniel')">Alejandro vs Daniel</div>
-<div class="match" onclick="openDuel('mateo','lucas')">Mateo vs Lucas</div>
-<div class="match">Hugo vs Adrián</div>
-<div class="match">Pablo vs Bruno</div>
-<div class="match">Diego vs Javier</div>
-<div class="match">Carlos vs Álvaro</div>
-<div class="match">Marco vs Nicolás</div>
-<div class="match">Iván vs Sergio</div>
+    function getCompetitionKey(){
+      const params = new URLSearchParams(window.location.search);
+      return params.get("competition") || "names";
+    }
 
-</div>
+    function getMatchCenters(matchCount, totalHeight){
+      const segment = totalHeight / matchCount;
+      const centers = [];
+      for(let i = 0; i < matchCount; i++){
+        centers.push((i * segment) + (segment / 2));
+      }
+      return centers;
+    }
 
-<div class="round">
+    function buildRounds(players){
+      const leftPlayers = players.slice(0, 16);
+      const rightPlayers = players.slice(16);
 
-<div class="match"></div>
-<div class="match"></div>
-<div class="match"></div>
-<div class="match"></div>
+      return {
+        left: {
+          r1: makeFirstRound(leftPlayers),
+          r2: makeSingleRound(4),
+          r3: makeSingleRound(2),
+          r4: makeSingleRound(1)
+        },
+        right: {
+          r1: makeFirstRound(rightPlayers),
+          r2: makeSingleRound(4),
+          r3: makeSingleRound(2),
+          r4: makeSingleRound(1)
+        }
+      };
+    }
 
-</div>
+    function makeFirstRound(players){
+      const matches = [];
+      for(let i = 0; i < players.length; i += 2){
+        matches.push({
+          type: "duel",
+          player1: { name: players[i], votes: 1 },
+          player2: { name: players[i + 1], votes: 1 }
+        });
+      }
+      return matches;
+    }
 
-<div class="round">
+    function makeSingleRound(count){
+      return Array.from({ length: count }, () => ({
+        type: "single",
+        name: "",
+        percent: ""
+      }));
+    }
 
-<div class="match"></div>
-<div class="match"></div>
+    function renderDuel(match, competitionKey){
+      const total = match.player1.votes + match.player2.votes;
+      const p1 = Math.round((match.player1.votes / total) * 100);
+      const p2 = Math.round((match.player2.votes / total) * 100);
 
-</div>
+      return `
+        <div class="player clickable"
+             onclick="openDuel('${competitionKey}','${encodeURIComponent(match.player1.name)}','${encodeURIComponent(match.player2.name)}')">
+          <span class="name">${match.player1.name}</span>
+          <span class="percent">${p1}%</span>
+        </div>
+        <div class="player clickable"
+             onclick="openDuel('${competitionKey}','${encodeURIComponent(match.player1.name)}','${encodeURIComponent(match.player2.name)}')">
+          <span class="name">${match.player2.name}</span>
+          <span class="percent">${p2}%</span>
+        </div>
+      `;
+    }
 
-<div class="round">
+    function renderSingle(match){
+      return `
+        <div class="player single">
+          <span class="name">${match.name || " "}</span>
+        </div>
+      `;
+    }
 
-<div class="match"></div>
+    function renderRound(containerId, matches, totalHeight, competitionKey){
+      const container = document.getElementById(containerId);
+      container.innerHTML = "";
+      const centers = getMatchCenters(matches.length, totalHeight);
 
-</div>
+      matches.forEach((match, index) => {
+        const matchEl = document.createElement("div");
+        matchEl.className = "match";
+        matchEl.style.top = centers[index] + "px";
 
-</div>
+        if(match.type === "duel"){
+          matchEl.innerHTML = renderDuel(match, competitionKey);
+        } else {
+          matchEl.innerHTML = renderSingle(match);
+        }
 
+        container.appendChild(matchEl);
+      });
+    }
 
-<!-- CENTER -->
+    function openDuel(competition, encodedName1, encodedName2){
+      window.location.href =
+        "duel.html?competition=" + competition +
+        "&name1=" + encodedName1 +
+        "&name2=" + encodedName2;
+    }
 
-<div class="center">
+    function goHome(){
+      window.location.href = "index.html";
+    }
 
-<div class="champion">Champion</div>
+    function fitBracket(){
+      const stage = document.getElementById("scaleStage");
+      const designWidth = 1680;
+      const designHeight = 920;
 
-</div>
+      if(window.innerWidth <= 900){
+        stage.style.transform = "none";
+        return;
+      }
 
+      const availableWidth = window.innerWidth - 20;
+      const availableHeight = window.innerHeight - 20;
+      const scale = Math.min(availableWidth / designWidth, availableHeight / designHeight, 1);
 
-<!-- RIGHT SIDE -->
+      stage.style.transform = `translate(-50%, -50%) scale(${scale})`;
+    }
 
-<div class="side">
+    function init(){
+      const competitionKey = getCompetitionKey();
+      const competition = competitions[competitionKey] || competitions["names"];
 
-<div class="round">
+      document.getElementById("title").textContent = competition.title;
+      document.getElementById("competitionLabel").textContent = competitionKey;
 
-<div class="match"></div>
+      const rounds = buildRounds(competition.players);
+      const totalHeight = 760;
 
-</div>
+      renderRound("left-r1", rounds.left.r1, totalHeight, competitionKey);
+      renderRound("left-r2", rounds.left.r2, totalHeight, competitionKey);
+      renderRound("left-r3", rounds.left.r3, totalHeight, competitionKey);
+      renderRound("left-r4", rounds.left.r4, totalHeight, competitionKey);
 
-<div class="round">
+      renderRound("right-r4", rounds.right.r4, totalHeight, competitionKey);
+      renderRound("right-r3", rounds.right.r3, totalHeight, competitionKey);
+      renderRound("right-r2", rounds.right.r2, totalHeight, competitionKey);
+      renderRound("right-r1", rounds.right.r1, totalHeight, competitionKey);
 
-<div class="match"></div>
-<div class="match"></div>
+      fitBracket();
+    }
 
-</div>
-
-<div class="round">
-
-<div class="match"></div>
-<div class="match"></div>
-<div class="match"></div>
-<div class="match"></div>
-
-</div>
-
-<div class="round">
-
-<div class="match">Gabriel vs Leo</div>
-<div class="match">Mario vs Andrés</div>
-<div class="match">David vs Eric</div>
-<div class="match">Oscar vs Raúl</div>
-<div class="match">Martín vs Joel</div>
-<div class="match">Samuel vs Enzo</div>
-<div class="match">Tomás vs Gonzalo</div>
-<div class="match">Luis vs Rubén</div>
-
-</div>
-
-</div>
-
-</div>
-
-<script>
-
-function openDuel(a,b){
-
-let url = "duel.html?name1="+a+"&name2="+b;
-
-window.location.href = url;
-
-}
-
-</script>
-
+    window.addEventListener("load", init);
+    window.addEventListener("resize", fitBracket);
+  </script>
 </body>
 </html>
