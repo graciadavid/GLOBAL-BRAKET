@@ -34,22 +34,29 @@ height:80vh;
 display:flex;
 flex-direction:column;
 justify-content:space-around;
-height:500px;
+height:520px;
 }
 
-.box{
-width:160px;
+.player{
+display:flex;
+justify-content:space-between;
+align-items:center;
+width:180px;
 padding:10px;
 border-radius:10px;
 background:linear-gradient(#eee,#bbb);
 color:black;
-text-align:center;
-margin:5px;
-font-size:14px;
+margin:4px;
+cursor:pointer;
+}
+
+.percent{
+font-weight:bold;
 }
 
 .tbd{
 opacity:.4;
+cursor:default;
 }
 
 .final{
@@ -94,7 +101,46 @@ const supabaseClient = createClient(
 "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9rYXByYmRidG55aXV0enRpYmNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzMDgyNjgsImV4cCI6MjA4ODg4NDI2OH0.8tfmypajrsLVbrD3-PUwkJvrM1h9aQ8UN2IP3btoNLE"
 )
 
+async function vote(matchId,player){
+
+const { data: match } = await supabaseClient
+.from("matches")
+.select("*")
+.eq("id",matchId)
+.single()
+
+let v1 = match.votes1
+let v2 = match.votes2
+
+if(player==1) v1++
+if(player==2) v2++
+
+await supabaseClient
+.from("matches")
+.update({
+votes1:v1,
+votes2:v2
+})
+.eq("id",matchId)
+
+loadBracket()
+
+}
+
+function percent(v1,v2){
+
+const total=v1+v2
+return [
+Math.round(v1*100/total),
+Math.round(v2*100/total)
+]
+
+}
+
 async function loadBracket(){
+
+document.getElementById("left1").innerHTML=""
+document.getElementById("right1").innerHTML=""
 
 const { data: matches } = await supabaseClient
 .from("matches")
@@ -106,31 +152,30 @@ const { data: players } = await supabaseClient
 .from("participants")
 .select("*")
 
-const names = {}
+const names={}
 
-players.forEach(p=>{
-names[p.id]=p.name
-})
+players.forEach(p=>names[p.id]=p.name)
 
 const round1 = matches.slice(0,8)
 
 const left = round1.slice(0,4)
 const right = round1.slice(4,8)
 
-function create(name){
+function createPlayer(name,perc,click){
 
 const div=document.createElement("div")
 
-div.className="box"
+div.className="player"
 
-if(!name){
-div.classList.add("tbd")
-div.innerText="TBD"
-}else{
-div.innerText=name
-}
+div.innerHTML=`
+<span>${name}</span>
+<span class="percent">${perc}%</span>
+`
+
+div.onclick=click
 
 return div
+
 }
 
 function render(matches,container){
@@ -139,8 +184,23 @@ const el=document.getElementById(container)
 
 matches.forEach(m=>{
 
-el.appendChild(create(names[m.player1_id]))
-el.appendChild(create(names[m.player2_id]))
+const p = percent(m.votes1,m.votes2)
+
+el.appendChild(
+createPlayer(
+names[m.player1_id],
+p[0],
+()=>vote(m.id,1)
+)
+)
+
+el.appendChild(
+createPlayer(
+names[m.player2_id],
+p[1],
+()=>vote(m.id,2)
+)
+)
 
 })
 
@@ -148,30 +208,6 @@ el.appendChild(create(names[m.player2_id]))
 
 render(left,"left1")
 render(right,"right1")
-
-function empty(container,n){
-
-const el=document.getElementById(container)
-
-for(let i=0;i<n;i++){
-
-const d=document.createElement("div")
-d.className="box tbd"
-d.innerText="TBD"
-
-el.appendChild(d)
-
-}
-
-}
-
-empty("left2",4)
-empty("left3",2)
-empty("left4",1)
-
-empty("right2",4)
-empty("right3",2)
-empty("right4",1)
 
 }
 
