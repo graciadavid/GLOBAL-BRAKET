@@ -1,435 +1,232 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bracket</title>
-  <style>
-    *{
-      box-sizing:border-box;
-    }
+<meta charset="UTF-8">
+<title>Bracket</title>
 
-    html, body{
-      margin:0;
-      width:100%;
-      height:100%;
-      overflow:hidden;
-      font-family:Arial, Helvetica, sans-serif;
-      background:linear-gradient(180deg,#3c3ccf 0%, #111 100%);
-      color:white;
-    }
+<style>
 
-    :root{
-      --design-width: 1680;
-      --design-height: 920;
-      --match-width: 180px;
-      --match-height: 44px;
-      --round-gap: 28px;
-    }
+body{
+margin:0;
+background:linear-gradient(#3c3ccf,#000);
+font-family:Arial;
+overflow:hidden;
+color:white;
+}
 
-    .page{
-      width:100vw;
-      height:100vh;
-      position:relative;
-      overflow:hidden;
-    }
+/* SCALING STAGE */
 
-    .scale-stage{
-      position:absolute;
-      left:50%;
-      top:50%;
-      transform:translate(-50%, -50%) scale(1);
-      transform-origin:center center;
-      width:calc(var(--design-width) * 1px);
-      height:calc(var(--design-height) * 1px);
-    }
+.stage{
+position:absolute;
+left:50%;
+top:50%;
+transform-origin:center;
+}
 
-    .title{
-      text-align:center;
-      font-size:42px;
-      font-weight:300;
-      margin:20px 0 10px;
-    }
+/* BRACKET GRID */
 
-    .topbar{
-      width:1500px;
-      margin:0 auto 12px;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-    }
+.bracket{
+width:1600px;
+height:900px;
 
-    .back{
-      background:white;
-      color:#111;
-      border:none;
-      border-radius:999px;
-      padding:10px 16px;
-      font-weight:700;
-      cursor:pointer;
-    }
+display:grid;
+grid-template-columns:
+180px 180px 180px 180px 220px 180px 180px 180px 180px;
 
-    .competition-label{
-      color:#e6e6ff;
-      font-size:16px;
-    }
+align-items:center;
+}
 
-    .bracket{
-      width:1500px;
-      height:760px;
-      margin:0 auto;
-      display:grid;
-      grid-template-columns: 190px 190px 190px 190px 220px 190px 190px 190px 190px;
-      column-gap:var(--round-gap);
-      align-items:start;
-    }
+/* ROUNDS */
 
-    .round{
-      height:100%;
-      position:relative;
-    }
+.round{
+position:relative;
+height:800px;
+}
 
-    .match{
-      width:var(--match-width);
-      position:absolute;
-      left:0;
-      transform:translateY(-50%);
-    }
+/* MATCH */
 
-    .player{
-      height:var(--match-height);
-      border-radius:10px;
-      background:linear-gradient(180deg,#efefef 0%, #cfcfcf 100%);
-      color:#111;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      padding:0 12px;
-      font-size:14px;
-      box-shadow:0 2px 8px rgba(0,0,0,0.15);
-      white-space:nowrap;
-      overflow:hidden;
-    }
+.match{
+position:absolute;
+width:160px;
+transform:translateY(-50%);
+}
 
-    .player + .player{
-      margin-top:4px;
-    }
+/* PLAYER */
 
-    .name{
-      overflow:hidden;
-      text-overflow:ellipsis;
-      margin-right:8px;
-    }
+.player{
+background:linear-gradient(#eee,#bbb);
+color:black;
+border-radius:8px;
+padding:5px 8px;
+margin:3px 0;
+display:flex;
+justify-content:space-between;
+font-size:12px;
+}
 
-    .percent{
-      font-weight:700;
-      flex-shrink:0;
-    }
+/* CHAMPION */
 
-    .clickable{
-      cursor:pointer;
-      transition:transform .15s ease, box-shadow .15s ease;
-    }
+.champion{
+background:gold;
+padding:18px 40px;
+border-radius:30px;
+color:black;
+font-weight:bold;
+text-align:center;
+}
 
-    .clickable:hover{
-      transform:scale(1.03);
-      box-shadow:0 4px 14px rgba(0,0,0,0.2);
-    }
+/* TITLE */
 
-    .single{
-      height:var(--match-height);
-      justify-content:center;
-      font-weight:700;
-    }
+.title{
+position:absolute;
+top:20px;
+width:100%;
+text-align:center;
+font-size:36px;
+}
 
-    .champion-wrap{
-      position:relative;
-      height:100%;
-    }
-
-    .champion{
-      position:absolute;
-      left:20px;
-      top:50%;
-      transform:translateY(-50%);
-      width:180px;
-      height:64px;
-      border-radius:999px;
-      background:gold;
-      color:#111;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-size:18px;
-      font-weight:700;
-      box-shadow:0 8px 24px rgba(0,0,0,0.18);
-    }
-
-    @media (max-width: 900px){
-      html, body{
-        overflow:auto;
-      }
-
-      .page{
-        height:auto;
-        min-height:100vh;
-      }
-
-      .scale-stage{
-        position:relative;
-        left:auto;
-        top:auto;
-        transform:none !important;
-        width:100%;
-        height:auto;
-        padding:20px;
-      }
-
-      .topbar,
-      .bracket{
-        width:100%;
-      }
-
-      .bracket{
-        display:flex;
-        flex-direction:column;
-        gap:20px;
-        height:auto;
-      }
-
-      .round{
-        height:auto;
-      }
-
-      .match{
-        position:relative;
-        transform:none;
-        margin-bottom:12px;
-      }
-
-      .champion{
-        position:relative;
-        left:auto;
-        top:auto;
-        transform:none;
-        margin:10px 0 0;
-      }
-    }
-  </style>
+</style>
 </head>
+
 <body>
-  <div class="page">
-    <div class="scale-stage" id="scaleStage">
-      <div class="title" id="title">BRACKET</div>
 
-      <div class="topbar">
-        <button class="back" onclick="goHome()">← Home</button>
-        <div class="competition-label" id="competitionLabel"></div>
-      </div>
+<div class="title">BEST MALE NAME</div>
 
-      <div class="bracket">
-        <div class="round" id="left-r1"></div>
-        <div class="round" id="left-r2"></div>
-        <div class="round" id="left-r3"></div>
-        <div class="round" id="left-r4"></div>
+<div class="stage" id="stage">
 
-        <div class="champion-wrap">
-          <div class="champion">Champion</div>
-        </div>
+<div class="bracket">
 
-        <div class="round" id="right-r4"></div>
-        <div class="round" id="right-r3"></div>
-        <div class="round" id="right-r2"></div>
-        <div class="round" id="right-r1"></div>
-      </div>
-    </div>
-  </div>
+<div class="round" id="r1L"></div>
+<div class="round" id="r2L"></div>
+<div class="round" id="r3L"></div>
+<div class="round" id="r4L"></div>
 
-  <script>
-    const competitions = {
-      "names": {
-        title: "BEST MALE NAME",
-        players: [
-          "Alejandro","Daniel","Mateo","Lucas","Hugo","Adrian","Pablo","Bruno",
-          "Diego","Javier","Carlos","Alvaro","Marco","Nicolas","Ivan","Sergio",
-          "Gabriel","Leo","Mario","Andres","David","Eric","Oscar","Raul",
-          "Martin","Joel","Samuel","Enzo","Tomas","Gonzalo","Luis","Ruben"
-        ]
-      },
-      "female-names": {
-        title: "BEST FEMALE NAME",
-        players: [
-          "Lucia","Sofia","Martina","Valeria","Paula","Noa","Emma","Julia",
-          "Daniela","Carla","Sara","Alma","Vega","Lola","Chloe","Aitana",
-          "Elena","Mia","Olivia","Claudia","Jimena","Laura","Abril","Ariadna",
-          "Andrea","Irene","Mara","Leire","Blanca","Nora","Elsa","Celia"
-        ]
-      },
-      "cities": {
-        title: "BEST CITY",
-        players: [
-          "Madrid","Barcelona","Paris","London","Rome","Berlin","Lisbon","Vienna",
-          "Prague","Budapest","Dublin","Amsterdam","Seville","Valencia","Milan","Naples",
-          "Tokyo","Seoul","Bangkok","Istanbul","New York","Chicago","Miami","Boston",
-          "Mexico City","Buenos Aires","Lima","Santiago","Bogota","Quito","Montevideo","Sao Paulo"
-        ]
-      }
-    };
+<div style="display:flex;align-items:center;justify-content:center;">
+<div class="champion">Champion</div>
+</div>
 
-    function getCompetitionKey(){
-      const params = new URLSearchParams(window.location.search);
-      return params.get("competition") || "names";
-    }
+<div class="round" id="r4R"></div>
+<div class="round" id="r3R"></div>
+<div class="round" id="r2R"></div>
+<div class="round" id="r1R"></div>
 
-    function getMatchCenters(matchCount, totalHeight){
-      const segment = totalHeight / matchCount;
-      const centers = [];
-      for(let i = 0; i < matchCount; i++){
-        centers.push((i * segment) + (segment / 2));
-      }
-      return centers;
-    }
+</div>
+</div>
 
-    function buildRounds(players){
-      const leftPlayers = players.slice(0, 16);
-      const rightPlayers = players.slice(16);
+<script>
 
-      return {
-        left: {
-          r1: makeFirstRound(leftPlayers),
-          r2: makeSingleRound(4),
-          r3: makeSingleRound(2),
-          r4: makeSingleRound(1)
-        },
-        right: {
-          r1: makeFirstRound(rightPlayers),
-          r2: makeSingleRound(4),
-          r3: makeSingleRound(2),
-          r4: makeSingleRound(1)
-        }
-      };
-    }
+/* PLAYERS */
 
-    function makeFirstRound(players){
-      const matches = [];
-      for(let i = 0; i < players.length; i += 2){
-        matches.push({
-          type: "duel",
-          player1: { name: players[i], votes: 1 },
-          player2: { name: players[i + 1], votes: 1 }
-        });
-      }
-      return matches;
-    }
+const players = [
+"Alejandro","Daniel","Mateo","Lucas","Hugo","Adrian","Pablo","Bruno",
+"Diego","Javier","Carlos","Alvaro","Marco","Nicolas","Ivan","Sergio",
+"Gabriel","Leo","Mario","Andres","David","Eric","Oscar","Raul",
+"Martin","Joel","Samuel","Enzo","Tomas","Gonzalo","Luis","Ruben"
+]
 
-    function makeSingleRound(count){
-      return Array.from({ length: count }, () => ({
-        type: "single",
-        name: "",
-        percent: ""
-      }));
-    }
+/* CREATE MATCH */
 
-    function renderDuel(match, competitionKey){
-      const total = match.player1.votes + match.player2.votes;
-      const p1 = Math.round((match.player1.votes / total) * 100);
-      const p2 = Math.round((match.player2.votes / total) * 100);
+function createMatch(p1,p2){
 
-      return `
-        <div class="player clickable"
-             onclick="openDuel('${competitionKey}','${encodeURIComponent(match.player1.name)}','${encodeURIComponent(match.player2.name)}')">
-          <span class="name">${match.player1.name}</span>
-          <span class="percent">${p1}%</span>
-        </div>
-        <div class="player clickable"
-             onclick="openDuel('${competitionKey}','${encodeURIComponent(match.player1.name)}','${encodeURIComponent(match.player2.name)}')">
-          <span class="name">${match.player2.name}</span>
-          <span class="percent">${p2}%</span>
-        </div>
-      `;
-    }
+return `
+<div class="match">
+<div class="player">${p1}<span>50%</span></div>
+<div class="player">${p2}<span>50%</span></div>
+</div>
+`
 
-    function renderSingle(match){
-      return `
-        <div class="player single">
-          <span class="name">${match.name || " "}</span>
-        </div>
-      `;
-    }
+}
 
-    function renderRound(containerId, matches, totalHeight, competitionKey){
-      const container = document.getElementById(containerId);
-      container.innerHTML = "";
-      const centers = getMatchCenters(matches.length, totalHeight);
+/* POSITIONS */
 
-      matches.forEach((match, index) => {
-        const matchEl = document.createElement("div");
-        matchEl.className = "match";
-        matchEl.style.top = centers[index] + "px";
+function centers(count,height){
 
-        if(match.type === "duel"){
-          matchEl.innerHTML = renderDuel(match, competitionKey);
-        } else {
-          matchEl.innerHTML = renderSingle(match);
-        }
+let space = height/count
+let arr=[]
 
-        container.appendChild(matchEl);
-      });
-    }
+for(let i=0;i<count;i++)
+arr.push(space*i + space/2)
 
-    function openDuel(competition, encodedName1, encodedName2){
-      window.location.href =
-        "duel.html?competition=" + competition +
-        "&name1=" + encodedName1 +
-        "&name2=" + encodedName2;
-    }
+return arr
 
-    function goHome(){
-      window.location.href = "index.html";
-    }
+}
 
-    function fitBracket(){
-      const stage = document.getElementById("scaleStage");
-      const designWidth = 1680;
-      const designHeight = 920;
+/* RENDER ROUND */
 
-      if(window.innerWidth <= 900){
-        stage.style.transform = "none";
-        return;
-      }
+function renderRound(id,matches){
 
-      const availableWidth = window.innerWidth - 20;
-      const availableHeight = window.innerHeight - 20;
-      const scale = Math.min(availableWidth / designWidth, availableHeight / designHeight, 1);
+let container = document.getElementById(id)
+let h=800
+let c=centers(matches.length,h)
 
-      stage.style.transform = `translate(-50%, -50%) scale(${scale})`;
-    }
+matches.forEach((m,i)=>{
 
-    function init(){
-      const competitionKey = getCompetitionKey();
-      const competition = competitions[competitionKey] || competitions["names"];
+let el=document.createElement("div")
+el.className="match"
+el.style.top=c[i]+"px"
 
-      document.getElementById("title").textContent = competition.title;
-      document.getElementById("competitionLabel").textContent = competitionKey;
+el.innerHTML=m
 
-      const rounds = buildRounds(competition.players);
-      const totalHeight = 760;
+container.appendChild(el)
 
-      renderRound("left-r1", rounds.left.r1, totalHeight, competitionKey);
-      renderRound("left-r2", rounds.left.r2, totalHeight, competitionKey);
-      renderRound("left-r3", rounds.left.r3, totalHeight, competitionKey);
-      renderRound("left-r4", rounds.left.r4, totalHeight, competitionKey);
+})
 
-      renderRound("right-r4", rounds.right.r4, totalHeight, competitionKey);
-      renderRound("right-r3", rounds.right.r3, totalHeight, competitionKey);
-      renderRound("right-r2", rounds.right.r2, totalHeight, competitionKey);
-      renderRound("right-r1", rounds.right.r1, totalHeight, competitionKey);
+}
 
-      fitBracket();
-    }
+/* BUILD */
 
-    window.addEventListener("load", init);
-    window.addEventListener("resize", fitBracket);
-  </script>
+let left=players.slice(0,16)
+let right=players.slice(16)
+
+/* R1 */
+
+let r1L=[]
+let r1R=[]
+
+for(let i=0;i<16;i+=2)
+r1L.push(createMatch(left[i],left[i+1]))
+
+for(let i=0;i<16;i+=2)
+r1R.push(createMatch(right[i],right[i+1]))
+
+renderRound("r1L",r1L)
+renderRound("r1R",r1R)
+
+/* EMPTY ROUNDS */
+
+function empty(count){
+return new Array(count).fill(`<div class="player">&nbsp;</div>`)
+}
+
+renderRound("r2L",empty(4))
+renderRound("r3L",empty(2))
+renderRound("r4L",empty(1))
+
+renderRound("r2R",empty(4))
+renderRound("r3R",empty(2))
+renderRound("r4R",empty(1))
+
+/* SCALE */
+
+function scale(){
+
+let w=1600
+let h=900
+
+let s=Math.min(
+window.innerWidth/w,
+window.innerHeight/h
+)
+
+document.getElementById("stage").style.transform=
+`translate(-50%,-50%) scale(${s})`
+
+}
+
+window.addEventListener("resize",scale)
+scale()
+
+</script>
+
 </body>
 </html>
