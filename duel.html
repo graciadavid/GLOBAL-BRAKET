@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 <meta charset="UTF-8">
 <title>Duel</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 
@@ -22,7 +25,7 @@ text-align:center;
 }
 
 .title{
-font-size:36px;
+font-size:40px;
 margin-bottom:40px;
 }
 
@@ -38,16 +41,16 @@ justify-content:center;
 background:white;
 color:black;
 
-padding:30px 40px;
+padding:30px 50px;
 
 border-radius:12px;
 
-font-size:22px;
+font-size:24px;
 font-weight:bold;
 
 cursor:pointer;
 
-transition:transform .2s;
+transition:0.2s;
 
 }
 
@@ -55,23 +58,18 @@ transition:transform .2s;
 transform:scale(1.05);
 }
 
-.vs{
-font-size:30px;
-}
-
 .percent{
 margin-top:10px;
-font-size:16px;
+font-size:18px;
+}
+
+.vs{
+font-size:28px;
 }
 
 .message{
 margin-top:30px;
 font-size:18px;
-}
-
-.back{
-margin-top:40px;
-cursor:pointer;
 }
 
 </style>
@@ -102,13 +100,30 @@ cursor:pointer;
 
 <div class="message" id="message"></div>
 
-<div class="back" onclick="goBack()">← Back to bracket</div>
-
 </div>
 
 <script>
 
-/* READ URL */
+/* SUPABASE */
+
+const supabase = window.supabase.createClient(
+"https://okaprbdbtnyiutztibcs.supabase.co",
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9rYXByYmRidG55aXV0enRpYmNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzMDgyNjgsImV4cCI6MjA4ODg4NDI2OH0.8tfmypajrsLVbrD3-PUwkJvrM1h9aQ8UN2IP3btoNLE"
+)
+
+/* SESSION */
+
+let session_id = localStorage.getItem("session_id")
+
+if(!session_id){
+
+session_id = crypto.randomUUID()
+
+localStorage.setItem("session_id",session_id)
+
+}
+
+/* URL PARAMETERS */
 
 const params = new URLSearchParams(window.location.search)
 
@@ -121,29 +136,17 @@ name1 + " vs " + name2
 document.getElementById("p1").innerText = name1
 document.getElementById("p2").innerText = name2
 
-/* MATCH KEY */
+/* TEMP VOTES DISPLAY */
 
-const matchKey = name1 + "_vs_" + name2
-
-/* LOAD VOTES */
-
-let votes = JSON.parse(localStorage.getItem(matchKey)) || {
-v1:1,
-v2:1
-}
-
-/* CHECK IF USER ALREADY VOTED */
-
-const voted = localStorage.getItem("voted_"+matchKey)
-
-/* UPDATE PERCENTAGES */
+let v1=1
+let v2=1
 
 function updatePercent(){
 
-let total = votes.v1 + votes.v2
+let total = v1+v2
 
-let p1 = Math.round(votes.v1/total*100)
-let p2 = Math.round(votes.v2/total*100)
+let p1 = Math.round(v1/total*100)
+let p2 = Math.round(v2/total*100)
 
 document.getElementById("percent1").innerText = p1+"%"
 document.getElementById("percent2").innerText = p2+"%"
@@ -154,22 +157,34 @@ updatePercent()
 
 /* VOTE */
 
-function vote(choice){
+async function vote(player){
 
-if(voted){
+const { data:existing } = await supabase
+.from("votes")
+.select("*")
+.eq("session_id",session_id)
+.limit(1)
+
+if(existing && existing.length>0){
 
 document.getElementById("message").innerText =
-"You already voted in this duel"
+"You already voted"
 
 return
 }
 
-if(choice==1) votes.v1++
-if(choice==2) votes.v2++
+await supabase
+.from("votes")
+.insert({
 
-localStorage.setItem(matchKey,JSON.stringify(votes))
+match_id:1,
+session_id:session_id,
+player_id:player
 
-localStorage.setItem("voted_"+matchKey,true)
+})
+
+if(player==1) v1++
+if(player==2) v2++
 
 updatePercent()
 
@@ -178,18 +193,13 @@ document.getElementById("message").innerText =
 
 }
 
-/* CLICK EVENTS */
+/* CLICK */
 
 document.getElementById("p1").onclick = ()=>vote(1)
 document.getElementById("p2").onclick = ()=>vote(2)
 
-/* BACK */
-
-function goBack(){
-window.history.back()
-}
-
 </script>
 
 </body>
+
 </html>
