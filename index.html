@@ -5,6 +5,7 @@
 <title>Best Cities in Europe</title>
 
 <style>
+
 body{
 font-family:Arial;
 background:#0f172a;
@@ -13,13 +14,29 @@ padding:20px;
 zoom:0.9;
 }
 
-h1{text-align:center;margin-bottom:30px;}
+h1{
+text-align:center;
+margin-bottom:20px;
+}
 
-.status{text-align:center;margin-bottom:20px;color:#93c5fd;font-weight:bold;}
+.status{
+text-align:center;
+margin-bottom:25px;
+color:#93c5fd;
+font-weight:bold;
+}
 
-.bracket{display:flex;justify-content:center;align-items:flex-start;gap:28px;}
+.bracket{
+display:flex;
+justify-content:center;
+align-items:flex-start;
+gap:28px;
+}
 
-.round{display:flex;flex-direction:column;}
+.round{
+display:flex;
+flex-direction:column;
+}
 
 .match{
 background:#1e293b;
@@ -40,7 +57,14 @@ padding:4px;
 cursor:pointer;
 }
 
-.team:hover{color:#38bdf8;}
+.team:hover{
+color:#38bdf8;
+}
+
+.locked{
+opacity:.6;
+cursor:not-allowed;
+}
 
 .final{
 background:#38bdf8;
@@ -176,7 +200,7 @@ FINAL
 
 const supabase = window.supabase.createClient(
 "https://okaprbdbtnyiutztibcs.supabase.co",
-"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+"TU_ANON_KEY"
 )
 
 function cutoffPassed(){
@@ -206,19 +230,9 @@ let b=document.getElementById(id+"b").innerText.split(" ")[0].toLowerCase()
 window.location.href="/duel.html?match="+a+"-"+b
 }
 
-function calcWinner(data,match,a,b){
-
-let va=1
-let vb=1
-
-data.forEach(v=>{
-if(v.match===match){
-if(v.choice===a)va++
-if(v.choice===b)vb++
-}
-})
-
-return va>=vb?a:b
+function percent(v1,v2){
+let total=v1+v2
+return[Math.round(v1/total*100),Math.round(v2/total*100)]
 }
 
 async function update(){
@@ -226,14 +240,9 @@ async function update(){
 const {data}=await supabase.from("votes").select("*")
 if(!data)return
 
-function pct(a,b){
-let total=a+b
-return[Math.round(a/total*100),Math.round(b/total*100)]
-}
-
 function votes(match,a,b){
-let va=1
-let vb=1
+let va=0
+let vb=0
 data.forEach(v=>{
 if(v.match===match){
 if(v.choice===a)va++
@@ -256,24 +265,33 @@ const matches={
 
 Object.keys(matches).forEach(m=>{
 let[a,b]=matches[m]
-let[vA,vB]=votes(m,a,b)
-let[pA,pB]=pct(vA,vB)
+let[va,vb]=votes(m,a,b)
+
+if(va===0&&vb===0){va=1;vb=1}
+
+let[pA,pB]=percent(va,vb)
+
 document.getElementById(a).innerText=pA+"%"
 document.getElementById(b).innerText=pB+"%"
 })
 
 if(cutoffPassed()){
 
-document.getElementById("status").innerText="Quarterfinals open"
+document.getElementById("status").innerText="Round of 16 closed — Quarterfinals open"
 
-let w1=calcWinner(data,"madrid-barcelona","madrid","barcelona")
-let w2=calcWinner(data,"paris-rome","paris","rome")
-let w3=calcWinner(data,"london-berlin","london","berlin")
-let w4=calcWinner(data,"lisbon-amsterdam","lisbon","amsterdam")
-let w5=calcWinner(data,"prague-vienna","prague","vienna")
-let w6=calcWinner(data,"budapest-dublin","budapest","dublin")
-let w7=calcWinner(data,"copenhagen-florence","copenhagen","florence")
-let w8=calcWinner(data,"seville-milan","seville","milan")
+function winner(match,a,b){
+let[va,vb]=votes(match,a,b)
+return va>=vb?a:b
+}
+
+let w1=winner("madrid-barcelona","madrid","barcelona")
+let w2=winner("paris-rome","paris","rome")
+let w3=winner("london-berlin","london","berlin")
+let w4=winner("lisbon-amsterdam","lisbon","amsterdam")
+let w5=winner("prague-vienna","prague","vienna")
+let w6=winner("budapest-dublin","budapest","dublin")
+let w7=winner("copenhagen-florence","copenhagen","florence")
+let w8=winner("seville-milan","seville","milan")
 
 document.getElementById("qf1a").innerText=w1
 document.getElementById("qf1b").innerText=w2
