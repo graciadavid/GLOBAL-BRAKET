@@ -78,23 +78,39 @@ text-align:center;
 <div class="round">
 
 <div class="match">
-<div class="team" onclick="openDuel('madrid-barcelona')">Madrid <span id="madrid">50%</span></div>
-<div class="team" onclick="openDuel('madrid-barcelona')">Barcelona <span id="barcelona">50%</span></div>
+<div class="team" onclick="openDuel('madrid-barcelona')">
+Madrid <span id="madrid">50%</span>
+</div>
+<div class="team" onclick="openDuel('madrid-barcelona')">
+Barcelona <span id="barcelona">50%</span>
+</div>
 </div>
 
 <div class="match">
-<div class="team" onclick="openDuel('paris-rome')">Paris <span id="paris">50%</span></div>
-<div class="team" onclick="openDuel('paris-rome')">Rome <span id="rome">50%</span></div>
+<div class="team" onclick="openDuel('paris-rome')">
+Paris <span id="paris">50%</span>
+</div>
+<div class="team" onclick="openDuel('paris-rome')">
+Rome <span id="rome">50%</span>
+</div>
 </div>
 
 <div class="match">
-<div class="team" onclick="openDuel('london-berlin')">London <span id="london">50%</span></div>
-<div class="team" onclick="openDuel('london-berlin')">Berlin <span id="berlin">50%</span></div>
+<div class="team" onclick="openDuel('london-berlin')">
+London <span id="london">50%</span>
+</div>
+<div class="team" onclick="openDuel('london-berlin')">
+Berlin <span id="berlin">50%</span>
+</div>
 </div>
 
 <div class="match">
-<div class="team" onclick="openDuel('lisbon-amsterdam')">Lisbon <span id="lisbon">50%</span></div>
-<div class="team" onclick="openDuel('lisbon-amsterdam')">Amsterdam <span id="amsterdam">50%</span></div>
+<div class="team" onclick="openDuel('lisbon-amsterdam')">
+Lisbon <span id="lisbon">50%</span>
+</div>
+<div class="team" onclick="openDuel('lisbon-amsterdam')">
+Amsterdam <span id="amsterdam">50%</span>
+</div>
 </div>
 
 </div>
@@ -164,28 +180,45 @@ FINAL
 <div class="round">
 
 <div class="match">
-<div class="team" onclick="openDuel('prague-vienna')">Prague <span id="prague">50%</span></div>
-<div class="team" onclick="openDuel('prague-vienna')">Vienna <span id="vienna">50%</span></div>
+<div class="team" onclick="openDuel('prague-vienna')">
+Prague <span id="prague">50%</span>
+</div>
+<div class="team" onclick="openDuel('prague-vienna')">
+Vienna <span id="vienna">50%</span>
+</div>
 </div>
 
 <div class="match">
-<div class="team" onclick="openDuel('budapest-dublin')">Budapest <span id="budapest">50%</span></div>
-<div class="team" onclick="openDuel('budapest-dublin')">Dublin <span id="dublin">50%</span></div>
+<div class="team" onclick="openDuel('budapest-dublin')">
+Budapest <span id="budapest">50%</span>
+</div>
+<div class="team" onclick="openDuel('budapest-dublin')">
+Dublin <span id="dublin">50%</span>
+</div>
 </div>
 
 <div class="match">
-<div class="team" onclick="openDuel('copenhagen-florence')">Copenhagen <span id="copenhagen">50%</span></div>
-<div class="team" onclick="openDuel('copenhagen-florence')">Florence <span id="florence">50%</span></div>
+<div class="team" onclick="openDuel('copenhagen-florence')">
+Copenhagen <span id="copenhagen">50%</span>
+</div>
+<div class="team" onclick="openDuel('copenhagen-florence')">
+Florence <span id="florence">50%</span>
+</div>
 </div>
 
 <div class="match">
-<div class="team" onclick="openDuel('seville-milan')">Seville <span id="seville">50%</span></div>
-<div class="team" onclick="openDuel('seville-milan')">Milan <span id="milan">50%</span></div>
+<div class="team" onclick="openDuel('seville-milan')">
+Seville <span id="seville">50%</span>
+</div>
+<div class="team" onclick="openDuel('seville-milan')">
+Milan <span id="milan">50%</span>
+</div>
 </div>
 
 </div>
 
 </div>
+
 
 <script>
 
@@ -194,6 +227,7 @@ window.location.href="/duel.html?match="+slug
 }
 
 </script>
+
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -216,8 +250,8 @@ const counts = {}
 
 data.forEach(v=>{
 
-const match = v.match.toLowerCase()
-const choice = v.choice.toLowerCase()
+const match=v.match.toLowerCase()
+const choice=v.choice.toLowerCase()
 
 if(!counts[match]) counts[match]={}
 if(!counts[match][choice]) counts[match][choice]=0
