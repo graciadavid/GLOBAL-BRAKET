@@ -39,10 +39,10 @@ background:#0ea5e9;
 
 <h1>Vote</h1>
 
-<h2 id="teamA"></h2>
+<h2 id="teamA">Loading...</h2>
 <button onclick="vote('A')">Vote</button>
 
-<h2 id="teamB"></h2>
+<h2 id="teamB">Loading...</h2>
 <button onclick="vote('B')">Vote</button>
 
 
@@ -63,8 +63,17 @@ const teams = {
 "paris-rome":["Paris","Rome"]
 }
 
+if(teams[match]){
+
 document.getElementById("teamA").innerText = teams[match][0]
 document.getElementById("teamB").innerText = teams[match][1]
+
+}else{
+
+document.getElementById("teamA").innerText = "Match not found"
+document.getElementById("teamB").innerText = ""
+
+}
 
 async function vote(team){
 
