@@ -39,11 +39,11 @@ gap:20px;
 .match{
 background:white;
 color:black;
-padding:10px 20px;
+padding:12px 20px;
 border-radius:10px;
 text-align:center;
 cursor:pointer;
-min-width:160px;
+min-width:180px;
 }
 
 .match:hover{
@@ -55,6 +55,13 @@ opacity:.3;
 cursor:default;
 }
 
+.debug{
+text-align:center;
+padding:10px;
+color:yellow;
+font-size:14px;
+}
+
 </style>
 
 </head>
@@ -62,6 +69,8 @@ cursor:default;
 <body>
 
 <div class="title">Best Male Name</div>
+
+<div class="debug" id="debug"></div>
 
 <div class="bracket">
 
@@ -87,20 +96,40 @@ const { createClient } = supabase
 
 const supabaseClient = createClient(
 "https://okaprbdbtnyiutztibcs.supabase.co",
-"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9rYXByYmRidG55aXV0enRpYmNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzMDgyNjgsImV4cCI6MjA4ODg4NDI2OH0.8tfmypajrsLVbrD3-PUwkJvrM1h9aQ8UN2IP3btoNLE"
 )
 
-/* LOAD DATA */
+/* LOAD BRACKET */
 
 async function loadBracket(){
 
-const { data:matches } = await supabaseClient
+const debug = document.getElementById("debug")
+
+const { data:matches, error:mError } = await supabaseClient
 .from("matches")
 .select("*")
+.order("id")
 
-const { data:participants } = await supabaseClient
+const { data:participants, error:pError } = await supabaseClient
 .from("participants")
 .select("*")
+
+if(mError){
+debug.innerText = "Matches error: " + mError.message
+return
+}
+
+if(pError){
+debug.innerText = "Participants error: " + pError.message
+return
+}
+
+if(!matches || !participants){
+debug.innerText = "Supabase returned empty data"
+return
+}
+
+debug.innerText = "Matches loaded: " + matches.length + " | Participants loaded: " + participants.length
 
 /* MAP PLAYERS */
 
@@ -112,16 +141,16 @@ players[p.id] = p.name
 
 /* ROUND 1 */
 
-const r1 = matches.filter(m=>m.round_number==1)
+const r1 = matches.filter(m=>m.round_number == 1)
 
 const left = r1.slice(0,4)
 const right = r1.slice(4,8)
 
-/* RENDER */
+/* RENDER FUNCTION */
 
 function render(round, container){
 
-container.innerHTML=""
+container.innerHTML = ""
 
 round.forEach(match=>{
 
@@ -132,20 +161,21 @@ if(match.player1_id && match.player2_id){
 const name1 = players[match.player1_id]
 const name2 = players[match.player2_id]
 
-div.className="match"
+div.className = "match"
 
 div.innerText = name1 + " vs " + name2
 
-div.onclick=()=>{
+div.onclick = () => {
 
-window.location.href="/names/"+match.seo_slug
+window.location.href =
+"/names/" + match.seo_slug
 
 }
 
 }else{
 
-div.className="match empty"
-div.innerText="TBD"
+div.className = "match empty"
+div.innerText = "TBD"
 
 }
 
@@ -154,6 +184,8 @@ container.appendChild(div)
 })
 
 }
+
+/* DRAW */
 
 render(left, document.getElementById("r1l"))
 render(right, document.getElementById("r1r"))
@@ -165,5 +197,4 @@ loadBracket()
 </script>
 
 </body>
-
 </html>
