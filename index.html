@@ -199,12 +199,26 @@ window.location.href="/duel.html?match="+slug
 
 <script>
 
-const supabaseClient = window.supabase.createClient(
+const supabase = window.supabase.createClient(
 "https://okaprbdbtnyiutztibcs.supabase.co",
 "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9rYXByYmRidG55aXV0enRpYmNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzMDgyNjgsImV4cCI6MjA4ODg4NDI2OH0.8tfmypajrsLVbrD3-PUwkJvrM1h9aQ8UN2IP3btoNLE"
 )
 
 async function updatePercentages(){
+
+const { data } = await supabase
+.from("votes")
+.select("*")
+
+if(!data) return
+
+const counts = {}
+
+data.forEach(v=>{
+if(!counts[v.match]) counts[v.match]={}
+if(!counts[v.match][v.choice]) counts[v.match][v.choice]=0
+counts[v.match][v.choice]++
+})
 
 const matches = [
 "madrid-barcelona",
@@ -217,49 +231,34 @@ const matches = [
 "seville-milan"
 ]
 
-for(const match of matches){
-
-const { data, error } = await supabaseClient
-.from("votes")
-.select("choice")
-.eq("match", match)
-
-if(error){
-console.log(error)
-continue
-}
+matches.forEach(match=>{
 
 let teamA = match.split("-")[0]
 let teamB = match.split("-")[1]
 
-let votesA = 0
-let votesB = 0
+let votesA = counts[match]?.[teamA] || 0
+let votesB = counts[match]?.[teamB] || 0
 
-if(data){
-votesA = data.filter(v => v.choice === teamA).length
-votesB = data.filter(v => v.choice === teamB).length
+if(votesA===0 && votesB===0){
+votesA=1
+votesB=1
 }
 
-if(votesA === 0 && votesB === 0){
-votesA = 1
-votesB = 1
-}
+let total=votesA+votesB
 
-let total = votesA + votesB
+let pctA=Math.round(votesA/total*100)
+let pctB=Math.round(votesB/total*100)
 
-let pctA = Math.round((votesA/total)*100)
-let pctB = Math.round((votesB/total)*100)
+document.getElementById(teamA).innerText=pctA+"%"
+document.getElementById(teamB).innerText=pctB+"%"
 
-document.getElementById(teamA).innerText = pctA + "%"
-document.getElementById(teamB).innerText = pctB + "%"
-
-}
+})
 
 }
 
 updatePercentages()
 
-setInterval(updatePercentages, 1000)
+setInterval(updatePercentages,1000)
 
 </script>
 
