@@ -4,7 +4,7 @@
 <head>
 
 <meta charset="UTF-8">
-<title>Bracket</title>
+<title>Duel</title>
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
@@ -15,56 +15,24 @@ margin:0;
 font-family:Arial;
 background:linear-gradient(#3c3ccf,#000);
 color:white;
-}
-
-.title{
-text-align:center;
-font-size:34px;
-margin-top:30px;
-}
-
-.bracket{
-width:1600px;
-margin:60px auto;
-display:grid;
-grid-template-columns:repeat(9,1fr);
-align-items:center;
-}
-
-.round{
 display:flex;
-flex-direction:column;
-justify-content:space-around;
-}
-
-.box{
-background:linear-gradient(#eee,#bbb);
-color:black;
-border-radius:12px;
-padding:8px 12px;
-margin:10px;
-display:flex;
-justify-content:space-between;
-cursor:pointer;
-}
-
-.box.empty{
-opacity:.4;
-cursor:default;
 justify-content:center;
+align-items:center;
+height:100vh;
 }
 
-.percent{
-font-weight:bold;
+.container{
+text-align:center;
 }
 
-.champion{
-background:gold;
+.player{
+background:white;
 color:black;
 padding:20px;
-border-radius:16px;
-text-align:center;
-font-weight:bold;
+margin:20px;
+border-radius:12px;
+font-size:22px;
+cursor:pointer;
 }
 
 </style>
@@ -73,21 +41,12 @@ font-weight:bold;
 
 <body>
 
-<div class="title" id="title">Loading bracket...</div>
+<div class="container">
 
-<div class="bracket">
+<h1 id="title">Loading...</h1>
 
-<div class="round" id="r1l"></div>
-<div class="round" id="r2l"></div>
-<div class="round" id="r3l"></div>
-<div class="round" id="r4l"></div>
-
-<div class="champion">Champion</div>
-
-<div class="round" id="r4r"></div>
-<div class="round" id="r3r"></div>
-<div class="round" id="r2r"></div>
-<div class="round" id="r1r"></div>
+<div id="p1" class="player"></div>
+<div id="p2" class="player"></div>
 
 </div>
 
@@ -97,155 +56,60 @@ const { createClient } = supabase
 
 const supabaseClient = createClient(
 "https://okaprbdbtnyiutztibcs.supabase.co",
-"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9rYXByYmRidG55aXV0enRpYmNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzMDgyNjgsImV4cCI6MjA4ODg4NDI2OH0.8tfmypajrsLVbrD3-PUwkJvrM1h9aQ8UN2IP3btoNLE"
+"TU_ANON_KEY"
 )
 
-function percent(v1,v2){
-
-v1=v1||1
-v2=v2||1
-
-const total=v1+v2
-
-return [
-Math.round(v1*100/total),
-Math.round(v2*100/total)
-]
-
-}
-
-function createBox(name,pct,matchId){
-
-const div=document.createElement("div")
-
-if(name==="TBD"){
-
-div.className="box empty"
-div.innerText="TBD"
-
-}else{
-
-div.className="box"
-
-div.innerHTML=`
-<span>${name}</span>
-<span class="percent">${pct}%</span>
-`
-
-div.onclick=()=>{
-window.location=`duel.html?match=${matchId}`
-}
-
-}
-
-return div
-
-}
-
-async function loadBracket(){
-
-/******** leer slug ********/
-
 const params = new URLSearchParams(window.location.search)
-const slug = params.get("competition")
+const matchId = params.get("match")
 
-console.log("URL slug:", slug)
+async function load(){
 
-document.getElementById("title").innerText = slug
-
-
-/******** buscar competition ********/
-
-const { data, error } = await supabaseClient
-.from("competitions")
-.select("*")
-.eq("slug", slug)
-
-if(error){
-
-console.error(error)
-alert("DB error")
-
-return
-
-}
-
-if(!data || data.length === 0){
-
-alert("Competition not found: " + slug)
-return
-
-}
-
-const competitionId = data[0].id
-
-
-/******** cargar matches ********/
-
-const { data:matches } = await supabaseClient
+const { data:match } = await supabaseClient
 .from("matches")
 .select("*")
-.eq("competition_id",competitionId)
+.eq("id",matchId)
+.single()
 
-
-/******** cargar participantes ********/
-
-const { data:players } = await supabaseClient
+const { data:p1 } = await supabaseClient
 .from("participants")
-.select("id,name")
+.select("name")
+.eq("id",match.player1_id)
+.single()
 
+const { data:p2 } = await supabaseClient
+.from("participants")
+.select("name")
+.eq("id",match.player2_id)
+.single()
 
-const names={}
+document.getElementById("title").innerText = p1.name + " vs " + p2.name
 
-players.forEach(p=>{
-names[p.id]=p.name
-})
+document.getElementById("p1").innerText = p1.name
+document.getElementById("p2").innerText = p2.name
 
-function getName(id){
-return names[id] || "TBD"
-}
+document.getElementById("p1").onclick = ()=>vote(1)
+document.getElementById("p2").onclick = ()=>vote(2)
 
-matches.sort((a,b)=>{
+async function vote(player){
 
-if(a.round===b.round){
-return a.position-b.position
-}
+let v1 = match.votes1 || 1
+let v2 = match.votes2 || 1
 
-return a.round-b.round
+if(player==1) v1++
+if(player==2) v2++
 
-})
+await supabaseClient
+.from("matches")
+.update({votes1:v1,votes2:v2})
+.eq("id",matchId)
 
-const round1 = matches.filter(m=>m.round==1)
-
-document.querySelectorAll(".round").forEach(r=>r.innerHTML="")
-
-round1.forEach((m,i)=>{
-
-const p = percent(m.votes1,m.votes2)
-
-if(i<4){
-
-document.getElementById("r1l")
-.appendChild(createBox(getName(m.player1_id),p[0],m.id))
-
-document.getElementById("r1l")
-.appendChild(createBox(getName(m.player2_id),p[1],m.id))
-
-}else{
-
-document.getElementById("r1r")
-.appendChild(createBox(getName(m.player1_id),p[0],m.id))
-
-document.getElementById("r1r")
-.appendChild(createBox(getName(m.player2_id),p[1],m.id))
+window.location = document.referrer
 
 }
 
-})
-
 }
 
-loadBracket()
+load()
 
 </script>
 
