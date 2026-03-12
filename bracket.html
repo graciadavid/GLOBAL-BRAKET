@@ -26,7 +26,7 @@ padding:30px;
 .bracket{
 display:flex;
 justify-content:center;
-gap:60px;
+gap:40px;
 padding:40px;
 }
 
@@ -39,11 +39,11 @@ gap:20px;
 .match{
 background:white;
 color:black;
-padding:12px 20px;
+padding:10px 20px;
 border-radius:10px;
-cursor:pointer;
 text-align:center;
-min-width:180px;
+cursor:pointer;
+min-width:160px;
 }
 
 .match:hover{
@@ -63,7 +63,21 @@ cursor:default;
 
 <div class="title">Best Male Name</div>
 
-<div class="bracket" id="bracket"></div>
+<div class="bracket">
+
+<div class="round" id="r1l"></div>
+<div class="round" id="r2l"></div>
+<div class="round" id="r3l"></div>
+<div class="round" id="r4l"></div>
+
+<div class="round" id="final"></div>
+
+<div class="round" id="r4r"></div>
+<div class="round" id="r3r"></div>
+<div class="round" id="r2r"></div>
+<div class="round" id="r1r"></div>
+
+</div>
 
 <script>
 
@@ -73,28 +87,22 @@ const { createClient } = supabase
 
 const supabaseClient = createClient(
 "https://okaprbdbtnyiutztibcs.supabase.co",
-"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9rYXByYmRidG55aXV0enRpYmNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzMDgyNjgsImV4cCI6MjA4ODg4NDI2OH0.8tfmypajrsLVbrD3-PUwkJvrM1h9aQ8UN2IP3btoNLE"
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 )
 
-/* LOAD BRACKET */
+/* LOAD DATA */
 
 async function loadBracket(){
 
-const { data:matches, error:mErr } = await supabaseClient
+const { data:matches } = await supabaseClient
 .from("matches")
 .select("*")
-.order("id")
 
-const { data:participants, error:pErr } = await supabaseClient
+const { data:participants } = await supabaseClient
 .from("participants")
 .select("*")
 
-if(mErr || pErr){
-console.log("Supabase error:",mErr,pErr)
-return
-}
-
-/* MAP PARTICIPANTS */
+/* MAP PLAYERS */
 
 const players = {}
 
@@ -102,31 +110,20 @@ participants.forEach(p=>{
 players[p.id] = p.name
 })
 
-/* GROUP BY ROUND */
+/* ROUND 1 */
 
-const rounds = {
-1:[],
-2:[],
-3:[],
-4:[]
-}
+const r1 = matches.filter(m=>m.round_number==1)
 
-matches.forEach(m=>{
-rounds[m.round_number].push(m)
-})
+const left = r1.slice(0,4)
+const right = r1.slice(4,8)
 
-const container = document.getElementById("bracket")
+/* RENDER */
 
-container.innerHTML = ""
+function render(round, container){
 
-/* BUILD BRACKET */
+container.innerHTML=""
 
-for(const r in rounds){
-
-const col = document.createElement("div")
-col.className = "round"
-
-rounds[r].forEach(match=>{
+round.forEach(match=>{
 
 const div = document.createElement("div")
 
@@ -135,31 +132,31 @@ if(match.player1_id && match.player2_id){
 const name1 = players[match.player1_id]
 const name2 = players[match.player2_id]
 
-div.className = "match"
+div.className="match"
 
 div.innerText = name1 + " vs " + name2
 
-div.onclick = () => {
+div.onclick=()=>{
 
-window.location.href =
-"/names/" + match.seo_slug
+window.location.href="/names/"+match.seo_slug
 
 }
 
 }else{
 
-div.className = "match empty"
-div.innerText = "TBD"
+div.className="match empty"
+div.innerText="TBD"
 
 }
 
-col.appendChild(div)
+container.appendChild(div)
 
 })
 
-container.appendChild(col)
-
 }
+
+render(left, document.getElementById("r1l"))
+render(right, document.getElementById("r1r"))
 
 }
 
