@@ -6,282 +6,352 @@
 
 <style>
 body{
-  font-family:Arial;
-  background:#0f172a;
-  color:white;
-  padding:20px;
-  zoom:0.9;
+font-family:Arial;
+background:#0f172a;
+color:white;
+padding:20px;
+zoom:0.9;
 }
 
 h1{
-  text-align:center;
-  margin-bottom:40px;
+text-align:center;
+margin-bottom:40px;
+}
+
+.status{
+text-align:center;
+margin-bottom:30px;
+color:#93c5fd;
+font-weight:bold;
 }
 
 .bracket{
-  display:flex;
-  justify-content:center;
-  align-items:flex-start;
-  gap:28px;
+display:flex;
+justify-content:center;
+align-items:flex-start;
+gap:28px;
 }
 
 .round{
-  display:flex;
-  flex-direction:column;
+display:flex;
+flex-direction:column;
 }
 
 .match{
-  background:#1e293b;
-  padding:6px;
-  border-radius:6px;
-  width:130px;
-  font-size:12px;
-  min-height:54px;
-  box-sizing:border-box;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
+background:#1e293b;
+padding:6px;
+border-radius:6px;
+width:130px;
+font-size:12px;
+min-height:54px;
+display:flex;
+flex-direction:column;
+justify-content:center;
 }
 
 .team{
-  display:flex;
-  justify-content:space-between;
-  padding:4px;
-  cursor:pointer;
+display:flex;
+justify-content:space-between;
+padding:4px;
+cursor:pointer;
 }
 
 .team:hover{
-  color:#38bdf8;
+color:#38bdf8;
+}
+
+.team.disabled{
+cursor:not-allowed;
+opacity:0.5;
 }
 
 .final{
-  background:#38bdf8;
-  color:black;
-  font-weight:bold;
-  text-align:center;
+background:#38bdf8;
+color:black;
+font-weight:bold;
+text-align:center;
 }
 
-/* ROUND 1 */
-.round-1{
-  gap:18px;
-}
+/* spacing */
 
-/* ROUND 2: centered between 1-2 and 3-4 */
-.round-2 .match:first-child{
-  margin-top:36px;
-}
-.round-2 .match:last-child{
-  margin-top:90px;
-}
+.round-1{gap:18px}
 
-/* ROUND 3: centered between round 2 matches */
-.round-3 .match{
-  margin-top:108px;
-}
+.round-2 .match:first-child{margin-top:36px}
+.round-2 .match:last-child{margin-top:90px}
 
-/* FINAL: centered between semis */
-.round-final .match{
-  margin-top:108px;
-}
+.round-3 .match{margin-top:108px}
+
+.round-final .match{margin-top:108px}
+
 </style>
 </head>
 
 <body>
 
 <h1>Best Cities in Europe</h1>
+<div class="status" id="statusText"></div>
 
 <div class="bracket">
 
-  <!-- LEFT ROUND 1 -->
-  <div class="round round-1">
-    <div class="match">
-      <div class="team" onclick="openDuel('madrid-barcelona')">
-        Madrid <span id="madrid">50%</span>
-      </div>
-      <div class="team" onclick="openDuel('madrid-barcelona')">
-        Barcelona <span id="barcelona">50%</span>
-      </div>
-    </div>
+<!-- LEFT ROUND 1 -->
 
-    <div class="match">
-      <div class="team" onclick="openDuel('paris-rome')">
-        Paris <span id="paris">50%</span>
-      </div>
-      <div class="team" onclick="openDuel('paris-rome')">
-        Rome <span id="rome">50%</span>
-      </div>
-    </div>
+<div class="round round-1">
 
-    <div class="match">
-      <div class="team" onclick="openDuel('london-berlin')">
-        London <span id="london">50%</span>
-      </div>
-      <div class="team" onclick="openDuel('london-berlin')">
-        Berlin <span id="berlin">50%</span>
-      </div>
-    </div>
+<div class="match">
+<div class="team" onclick="openDuel('madrid-barcelona')">
+Madrid <span id="madrid">50%</span>
+</div>
+<div class="team" onclick="openDuel('madrid-barcelona')">
+Barcelona <span id="barcelona">50%</span>
+</div>
+</div>
 
-    <div class="match">
-      <div class="team" onclick="openDuel('lisbon-amsterdam')">
-        Lisbon <span id="lisbon">50%</span>
-      </div>
-      <div class="team" onclick="openDuel('lisbon-amsterdam')">
-        Amsterdam <span id="amsterdam">50%</span>
-      </div>
-    </div>
-  </div>
+<div class="match">
+<div class="team" onclick="openDuel('paris-rome')">
+Paris <span id="paris">50%</span>
+</div>
+<div class="team" onclick="openDuel('paris-rome')">
+Rome <span id="rome">50%</span>
+</div>
+</div>
 
-  <!-- LEFT QUARTERS -->
-  <div class="round round-2">
-    <div class="match">
-      <div class="team">TBD</div>
-      <div class="team">TBD</div>
-    </div>
+<div class="match">
+<div class="team" onclick="openDuel('london-berlin')">
+London <span id="london">50%</span>
+</div>
+<div class="team" onclick="openDuel('london-berlin')">
+Berlin <span id="berlin">50%</span>
+</div>
+</div>
 
-    <div class="match">
-      <div class="team">TBD</div>
-      <div class="team">TBD</div>
-    </div>
-  </div>
-
-  <!-- LEFT SEMI -->
-  <div class="round round-3">
-    <div class="match">
-      <div class="team">TBD</div>
-      <div class="team">TBD</div>
-    </div>
-  </div>
-
-  <!-- FINAL -->
-  <div class="round round-final">
-    <div class="match final">
-      FINAL
-      <div class="team">TBD</div>
-      <div class="team">TBD</div>
-    </div>
-  </div>
-
-  <!-- RIGHT SEMI -->
-  <div class="round round-3">
-    <div class="match">
-      <div class="team">TBD</div>
-      <div class="team">TBD</div>
-    </div>
-  </div>
-
-  <!-- RIGHT QUARTERS -->
-  <div class="round round-2">
-    <div class="match">
-      <div class="team">TBD</div>
-      <div class="team">TBD</div>
-    </div>
-
-    <div class="match">
-      <div class="team">TBD</div>
-      <div class="team">TBD</div>
-    </div>
-  </div>
-
-  <!-- RIGHT ROUND 1 -->
-  <div class="round round-1">
-    <div class="match">
-      <div class="team" onclick="openDuel('prague-vienna')">
-        Prague <span id="prague">50%</span>
-      </div>
-      <div class="team" onclick="openDuel('prague-vienna')">
-        Vienna <span id="vienna">50%</span>
-      </div>
-    </div>
-
-    <div class="match">
-      <div class="team" onclick="openDuel('budapest-dublin')">
-        Budapest <span id="budapest">50%</span>
-      </div>
-      <div class="team" onclick="openDuel('budapest-dublin')">
-        Dublin <span id="dublin">50%</span>
-      </div>
-    </div>
-
-    <div class="match">
-      <div class="team" onclick="openDuel('copenhagen-florence')">
-        Copenhagen <span id="copenhagen">50%</span>
-      </div>
-      <div class="team" onclick="openDuel('copenhagen-florence')">
-        Florence <span id="florence">50%</span>
-      </div>
-    </div>
-
-    <div class="match">
-      <div class="team" onclick="openDuel('seville-milan')">
-        Seville <span id="seville">50%</span>
-      </div>
-      <div class="team" onclick="openDuel('seville-milan')">
-        Milan <span id="milan">50%</span>
-      </div>
-    </div>
-  </div>
+<div class="match">
+<div class="team" onclick="openDuel('lisbon-amsterdam')">
+Lisbon <span id="lisbon">50%</span>
+</div>
+<div class="team" onclick="openDuel('lisbon-amsterdam')">
+Amsterdam <span id="amsterdam">50%</span>
+</div>
+</div>
 
 </div>
 
-<script>
-function openDuel(slug){
-  window.location.href="/duel.html?match="+slug
-}
-</script>
+<!-- LEFT QUARTERS -->
+
+<div class="round round-2">
+
+<div class="match">
+<div class="team" id="qf1a">TBD</div>
+<div class="team" id="qf1b">TBD</div>
+</div>
+
+<div class="match">
+<div class="team" id="qf2a">TBD</div>
+<div class="team" id="qf2b">TBD</div>
+</div>
+
+</div>
+
+<!-- SEMI -->
+
+<div class="round round-3">
+<div class="match">
+<div class="team">TBD</div>
+<div class="team">TBD</div>
+</div>
+</div>
+
+<!-- FINAL -->
+
+<div class="round round-final">
+<div class="match final">
+FINAL
+<div class="team">TBD</div>
+<div class="team">TBD</div>
+</div>
+</div>
+
+<!-- RIGHT SEMI -->
+
+<div class="round round-3">
+<div class="match">
+<div class="team">TBD</div>
+<div class="team">TBD</div>
+</div>
+</div>
+
+<!-- RIGHT QUARTERS -->
+
+<div class="round round-2">
+
+<div class="match">
+<div class="team" id="qf3a">TBD</div>
+<div class="team" id="qf3b">TBD</div>
+</div>
+
+<div class="match">
+<div class="team" id="qf4a">TBD</div>
+<div class="team" id="qf4b">TBD</div>
+</div>
+
+</div>
+
+<!-- RIGHT ROUND 1 -->
+
+<div class="round round-1">
+
+<div class="match">
+<div class="team" onclick="openDuel('prague-vienna')">
+Prague <span id="prague">50%</span>
+</div>
+<div class="team" onclick="openDuel('prague-vienna')">
+Vienna <span id="vienna">50%</span>
+</div>
+</div>
+
+<div class="match">
+<div class="team" onclick="openDuel('budapest-dublin')">
+Budapest <span id="budapest">50%</span>
+</div>
+<div class="team" onclick="openDuel('budapest-dublin')">
+Dublin <span id="dublin">50%</span>
+</div>
+</div>
+
+<div class="match">
+<div class="team" onclick="openDuel('copenhagen-florence')">
+Copenhagen <span id="copenhagen">50%</span>
+</div>
+<div class="team" onclick="openDuel('copenhagen-florence')">
+Florence <span id="florence">50%</span>
+</div>
+</div>
+
+<div class="match">
+<div class="team" onclick="openDuel('seville-milan')">
+Seville <span id="seville">50%</span>
+</div>
+<div class="team" onclick="openDuel('seville-milan')">
+Milan <span id="milan">50%</span>
+</div>
+</div>
+
+</div>
+
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
+
 const supabaseClient = window.supabase.createClient(
-  "https://okaprbdbtnyiutztibcs.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9rYXByYmRidG55aXV0enRpYmNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzMDgyNjgsImV4cCI6MjA4ODg4NDI2OH0.8tfmypajrsLVbrD3-PUwkJvrM1h9aQ8UN2IP3btoNLE"
+"https://okaprbdbtnyiutztibcs.supabase.co",
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9rYXByYmRidG55aXV0enRpYmNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzMDgyNjgsImV4cCI6MjA4ODg4NDI2OH0.8tfmypajrsLVbrD3-PUwkJvrM1h9aQ8UN2IP3btoNLE"
 )
 
-async function updatePercentages(){
-  const { data } = await supabaseClient
-    .from("votes")
-    .select("*")
-
-  if(!data) return
-
-  const matches = {
-    "madrid-barcelona":["madrid","barcelona"],
-    "paris-rome":["paris","rome"],
-    "london-berlin":["london","berlin"],
-    "lisbon-amsterdam":["lisbon","amsterdam"],
-    "prague-vienna":["prague","vienna"],
-    "budapest-dublin":["budapest","dublin"],
-    "copenhagen-florence":["copenhagen","florence"],
-    "seville-milan":["seville","milan"]
-  }
-
-  Object.keys(matches).forEach(match=>{
-    const [a,b] = matches[match]
-
-    let votesA = 0
-    let votesB = 0
-
-    data.forEach(v=>{
-      if(v.match === match){
-        if(v.choice === a) votesA++
-        if(v.choice === b) votesB++
-      }
-    })
-
-    if(votesA === 0 && votesB === 0){
-      votesA = 1
-      votesB = 1
-    }
-
-    let total = votesA + votesB
-
-    document.getElementById(a).innerText = Math.round(votesA/total*100) + "%"
-    document.getElementById(b).innerText = Math.round(votesB/total*100) + "%"
-  })
+function openDuel(slug){
+window.location.href="/duel.html?match="+slug
 }
 
-updatePercentages()
-setInterval(updatePercentages, 1000)
+function cutoffPassed(){
+const cutoff = new Date()
+cutoff.setHours(19,5,0,0)
+return new Date()>=cutoff
+}
+
+function winner(data,match,a,b){
+
+let votesA=0
+let votesB=0
+
+data.forEach(v=>{
+if(v.match===match){
+if(v.choice===a) votesA++
+if(v.choice===b) votesB++
+}
+})
+
+if(votesA===0 && votesB===0){
+votesA=1
+votesB=1
+}
+
+return votesA>=votesB?a:b
+}
+
+async function updateBracket(){
+
+const { data } = await supabaseClient
+.from("votes")
+.select("*")
+
+if(!data) return
+
+const matches={
+"madrid-barcelona":["madrid","barcelona"],
+"paris-rome":["paris","rome"],
+"london-berlin":["london","berlin"],
+"lisbon-amsterdam":["lisbon","amsterdam"],
+"prague-vienna":["prague","vienna"],
+"budapest-dublin":["budapest","dublin"],
+"copenhagen-florence":["copenhagen","florence"],
+"seville-milan":["seville","milan"]
+}
+
+Object.keys(matches).forEach(match=>{
+
+let [a,b]=matches[match]
+
+let votesA=0
+let votesB=0
+
+data.forEach(v=>{
+if(v.match===match){
+if(v.choice===a) votesA++
+if(v.choice===b) votesB++
+}
+})
+
+if(votesA===0&&votesB===0){votesA=1;votesB=1}
+
+let total=votesA+votesB
+
+document.getElementById(a).innerText=Math.round(votesA/total*100)+"%"
+document.getElementById(b).innerText=Math.round(votesB/total*100)+"%"
+
+})
+
+if(cutoffPassed()){
+
+document.getElementById("statusText").innerText="Round of 16 finished. Quarterfinals ready."
+
+let w1=winner(data,"madrid-barcelona","madrid","barcelona")
+let w2=winner(data,"paris-rome","paris","rome")
+let w3=winner(data,"london-berlin","london","berlin")
+let w4=winner(data,"lisbon-amsterdam","lisbon","amsterdam")
+let w5=winner(data,"prague-vienna","prague","vienna")
+let w6=winner(data,"budapest-dublin","budapest","dublin")
+let w7=winner(data,"copenhagen-florence","copenhagen","florence")
+let w8=winner(data,"seville-milan","seville","milan")
+
+document.getElementById("qf1a").innerText=w1
+document.getElementById("qf1b").innerText=w2
+
+document.getElementById("qf2a").innerText=w3
+document.getElementById("qf2b").innerText=w4
+
+document.getElementById("qf3a").innerText=w5
+document.getElementById("qf3b").innerText=w6
+
+document.getElementById("qf4a").innerText=w7
+document.getElementById("qf4b").innerText=w8
+
+}
+
+}
+
+updateBracket()
+setInterval(updateBracket,1000)
+
 </script>
 
 </body>
