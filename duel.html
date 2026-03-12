@@ -16,8 +16,8 @@ padding:60px;
 }
 
 button{
-padding:20px 40px;
-font-size:20px;
+padding:18px 36px;
+font-size:18px;
 margin:20px;
 cursor:pointer;
 border-radius:8px;
@@ -29,6 +29,15 @@ font-weight:bold;
 
 button:hover{
 background:#0ea5e9;
+}
+
+.back{
+background:#1e293b;
+color:white;
+}
+
+.back:hover{
+background:#334155;
 }
 
 </style>
@@ -44,6 +53,10 @@ background:#0ea5e9;
 
 <h2 id="teamB">Loading...</h2>
 <button id="voteB">Vote</button>
+
+<br><br>
+
+<button class="back" onclick="goBack()">Back to Bracket</button>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -89,15 +102,16 @@ choice: team.toLowerCase()
 if(error){
 alert("Error saving vote")
 }else{
-alert("Vote registered!")
+window.location.href="/index.html"
 }
 
+}
+
+function goBack(){
+window.location.href="/index.html"
 }
 
 </script>
 
 </body>
 </html>
-<button onclick="window.location.href='/index.html'">
-Back to Bracket
-</button>
