@@ -23,28 +23,49 @@ padding:20px;
 display:flex;
 justify-content:center;
 align-items:center;
-height:85vh;
-gap:40px;
+gap:60px;
+padding:20px;
+flex-wrap:wrap;
 }
 
 .side{
 display:flex;
-gap:20px;
+gap:40px;
 }
+
+/* RONDAS */
 
 .round{
 display:flex;
 flex-direction:column;
-justify-content:space-around;
-height:70vh;
 }
 
+.round:nth-child(1){
+gap:12px;
+}
+
+.round:nth-child(2){
+gap:50px;
+margin-top:30px;
+}
+
+.round:nth-child(3){
+gap:120px;
+margin-top:80px;
+}
+
+.round:nth-child(4){
+gap:260px;
+margin-top:160px;
+}
+
+/* MATCH BOX */
+
 .match{
-width:140px;
-padding:6px;
+width:160px;
+padding:8px;
 background:linear-gradient(#eee,#bbb);
 border-radius:10px;
-margin:5px 0;
 text-align:center;
 font-size:13px;
 color:black;
@@ -55,21 +76,51 @@ cursor:pointer;
 background:white;
 }
 
-.champion{
-width:160px;
-padding:10px;
-background:linear-gradient(#eee,#bbb);
-border-radius:20px;
-text-align:center;
-color:black;
-}
+/* CENTER */
 
 .center{
 display:flex;
 align-items:center;
+justify-content:center;
+}
+
+.champion{
+width:180px;
+padding:14px;
+background:gold;
+border-radius:30px;
+text-align:center;
+font-weight:bold;
+color:black;
+}
+
+/* MOBILE */
+
+@media(max-width:900px){
+
+.bracket{
+flex-direction:column;
+height:auto;
+}
+
+.side{
+flex-direction:column;
+align-items:center;
+}
+
+.round{
+margin:10px 0;
+gap:10px !important;
+}
+
+.center{
+margin:30px 0;
+}
+
 }
 
 </style>
+  
 </head>
 
 <body>
