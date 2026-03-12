@@ -1,207 +1,166 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <title>Bracket</title>
 
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 
 body{
-margin:0;
 font-family:Arial;
-background:linear-gradient(#3c3ccf,#000);
-color:white;
+background:#f5f5f5;
+padding:40px;
 }
 
-.title{
-text-align:center;
+#title{
 font-size:28px;
-margin-top:20px;
+margin-bottom:20px;
 }
 
-.bracket{
-width:1400px;
-margin:40px auto;
+#bracket{
 display:grid;
-grid-template-columns:repeat(9,1fr);
+grid-template-columns:repeat(4,1fr);
+gap:20px;
 }
 
 .round{
-display:flex;
-flex-direction:column;
-gap:10px;
-}
-
-.box{
 background:white;
-color:black;
-padding:8px;
+padding:20px;
 border-radius:8px;
-display:flex;
-justify-content:space-between;
-cursor:pointer;
 }
 
-.box.empty{
-opacity:.5;
-cursor:default;
-justify-content:center;
+.match{
+border:1px solid #ddd;
+padding:10px;
+margin-bottom:10px;
+border-radius:6px;
+background:#fafafa;
 }
 
-.center{
-display:flex;
-align-items:center;
-justify-content:center;
-font-weight:bold;
+.player{
+display:block;
+padding:5px 0;
 }
 
 </style>
+
 </head>
 
 <body>
 
-<div class="title" id="title">Loading...</div>
+<div id="title">Loading bracket...</div>
 
-<div class="bracket">
+<div id="bracket">
 
-<div class="round" id="r1l"></div>
-<div class="round" id="r2l"></div>
-<div class="round" id="r3l"></div>
-<div class="round" id="r4l"></div>
+<div class="round" id="round1">
+<h3>Round 1</h3>
+</div>
 
-<div class="center">Champion</div>
+<div class="round" id="round2">
+<h3>Quarterfinals</h3>
+</div>
 
-<div class="round" id="r4r"></div>
-<div class="round" id="r3r"></div>
-<div class="round" id="r2r"></div>
-<div class="round" id="r1r"></div>
+<div class="round" id="round3">
+<h3>Semifinals</h3>
+</div>
+
+<div class="round" id="round4">
+<h3>Final</h3>
+</div>
 
 </div>
 
 <script>
 
-const { createClient } = supabase
+const supabase = window.supabase.createClient(
+"https://YOUR_PROJECT.supabase.co",
+"YOUR_PUBLIC_ANON_KEY"
+);
 
-const supabaseClient = createClient(
-"https://okaprbdbtnyiutztibcs.supabase.co",
-"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9rYXByYmRidG55aXV0enRpYmNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzMDgyNjgsImV4cCI6MjA4ODg4NDI2OH0.8tfmypajrsLVbrD3-PUwkJvrM1h9aQ8UN2IP3btoNLE"
-)
+function getTournamentFromURL(){
 
-function createBox(name,matchId){
+const path = window.location.pathname.split("/");
 
-const div=document.createElement("div")
+return {
+competition:path[1],
+date:path[2]
+};
 
-if(name==="TBD"){
-div.className="box empty"
-div.innerText="TBD"
-}else{
-div.className="box"
-div.innerHTML=`<span>${name}</span>`
-div.onclick=()=>{
-window.location=`duel.html?match=${matchId}`
-}
 }
 
-return div
-}
+async function loadTournament(){
 
-async function load(){
+const {competition,date}=getTournamentFromURL();
 
-const params=new URLSearchParams(window.location.search)
-const slug=params.get("competition")
+const tournamentName=`${competition}-${date}`;
 
-if(!slug){
-document.getElementById("title").innerText="Missing competition slug"
-return
-}
+document.getElementById("title").innerText=tournamentName;
 
-document.getElementById("title").innerText=slug
-
-/* buscar competición */
-
-const { data:comp, error } = await supabaseClient
-.from("competitions")
+const {data,error}=await supabase
+.from("tournaments")
 .select("*")
-.eq("slug",slug)
-.limit(1)
+.eq("name",tournamentName)
+.single();
 
 if(error){
-document.getElementById("title").innerText="DB error: "+error.message
-return
+
+document.getElementById("title").innerText="Tournament not found";
+
+console.log(error);
+return;
+
 }
 
-if(!comp || comp.length===0){
-document.getElementById("title").innerText="Competition not found"
-return
+loadMatches(data.id);
+
 }
 
-const competitionId=comp[0].id
+async function loadMatches(tournamentId){
 
-/* cargar matches */
-
-const { data:matches } = await supabaseClient
+const {data,error}=await supabase
 .from("matches")
 .select("*")
-.eq("competition_id",competitionId)
+.eq("competition_id",tournamentId)
+.order("round",{ascending:true})
+.order("position",{ascending:true});
 
-/* cargar participantes */
+if(error){
 
-const { data:players } = await supabaseClient
-.from("participants")
-.select("id,name")
-
-const names={}
-players.forEach(p=>names[p.id]=p.name)
-
-function name(id){
-return names[id]||"TBD"
-}
-
-/* limpiar */
-
-document.querySelectorAll(".round").forEach(r=>r.innerHTML="")
-
-/* round1 */
-
-const round1=matches.filter(m=>m.round==1)
-
-round1.forEach((m,i)=>{
-
-if(i<4){
-
-document.getElementById("r1l").appendChild(createBox(name(m.player1_id),m.id))
-document.getElementById("r1l").appendChild(createBox(name(m.player2_id),m.id))
-
-}else{
-
-document.getElementById("r1r").appendChild(createBox(name(m.player1_id),m.id))
-document.getElementById("r1r").appendChild(createBox(name(m.player2_id),m.id))
+console.log(error);
+return;
 
 }
 
-})
-
-/* rondas futuras */
-
-for(let i=0;i<4;i++){
-document.getElementById("r2l").appendChild(createBox("TBD"))
-document.getElementById("r2r").appendChild(createBox("TBD"))
-}
-
-for(let i=0;i<2;i++){
-document.getElementById("r3l").appendChild(createBox("TBD"))
-document.getElementById("r3r").appendChild(createBox("TBD"))
-}
-
-document.getElementById("r4l").appendChild(createBox("TBD"))
-document.getElementById("r4r").appendChild(createBox("TBD"))
+renderBracket(data);
 
 }
 
-load()
+function renderBracket(matches){
+
+matches.forEach(match=>{
+
+const div=document.createElement("div");
+
+div.className="match";
+
+div.innerHTML=`
+
+<span class="player">${match.player1_id ?? "TBD"}</span>
+<span class="player">${match.player2_id ?? "TBD"}</span>
+
+`;
+
+const roundDiv=document.getElementById(`round${match.round}`);
+
+roundDiv.appendChild(div);
+
+});
+
+}
+
+loadTournament();
 
 </script>
 
