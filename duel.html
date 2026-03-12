@@ -1,3 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<title>Vote</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#0f172a;
+color:white;
+text-align:center;
+padding:60px;
+}
+
+button{
+padding:20px 40px;
+font-size:20px;
+margin:20px;
+cursor:pointer;
+border-radius:8px;
+border:none;
+background:#38bdf8;
+color:black;
+font-weight:bold;
+}
+
+button:hover{
+background:#0ea5e9;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>Vote</h1>
+
+<h2 id="teamA"></h2>
+<button onclick="vote('A')">Vote</button>
+
+<h2 id="teamB"></h2>
+<button onclick="vote('B')">Vote</button>
+
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
@@ -48,3 +96,6 @@ alert("Vote registered!")
 }
 
 </script>
+
+</body>
+</html>
