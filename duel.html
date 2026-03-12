@@ -24,13 +24,13 @@ text-align:center;
 }
 
 .title{
-font-size:40px;
-margin-bottom:40px;
+font-size:48px;
+margin-bottom:50px;
 }
 
 .duel{
 display:flex;
-gap:80px;
+gap:100px;
 align-items:center;
 justify-content:center;
 }
@@ -38,9 +38,9 @@ justify-content:center;
 .player{
 background:white;
 color:black;
-padding:30px 50px;
-border-radius:12px;
-font-size:24px;
+padding:30px 60px;
+border-radius:14px;
+font-size:26px;
 font-weight:bold;
 cursor:pointer;
 transition:.2s;
@@ -56,7 +56,7 @@ font-size:18px;
 }
 
 .vs{
-font-size:28px;
+font-size:30px;
 }
 
 .message{
@@ -107,46 +107,57 @@ const supabase = window.supabase.createClient(
 let session_id = localStorage.getItem("session_id")
 
 if(!session_id){
-
 session_id = crypto.randomUUID()
 localStorage.setItem("session_id",session_id)
-
 }
 
-/* READ URL PARAMETERS */
+/* LEER URL */
 
 const params = new URLSearchParams(window.location.search)
 
 const name1 = params.get("name1")
 const name2 = params.get("name2")
 
-/* SET NAMES */
+/* DEBUG */
 
-document.getElementById("title").innerText = name1 + " vs " + name2
+console.log("Player1:",name1)
+console.log("Player2:",name2)
 
-document.getElementById("p1").innerText = name1
-document.getElementById("p2").innerText = name2
+/* SI NO HAY PARAMETROS */
 
-/* VOTES LOCAL DISPLAY */
+if(!name1 || !name2){
 
-let v1 = 1
-let v2 = 1
+document.getElementById("title").innerText="Error: duel not found"
+
+}else{
+
+document.getElementById("title").innerText=name1+" vs "+name2
+
+document.getElementById("p1").innerText=name1
+document.getElementById("p2").innerText=name2
+
+}
+
+/* VOTOS */
+
+let v1=1
+let v2=1
 
 function updatePercent(){
 
-let total = v1 + v2
+let total=v1+v2
 
-let p1 = Math.round(v1/total*100)
-let p2 = Math.round(v2/total*100)
+let p1=Math.round(v1/total*100)
+let p2=Math.round(v2/total*100)
 
-document.getElementById("percent1").innerText = p1+"%"
-document.getElementById("percent2").innerText = p2+"%"
+document.getElementById("percent1").innerText=p1+"%"
+document.getElementById("percent2").innerText=p2+"%"
 
 }
 
 updatePercent()
 
-/* VOTE */
+/* VOTAR */
 
 async function vote(player){
 
@@ -154,24 +165,21 @@ const { data:existing } = await supabase
 .from("votes")
 .select("*")
 .eq("session_id",session_id)
-.limit(1)
 
 if(existing && existing.length>0){
 
-document.getElementById("message").innerText =
-"You already voted"
+document.getElementById("message").innerText="You already voted"
 
 return
+
 }
 
 await supabase
 .from("votes")
 .insert({
-
 match_id:1,
 session_id:session_id,
 player_id:player
-
 })
 
 if(player==1) v1++
@@ -179,15 +187,14 @@ if(player==2) v2++
 
 updatePercent()
 
-document.getElementById("message").innerText =
-"Vote recorded!"
+document.getElementById("message").innerText="Vote recorded!"
 
 }
 
-/* CLICK EVENTS */
+/* CLICK */
 
-document.getElementById("p1").onclick = ()=>vote(1)
-document.getElementById("p2").onclick = ()=>vote(2)
+document.getElementById("p1").onclick=()=>vote(1)
+document.getElementById("p2").onclick=()=>vote(2)
 
 </script>
 
