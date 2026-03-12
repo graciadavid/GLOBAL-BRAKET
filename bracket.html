@@ -71,7 +71,6 @@ font-weight:bold;
 
 </head>
 
-
 <body>
 
 <div class="title">Best Male Name</div>
@@ -92,7 +91,6 @@ font-weight:bold;
 
 </div>
 
-
 <script>
 
 const { createClient } = supabase
@@ -106,10 +104,10 @@ const supabaseClient = createClient(
 
 function percent(v1,v2){
 
-v1=v1||1
-v2=v2||1
+v1 = v1 || 1
+v2 = v2 || 1
 
-const total=v1+v2
+const total = v1 + v2
 
 return [
 Math.round(v1*100/total),
@@ -161,14 +159,27 @@ const { data:players } = await supabaseClient
 .from("participants")
 .select("id,name")
 
+
 const safeMatches = matches || []
 const safePlayers = players || []
 
 
+/* ordenar matches */
+
+safeMatches.sort((a,b)=>{
+if(a.round===b.round){
+return a.position-b.position
+}
+return a.round-b.round
+})
+
+
+/* mapa nombres */
 
 const names={}
-safePlayers.forEach(p=>names[p.id]=p.name)
-
+safePlayers.forEach(p=>{
+names[p.id]=p.name
+})
 
 
 function getName(id){
@@ -176,6 +187,7 @@ return names[id] || "TBD"
 }
 
 
+/* separar rondas */
 
 const round1 = safeMatches.filter(m=>m.round==1)
 const round2 = safeMatches.filter(m=>m.round==2)
@@ -245,12 +257,9 @@ document.getElementById("r4r").appendChild(createBox("TBD"))
 
 }
 
-
-
 loadBracket()
 
 </script>
-
 
 </body>
 </html>
