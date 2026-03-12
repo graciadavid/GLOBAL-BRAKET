@@ -1,12 +1,9 @@
 <!DOCTYPE html>
 <html>
-
 <head>
 
 <meta charset="UTF-8">
 <title>Bracket</title>
-
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
 <style>
 
@@ -15,189 +12,116 @@ margin:0;
 font-family:Arial;
 background:linear-gradient(#3c3ccf,#000);
 color:white;
+overflow:hidden;
 }
 
 .title{
 text-align:center;
-font-size:40px;
+font-size:36px;
 padding:30px;
-}
-
-.debug{
-text-align:center;
-color:yellow;
-padding:10px;
-font-size:14px;
 }
 
 .bracket{
 display:flex;
 justify-content:center;
+align-items:center;
 gap:40px;
-padding:40px;
+height:80vh;
 }
 
 .round{
 display:flex;
 flex-direction:column;
-gap:20px;
+justify-content:space-around;
+height:600px;
 }
 
-.match{
-background:white;
-color:black;
-padding:12px 20px;
+.box{
+width:140px;
+padding:10px;
+background:linear-gradient(#eee,#bbb);
 border-radius:10px;
 text-align:center;
-cursor:pointer;
-min-width:160px;
-}
-
-.match:hover{
-background:#eee;
-}
-
-.empty{
-opacity:.4;
-cursor:default;
+color:black;
+font-size:13px;
 }
 
 .final{
+width:160px;
+padding:14px;
+background:gold;
+border-radius:20px;
+text-align:center;
+color:black;
 font-weight:bold;
 }
 
 </style>
-
 </head>
 
 <body>
 
 <div class="title">Best Male Name</div>
 
-<div class="debug" id="debug"></div>
-
 <div class="bracket">
 
-<div class="round" id="r1l"></div>
-<div class="round" id="r2l"></div>
-<div class="round" id="r3l"></div>
-<div class="round" id="r4l"></div>
-
-<div class="round" id="final"></div>
-
-<div class="round" id="r4r"></div>
-<div class="round" id="r3r"></div>
-<div class="round" id="r2r"></div>
-<div class="round" id="r1r"></div>
-
+<div class="round">
+<div class="box">Player</div>
+<div class="box">Player</div>
+<div class="box">Player</div>
+<div class="box">Player</div>
+<div class="box">Player</div>
+<div class="box">Player</div>
+<div class="box">Player</div>
+<div class="box">Player</div>
 </div>
 
-<script>
+<div class="round">
+<div class="box">TBD</div>
+<div class="box">TBD</div>
+<div class="box">TBD</div>
+<div class="box">TBD</div>
+</div>
 
-const { createClient } = supabase
+<div class="round">
+<div class="box">TBD</div>
+<div class="box">TBD</div>
+</div>
 
-const supabaseClient = createClient(
-"https://okaprbdbtnyiutztibcs.supabase.co",
-"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9rYXByYmRidG55aXV0enRpYmNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzMDgyNjgsImV4cCI6MjA4ODg4NDI2OH0.8tfmypajrsLVbrD3-PUwkJvrM1h9aQ8UN2IP3btoNLE"
-)
+<div class="round">
+<div class="box">TBD</div>
+</div>
 
-async function loadBracket(){
+<div class="final">Champion</div>
 
-const debug = document.getElementById("debug")
+<div class="round">
+<div class="box">TBD</div>
+</div>
 
-const { data:matches } = await supabaseClient
-.from("matches")
-.select("*")
-.order("id")
+<div class="round">
+<div class="box">TBD</div>
+<div class="box">TBD</div>
+</div>
 
-const { data:participants } = await supabaseClient
-.from("participants")
-.select("*")
+<div class="round">
+<div class="box">TBD</div>
+<div class="box">TBD</div>
+<div class="box">TBD</div>
+<div class="box">TBD</div>
+</div>
 
-debug.innerText =
-"Matches loaded: " + (matches?.length || 0) +
-" | Participants loaded: " + (participants?.length || 0)
+<div class="round">
+<div class="box">Player</div>
+<div class="box">Player</div>
+<div class="box">Player</div>
+<div class="box">Player</div>
+<div class="box">Player</div>
+<div class="box">Player</div>
+<div class="box">Player</div>
+<div class="box">Player</div>
+</div>
 
-const players = {}
-
-if(participants){
-
-participants.forEach(p=>{
-players[p.id] = p.name
-})
-
-}
-
-/* ROUND GROUPS */
-
-const r1 = matches.filter(m=>m.round_number==1)
-const r2 = matches.filter(m=>m.round_number==2)
-const r3 = matches.filter(m=>m.round_number==3)
-const r4 = matches.filter(m=>m.round_number==4)
-
-/* SPLIT LEFT RIGHT */
-
-const r1l = r1.slice(0,4)
-const r1r = r1.slice(4,8)
-
-const r2l = r2.slice(0,2)
-const r2r = r2.slice(2,4)
-
-const r3l = r3.slice(0,1)
-const r3r = r3.slice(1,2)
-
-function render(round, container){
-
-container.innerHTML=""
-
-round.forEach(match=>{
-
-const div = document.createElement("div")
-
-if(match.player1_id && match.player2_id){
-
-const name1 = players[match.player1_id] || "TBD"
-const name2 = players[match.player2_id] || "TBD"
-
-div.className="match"
-
-div.innerText=name1+" vs "+name2
-
-div.onclick=()=>{
-window.location.href="/names/"+match.seo_slug
-}
-
-}else{
-
-div.className="match empty"
-div.innerText="TBD"
-
-}
-
-container.appendChild(div)
-
-})
-
-}
-
-/* DRAW */
-
-render(r1l,document.getElementById("r1l"))
-render(r2l,document.getElementById("r2l"))
-render(r3l,document.getElementById("r3l"))
-render(r4,document.getElementById("r4l"))
-
-render(r4,document.getElementById("final"))
-
-render(r3r,document.getElementById("r3r"))
-render(r2r,document.getElementById("r2r"))
-render(r1r,document.getElementById("r1r"))
-
-}
-
-loadBracket()
-
-</script>
+</div>
 
 </body>
 </html>
