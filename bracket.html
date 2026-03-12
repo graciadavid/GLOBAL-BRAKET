@@ -39,11 +39,11 @@ gap:20px;
 .match{
 background:white;
 color:black;
-padding:10px 20px;
+padding:12px 20px;
 border-radius:10px;
 cursor:pointer;
 text-align:center;
-min-width:160px;
+min-width:180px;
 }
 
 .match:hover{
@@ -73,27 +73,36 @@ const { createClient } = supabase
 
 const supabaseClient = createClient(
 "https://okaprbdbtnyiutztibcs.supabase.co",
-"TU_ANON_PUBLIC_KEY"
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9rYXByYmRidG55aXV0enRpYmNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzMDgyNjgsImV4cCI6MjA4ODg4NDI2OH0.8tfmypajrsLVbrD3-PUwkJvrM1h9aQ8UN2IP3btoNLE"
 )
 
 /* LOAD BRACKET */
 
 async function loadBracket(){
 
-const { data:matches } = await supabaseClient
+const { data:matches, error:mErr } = await supabaseClient
 .from("matches")
 .select("*")
 .order("id")
 
-const { data:participants } = await supabaseClient
+const { data:participants, error:pErr } = await supabaseClient
 .from("participants")
 .select("*")
+
+if(mErr || pErr){
+console.log("Supabase error:",mErr,pErr)
+return
+}
+
+/* MAP PARTICIPANTS */
 
 const players = {}
 
 participants.forEach(p=>{
 players[p.id] = p.name
 })
+
+/* GROUP BY ROUND */
 
 const rounds = {
 1:[],
@@ -107,6 +116,10 @@ rounds[m.round_number].push(m)
 })
 
 const container = document.getElementById("bracket")
+
+container.innerHTML = ""
+
+/* BUILD BRACKET */
 
 for(const r in rounds){
 
