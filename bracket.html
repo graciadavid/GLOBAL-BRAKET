@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Best Male Name</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial;
+background:linear-gradient(#3c3ccf,#000);
+color:white;
+overflow:hidden;
+}
+
+.title{
+text-align:center;
+font-size:34px;
+padding:20px;
+letter-spacing:3px;
+}
+
+.bracket{
+display:flex;
+justify-content:center;
+align-items:center;
+height:90vh;
+gap:40px;
+}
+
+.side{
+display:flex;
+align-items:center;
+gap:20px;
+}
+
+.round{
+display:flex;
+flex-direction:column;
+justify-content:space-around;
+height:80vh;
+}
+
+.match{
+width:130px;
+padding:4px;
+background:linear-gradient(#eee,#bbb);
+border-radius:10px;
+margin:4px 0;
+text-align:center;
+font-size:13px;
+color:black;
+cursor:pointer;
+}
+
+.match:hover{
+background:#fff;
+}
+
+.connector{
+width:30px;
+border-top:2px solid white;
+}
+
+.champion{
+width:150px;
+padding:10px;
+text-align:center;
+background:linear-gradient(#eee,#bbb);
+border-radius:15px;
+color:black;
+font-weight:bold;
+}
+
+.center{
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+}
+
+@media(max-width:900px){
+
+body{
+overflow:auto;
+}
+
+.bracket{
+flex-direction:column;
+height:auto;
+}
+
+.round{
+height:auto;
+flex-direction:row;
+flex-wrap:wrap;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="title">BEST MALE NAME</div>
+
+<div class="bracket">
+
+<!-- LEFT SIDE -->
+
+<div class="side">
+
+<div class="round">
+
+<div class="match" onclick="openDuel('alejandro','daniel')">Alejandro vs Daniel</div>
+<div class="match" onclick="openDuel('mateo','lucas')">Mateo vs Lucas</div>
+<div class="match">Hugo vs Adrián</div>
+<div class="match">Pablo vs Bruno</div>
+<div class="match">Diego vs Javier</div>
+<div class="match">Carlos vs Álvaro</div>
+<div class="match">Marco vs Nicolás</div>
+<div class="match">Iván vs Sergio</div>
+
+</div>
+
+<div class="round">
+
+<div class="match"></div>
+<div class="match"></div>
+<div class="match"></div>
+<div class="match"></div>
+
+</div>
+
+<div class="round">
+
+<div class="match"></div>
+<div class="match"></div>
+
+</div>
+
+<div class="round">
+
+<div class="match"></div>
+
+</div>
+
+</div>
+
+
+<!-- CENTER -->
+
+<div class="center">
+
+<div class="champion">Champion</div>
+
+</div>
+
+
+<!-- RIGHT SIDE -->
+
+<div class="side">
+
+<div class="round">
+
+<div class="match"></div>
+
+</div>
+
+<div class="round">
+
+<div class="match"></div>
+<div class="match"></div>
+
+</div>
+
+<div class="round">
+
+<div class="match"></div>
+<div class="match"></div>
+<div class="match"></div>
+<div class="match"></div>
+
+</div>
+
+<div class="round">
+
+<div class="match">Gabriel vs Leo</div>
+<div class="match">Mario vs Andrés</div>
+<div class="match">David vs Eric</div>
+<div class="match">Oscar vs Raúl</div>
+<div class="match">Martín vs Joel</div>
+<div class="match">Samuel vs Enzo</div>
+<div class="match">Tomás vs Gonzalo</div>
+<div class="match">Luis vs Rubén</div>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+function openDuel(a,b){
+
+let url = "duel.html?name1="+a+"&name2="+b;
+
+window.location.href = url;
+
+}
+
+</script>
+
+</body>
+</html>
