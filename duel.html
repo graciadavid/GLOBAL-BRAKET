@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
+
 <meta charset="UTF-8">
 <title>Duel</title>
+
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
 <style>
@@ -37,6 +39,7 @@ font-weight:bold;
 }
 
 </style>
+
 </head>
 
 <body>
@@ -56,7 +59,7 @@ const { createClient } = supabase
 
 const supabaseClient = createClient(
 "https://okaprbdbtnyiutztibcs.supabase.co",
-"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+"TU_ANON_KEY"
 )
 
 const params=new URLSearchParams(location.search)
@@ -113,7 +116,7 @@ await supabaseClient
 .update({votes1:v1,votes2:v2})
 .eq("id",match.id)
 
-location.reload()
+window.location="bracket.html"
 
 }
 
