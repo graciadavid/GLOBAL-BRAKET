@@ -2,9 +2,8 @@
 <html>
 
 <head>
-
 <meta charset="UTF-8">
-<title>Duel</title>
+<title>Bracket</title>
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
@@ -15,38 +14,70 @@ margin:0;
 font-family:Arial;
 background:linear-gradient(#3c3ccf,#000);
 color:white;
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
 }
 
-.container{
+.title{
 text-align:center;
+font-size:28px;
+margin-top:20px;
 }
 
-.player{
+.bracket{
+width:1400px;
+margin:40px auto;
+display:grid;
+grid-template-columns:repeat(9,1fr);
+}
+
+.round{
+display:flex;
+flex-direction:column;
+gap:10px;
+}
+
+.box{
 background:white;
 color:black;
-padding:20px;
-margin:20px;
-border-radius:12px;
-font-size:22px;
+padding:8px;
+border-radius:8px;
+display:flex;
+justify-content:space-between;
 cursor:pointer;
 }
 
-</style>
+.box.empty{
+opacity:.5;
+cursor:default;
+justify-content:center;
+}
 
+.center{
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:bold;
+}
+
+</style>
 </head>
 
 <body>
 
-<div class="container">
+<div class="title" id="title">Loading...</div>
 
-<h1 id="title">Loading...</h1>
+<div class="bracket">
 
-<div id="p1" class="player"></div>
-<div id="p2" class="player"></div>
+<div class="round" id="r1l"></div>
+<div class="round" id="r2l"></div>
+<div class="round" id="r3l"></div>
+<div class="round" id="r4l"></div>
+
+<div class="center">Champion</div>
+
+<div class="round" id="r4r"></div>
+<div class="round" id="r3r"></div>
+<div class="round" id="r2r"></div>
+<div class="round" id="r1r"></div>
 
 </div>
 
@@ -56,56 +87,117 @@ const { createClient } = supabase
 
 const supabaseClient = createClient(
 "https://okaprbdbtnyiutztibcs.supabase.co",
-"TU_ANON_KEY"
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9rYXByYmRidG55aXV0enRpYmNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzMDgyNjgsImV4cCI6MjA4ODg4NDI2OH0.8tfmypajrsLVbrD3-PUwkJvrM1h9aQ8UN2IP3btoNLE"
 )
 
-const params = new URLSearchParams(window.location.search)
-const matchId = params.get("match")
+function createBox(name,matchId){
+
+const div=document.createElement("div")
+
+if(name==="TBD"){
+div.className="box empty"
+div.innerText="TBD"
+}else{
+div.className="box"
+div.innerHTML=`<span>${name}</span>`
+div.onclick=()=>{
+window.location=`duel.html?match=${matchId}`
+}
+}
+
+return div
+}
 
 async function load(){
 
-const { data:match } = await supabaseClient
+const params=new URLSearchParams(window.location.search)
+const slug=params.get("competition")
+
+if(!slug){
+document.getElementById("title").innerText="Missing competition slug"
+return
+}
+
+document.getElementById("title").innerText=slug
+
+/* buscar competición */
+
+const { data:comp, error } = await supabaseClient
+.from("competitions")
+.select("*")
+.eq("slug",slug)
+.limit(1)
+
+if(error){
+document.getElementById("title").innerText="DB error: "+error.message
+return
+}
+
+if(!comp || comp.length===0){
+document.getElementById("title").innerText="Competition not found"
+return
+}
+
+const competitionId=comp[0].id
+
+/* cargar matches */
+
+const { data:matches } = await supabaseClient
 .from("matches")
 .select("*")
-.eq("id",matchId)
-.single()
+.eq("competition_id",competitionId)
 
-const { data:p1 } = await supabaseClient
+/* cargar participantes */
+
+const { data:players } = await supabaseClient
 .from("participants")
-.select("name")
-.eq("id",match.player1_id)
-.single()
+.select("id,name")
 
-const { data:p2 } = await supabaseClient
-.from("participants")
-.select("name")
-.eq("id",match.player2_id)
-.single()
+const names={}
+players.forEach(p=>names[p.id]=p.name)
 
-document.getElementById("title").innerText = p1.name + " vs " + p2.name
+function name(id){
+return names[id]||"TBD"
+}
 
-document.getElementById("p1").innerText = p1.name
-document.getElementById("p2").innerText = p2.name
+/* limpiar */
 
-document.getElementById("p1").onclick = ()=>vote(1)
-document.getElementById("p2").onclick = ()=>vote(2)
+document.querySelectorAll(".round").forEach(r=>r.innerHTML="")
 
-async function vote(player){
+/* round1 */
 
-let v1 = match.votes1 || 1
-let v2 = match.votes2 || 1
+const round1=matches.filter(m=>m.round==1)
 
-if(player==1) v1++
-if(player==2) v2++
+round1.forEach((m,i)=>{
 
-await supabaseClient
-.from("matches")
-.update({votes1:v1,votes2:v2})
-.eq("id",matchId)
+if(i<4){
 
-window.location = document.referrer
+document.getElementById("r1l").appendChild(createBox(name(m.player1_id),m.id))
+document.getElementById("r1l").appendChild(createBox(name(m.player2_id),m.id))
+
+}else{
+
+document.getElementById("r1r").appendChild(createBox(name(m.player1_id),m.id))
+document.getElementById("r1r").appendChild(createBox(name(m.player2_id),m.id))
 
 }
+
+})
+
+/* rondas futuras */
+
+for(let i=0;i<4;i++){
+document.getElementById("r2l").appendChild(createBox("TBD"))
+document.getElementById("r2r").appendChild(createBox("TBD"))
+}
+
+for(let i=0;i<2;i++){
+document.getElementById("r3l").appendChild(createBox("TBD"))
+document.getElementById("r3r").appendChild(createBox("TBD"))
+}
+
+document.getElementById("r4l").appendChild(createBox("TBD"))
+document.getElementById("r4r").appendChild(createBox("TBD"))
 
 }
 
