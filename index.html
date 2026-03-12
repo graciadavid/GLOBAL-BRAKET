@@ -1,210 +1,346 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Best Male Name</title>
 
 <style>
+*{
+  box-sizing:border-box;
+}
 
-body{
-margin:0;
-font-family:Arial;
-background:linear-gradient(#3c3ccf,#000);
-color:white;
+html,body{
+  margin:0;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  font-family:Arial, Helvetica, sans-serif;
+  background:linear-gradient(180deg,#3c3ccf 0%, #1e1e8f 45%, #050514 100%);
+  color:white;
+}
+
+:root{
+  --design-width: 1500;
+  --design-height: 860;
+}
+
+.page{
+  width:100vw;
+  height:100vh;
+  overflow:hidden;
+  position:relative;
+}
+
+.scale-stage{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%) scale(1);
+  transform-origin:center center;
+  width:calc(var(--design-width) * 1px);
+  height:calc(var(--design-height) * 1px);
 }
 
 .title{
-text-align:center;
-font-size:40px;
-padding:30px;
-letter-spacing:2px;
+  text-align:center;
+  font-size:52px;
+  font-weight:300;
+  letter-spacing:1px;
+  margin:18px 0 8px 0;
 }
-
-/* BRACKET */
 
 .bracket{
-display:flex;
-justify-content:center;
-align-items:center;
-gap:70px;
-padding:40px;
+  width:100%;
+  height:760px;
+  display:grid;
+  grid-template-columns: 560px 220px 560px;
+  align-items:center;
+  justify-items:center;
+  padding:10px 20px 20px;
 }
 
-/* SIDES */
+/* LEFT + RIGHT BLOCKS */
 
 .side{
-display:flex;
-gap:50px;
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:22px;
 }
 
 /* ROUNDS */
 
 .round{
-display:flex;
-flex-direction:column;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-start;
 }
 
-/* 16 matches */
-
-.round.r1{
-gap:14px;
+/* LEFT SIDE */
+.left .r1,
+.right .r1{
+  gap:14px;
 }
 
-/* 8 matches */
-
-.round.r2{
-gap:70px;
-margin-top:35px;
+.left .r2,
+.right .r2{
+  gap:56px;
+  margin-top:21px;
 }
 
-/* 4 matches */
-
-.round.r3{
-gap:170px;
-margin-top:95px;
+.left .r3,
+.right .r3{
+  gap:138px;
+  margin-top:78px;
 }
 
-/* 2 matches */
-
-.round.r4{
-gap:360px;
-margin-top:190px;
+.left .r4,
+.right .r4{
+  gap:0;
+  margin-top:246px;
 }
 
-/* MATCH BOX */
+/* MATCHES */
 
 .match{
-width:180px;
-padding:10px;
-background:linear-gradient(#eee,#bbb);
-border-radius:12px;
-text-align:center;
-font-size:14px;
-color:black;
-cursor:pointer;
-transition:0.2s;
+  width:222px;
+  height:44px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:0 12px;
+  border-radius:14px;
+  background:linear-gradient(180deg,#ededed 0%, #c9c9c9 100%);
+  color:#111;
+  font-size:17px;
+  line-height:1;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.75),
+    0 2px 8px rgba(0,0,0,0.15);
+  white-space:nowrap;
 }
 
-.match:hover{
-background:white;
-transform:scale(1.05);
+.match.clickable{
+  cursor:pointer;
+  transition:transform .15s ease, background .15s ease, box-shadow .15s ease;
+}
+
+.match.clickable:hover{
+  background:linear-gradient(180deg,#ffffff 0%, #dcdcdc 100%);
+  transform:scale(1.03);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.9),
+    0 4px 14px rgba(0,0,0,0.2);
+}
+
+.match.empty{
+  color:transparent;
 }
 
 /* CENTER */
 
 .center{
-display:flex;
-align-items:center;
-justify-content:center;
+  width:100%;
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
 }
 
 .champion{
-width:200px;
-padding:16px;
-background:gold;
-border-radius:40px;
-text-align:center;
-font-weight:bold;
-font-size:18px;
-color:black;
+  width:290px;
+  height:66px;
+  border-radius:999px;
+  background:#ffd700;
+  color:#000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:28px;
+  font-weight:700;
+  box-shadow:0 8px 24px rgba(0,0,0,0.18);
 }
 
+/* Small screens fallback */
+@media (max-width: 900px){
+  html,body{
+    overflow:auto;
+  }
+
+  .page{
+    height:auto;
+    min-height:100vh;
+    overflow:auto;
+  }
+
+  .scale-stage{
+    position:relative;
+    left:auto;
+    top:auto;
+    transform:none !important;
+    width:100%;
+    height:auto;
+    padding:20px 14px 40px;
+  }
+
+  .title{
+    font-size:36px;
+    margin:8px 0 20px;
+  }
+
+  .bracket{
+    width:100%;
+    height:auto;
+    display:flex;
+    flex-direction:column;
+    gap:24px;
+    padding:0;
+  }
+
+  .side{
+    width:100%;
+    flex-direction:column;
+    gap:18px;
+  }
+
+  .round{
+    width:100%;
+    align-items:center;
+    gap:10px !important;
+    margin-top:0 !important;
+  }
+
+  .match{
+    width:min(92vw, 320px);
+    font-size:16px;
+  }
+
+  .center{
+    height:auto;
+  }
+
+  .champion{
+    width:min(92vw, 320px);
+    height:60px;
+    font-size:26px;
+  }
+}
 </style>
 </head>
-
 <body>
 
-<div class="title">BEST MALE NAME</div>
+<div class="page">
+  <div class="scale-stage" id="scaleStage">
 
-<div class="bracket">
+    <div class="title">BEST MALE NAME</div>
 
-<!-- LEFT SIDE -->
+    <div class="bracket">
 
-<div class="side">
+      <!-- LEFT SIDE -->
+      <div class="side left">
 
-<div class="round r1">
+        <div class="round r1">
+          <div class="match clickable" onclick="openDuel('Alejandro','Daniel')">Alejandro vs Daniel</div>
+          <div class="match clickable" onclick="openDuel('Mateo','Lucas')">Mateo vs Lucas</div>
+          <div class="match clickable" onclick="openDuel('Hugo','Adrian')">Hugo vs Adrian</div>
+          <div class="match clickable" onclick="openDuel('Pablo','Bruno')">Pablo vs Bruno</div>
+          <div class="match clickable" onclick="openDuel('Diego','Javier')">Diego vs Javier</div>
+          <div class="match clickable" onclick="openDuel('Carlos','Alvaro')">Carlos vs Alvaro</div>
+          <div class="match clickable" onclick="openDuel('Marco','Nicolas')">Marco vs Nicolas</div>
+          <div class="match clickable" onclick="openDuel('Ivan','Sergio')">Ivan vs Sergio</div>
+        </div>
 
-<div class="match" onclick="openDuel('Alejandro','Daniel')">Alejandro vs Daniel</div>
-<div class="match" onclick="openDuel('Mateo','Lucas')">Mateo vs Lucas</div>
-<div class="match" onclick="openDuel('Hugo','Adrian')">Hugo vs Adrian</div>
-<div class="match" onclick="openDuel('Pablo','Bruno')">Pablo vs Bruno</div>
-<div class="match" onclick="openDuel('Diego','Javier')">Diego vs Javier</div>
-<div class="match" onclick="openDuel('Carlos','Alvaro')">Carlos vs Alvaro</div>
-<div class="match" onclick="openDuel('Marco','Nicolas')">Marco vs Nicolas</div>
-<div class="match" onclick="openDuel('Ivan','Sergio')">Ivan vs Sergio</div>
+        <div class="round r2">
+          <div class="match empty"> </div>
+          <div class="match empty"> </div>
+          <div class="match empty"> </div>
+          <div class="match empty"> </div>
+        </div>
 
-</div>
+        <div class="round r3">
+          <div class="match empty"> </div>
+          <div class="match empty"> </div>
+        </div>
 
-<div class="round r2">
-<div class="match"></div>
-<div class="match"></div>
-<div class="match"></div>
-<div class="match"></div>
-</div>
+        <div class="round r4">
+          <div class="match empty"> </div>
+        </div>
 
-<div class="round r3">
-<div class="match"></div>
-<div class="match"></div>
-</div>
+      </div>
 
-<div class="round r4">
-<div class="match"></div>
-</div>
+      <!-- CENTER -->
+      <div class="center">
+        <div class="champion">Champion</div>
+      </div>
 
-</div>
+      <!-- RIGHT SIDE -->
+      <div class="side right">
 
-<!-- CENTER -->
+        <div class="round r4">
+          <div class="match empty"> </div>
+        </div>
 
-<div class="center">
-<div class="champion">Champion</div>
-</div>
+        <div class="round r3">
+          <div class="match empty"> </div>
+          <div class="match empty"> </div>
+        </div>
 
-<!-- RIGHT SIDE -->
+        <div class="round r2">
+          <div class="match empty"> </div>
+          <div class="match empty"> </div>
+          <div class="match empty"> </div>
+          <div class="match empty"> </div>
+        </div>
 
-<div class="side">
+        <div class="round r1">
+          <div class="match clickable" onclick="openDuel('Gabriel','Leo')">Gabriel vs Leo</div>
+          <div class="match clickable" onclick="openDuel('Mario','Andres')">Mario vs Andres</div>
+          <div class="match clickable" onclick="openDuel('David','Eric')">David vs Eric</div>
+          <div class="match clickable" onclick="openDuel('Oscar','Raul')">Oscar vs Raul</div>
+          <div class="match clickable" onclick="openDuel('Martin','Joel')">Martin vs Joel</div>
+          <div class="match clickable" onclick="openDuel('Samuel','Enzo')">Samuel vs Enzo</div>
+          <div class="match clickable" onclick="openDuel('Tomas','Gonzalo')">Tomas vs Gonzalo</div>
+          <div class="match clickable" onclick="openDuel('Luis','Ruben')">Luis vs Ruben</div>
+        </div>
 
-<div class="round r4">
-<div class="match"></div>
-</div>
+      </div>
 
-<div class="round r3">
-<div class="match"></div>
-<div class="match"></div>
-</div>
-
-<div class="round r2">
-<div class="match"></div>
-<div class="match"></div>
-<div class="match"></div>
-<div class="match"></div>
-</div>
-
-<div class="round r1">
-
-<div class="match" onclick="openDuel('Gabriel','Leo')">Gabriel vs Leo</div>
-<div class="match" onclick="openDuel('Mario','Andres')">Mario vs Andres</div>
-<div class="match" onclick="openDuel('David','Eric')">David vs Eric</div>
-<div class="match" onclick="openDuel('Oscar','Raul')">Oscar vs Raul</div>
-<div class="match" onclick="openDuel('Martin','Joel')">Martin vs Joel</div>
-<div class="match" onclick="openDuel('Samuel','Enzo')">Samuel vs Enzo</div>
-<div class="match" onclick="openDuel('Tomas','Gonzalo')">Tomas vs Gonzalo</div>
-<div class="match" onclick="openDuel('Luis','Ruben')">Luis vs Ruben</div>
-
-</div>
-
-</div>
-
+    </div>
+  </div>
 </div>
 
 <script>
-
-function openDuel(name1,name2){
-
-window.location.href =
-"duel.html?name1="+encodeURIComponent(name1)+"&name2="+encodeURIComponent(name2);
-
+function openDuel(name1, name2){
+  window.location.href =
+    "duel.html?name1=" + encodeURIComponent(name1) +
+    "&name2=" + encodeURIComponent(name2);
 }
 
+function fitBracket(){
+  const stage = document.getElementById("scaleStage");
+  const designWidth = 1500;
+  const designHeight = 860;
+
+  if (window.innerWidth <= 900){
+    stage.style.transform = "none";
+    return;
+  }
+
+  const availableWidth = window.innerWidth - 24;
+  const availableHeight = window.innerHeight - 24;
+
+  const scaleX = availableWidth / designWidth;
+  const scaleY = availableHeight / designHeight;
+  const scale = Math.min(scaleX, scaleY, 1);
+
+  stage.style.transform = `translate(-50%, -50%) scale(${scale})`;
+}
+
+window.addEventListener("load", fitBracket);
+window.addEventListener("resize", fitBracket);
 </script>
 
 </body>
