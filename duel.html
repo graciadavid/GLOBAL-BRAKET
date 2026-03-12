@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 
 <meta charset="UTF-8">
@@ -39,17 +39,17 @@ background:#0ea5e9;
 
 <h1>Vote</h1>
 
-<h2 id="teamA"></h2>
-<button id="btnA">Vote</button>
+<h2 id="teamA">Loading...</h2>
+<button id="voteA">Vote</button>
 
-<h2 id="teamB"></h2>
-<button id="btnB">Vote</button>
+<h2 id="teamB">Loading...</h2>
+<button id="voteB">Vote</button>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
 
-const supabase = window.supabase.createClient(
+const supabaseClient = window.supabase.createClient(
 "https://okaprbdbtnyiutztibcs.supabase.co",
 "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9rYXByYmRidG55aXV0enRpYmNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzMDgyNjgsImV4cCI6MjA4ODg4NDI2OH0.8tfmypajrsLVbrD3-PUwkJvrM1h9aQ8UN2IP3btoNLE"
 )
@@ -74,12 +74,12 @@ const teamB = teams[match][1]
 document.getElementById("teamA").innerText = teamA
 document.getElementById("teamB").innerText = teamB
 
-document.getElementById("btnA").onclick = () => vote(teamA)
-document.getElementById("btnB").onclick = () => vote(teamB)
+document.getElementById("voteA").addEventListener("click", () => vote(teamA))
+document.getElementById("voteB").addEventListener("click", () => vote(teamB))
 
 async function vote(team){
 
-const { error } = await supabase
+const { error } = await supabaseClient
 .from("votes")
 .insert({
 match: match,
@@ -87,13 +87,9 @@ choice: team.toLowerCase()
 })
 
 if(error){
-
 alert("Error saving vote")
-
 }else{
-
 alert("Vote registered!")
-
 }
 
 }
