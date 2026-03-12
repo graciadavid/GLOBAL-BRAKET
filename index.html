@@ -1,73 +1,57 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Bracket 32</title>
+<title>Best Male Name</title>
 
 <style>
 
 body{
-background:#0b0f1a;
-color:white;
-font-family:Arial;
-margin:0;
+font-family: Arial;
+background:#f4f4f4;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+}
+
+.container{
+background:white;
 padding:40px;
-overflow-x:auto;
+border-radius:10px;
+text-align:center;
+width:400px;
+box-shadow:0 10px 30px rgba(0,0,0,0.1);
 }
 
-.bracket{
-display:grid;
-grid-template-columns:
-220px 60px
-220px 60px
-220px 60px
-220px 160px
-220px 60px
-220px 60px
-220px 60px
-220px;
-align-items:center;
-min-width:1600px;
+h1{
+margin-bottom:30px;
 }
 
-.round{
-display:flex;
-flex-direction:column;
-justify-content:center;
+.name{
+font-size:28px;
+margin:20px 0;
 }
 
-.match{
-background:#141c2e;
+button{
+width:100%;
+padding:15px;
+margin:10px 0;
+font-size:18px;
+cursor:pointer;
+border:none;
 border-radius:8px;
-padding:10px;
-margin:12px 0;
-text-align:center;
-border:1px solid rgba(255,255,255,0.08);
-height:42px;
-display:flex;
-align-items:center;
-justify-content:center;
+background:#0070f3;
+color:white;
 }
 
-.empty{
-opacity:0.3;
+button:hover{
+background:#005ad1;
 }
 
-.connector{
-border-top:2px solid rgba(255,255,255,0.15);
-height:1px;
-}
-
-.final{
-background:#1e2b47;
-font-weight:bold;
-height:60px;
-}
-
-.title{
-text-align:center;
-margin-bottom:20px;
-font-size:26px;
+.progress{
+margin-top:20px;
+color:#777;
 }
 
 </style>
@@ -76,122 +60,67 @@ font-size:26px;
 
 <body>
 
-<div class="title">Bracket Popular</div>
+<div class="container">
 
-<div class="bracket">
+<h1>Who do you prefer?</h1>
 
-<!-- ROUND 1 LEFT -->
-<div class="round" id="left-r1"></div>
+<div id="name1" class="name"></div>
 
-<div></div>
+<div>VS</div>
 
-<!-- ROUND 2 LEFT -->
-<div class="round" id="left-r2"></div>
+<div id="name2" class="name"></div>
 
-<div></div>
+<button onclick="vote(1)">Vote</button>
+<button onclick="vote(2)">Vote</button>
 
-<!-- ROUND 3 LEFT -->
-<div class="round" id="left-r3"></div>
-
-<div></div>
-
-<!-- ROUND 4 LEFT -->
-<div class="round" id="left-r4"></div>
-
-<div></div>
-
-<!-- FINAL -->
-<div class="round">
-<div class="match final empty" id="final">FINAL</div>
-</div>
-
-<div></div>
-
-<!-- ROUND 4 RIGHT -->
-<div class="round" id="right-r4"></div>
-
-<div></div>
-
-<!-- ROUND 3 RIGHT -->
-<div class="round" id="right-r3"></div>
-
-<div></div>
-
-<!-- ROUND 2 RIGHT -->
-<div class="round" id="right-r2"></div>
-
-<div></div>
-
-<!-- ROUND 1 RIGHT -->
-<div class="round" id="right-r1"></div>
+<div class="progress" id="progress"></div>
 
 </div>
 
 <script>
 
-// 16 equipos por lado
-const leftTeams = [
-"Team 1","Team 2","Team 3","Team 4",
-"Team 5","Team 6","Team 7","Team 8",
-"Team 9","Team 10","Team 11","Team 12",
-"Team 13","Team 14","Team 15","Team 16"
+const names = [
+"Alejandro","Daniel","Mateo","Lucas",
+"Hugo","Adrián","Pablo","Bruno",
+"Diego","Javier","Carlos","Álvaro",
+"Marco","Nicolás","Iván","Sergio",
+"Gabriel","Leo","Mario","Andrés",
+"David","Eric","Oscar","Raúl",
+"Martín","Joel","Samuel","Enzo",
+"Tomás","Gonzalo","Luis","Rubén"
 ];
 
-const rightTeams = [
-"Team 17","Team 18","Team 19","Team 20",
-"Team 21","Team 22","Team 23","Team 24",
-"Team 25","Team 26","Team 27","Team 28",
-"Team 29","Team 30","Team 31","Team 32"
-];
+let matches = [];
+let currentMatch = 0;
 
-function createMatch(name){
-const div=document.createElement("div");
-div.className="match";
-div.textContent=name;
-return div;
+for(let i=0;i<names.length;i+=2){
+matches.push([names[i],names[i+1]]);
 }
 
-function createEmpty(){
-const div=document.createElement("div");
-div.className="match empty";
-div.textContent="—";
-return div;
+function loadMatch(){
+
+if(currentMatch >= matches.length){
+document.querySelector(".container").innerHTML="<h1>Round finished!</h1>";
+return;
 }
 
-// RONDA 1
+document.getElementById("name1").innerText = matches[currentMatch][0];
+document.getElementById("name2").innerText = matches[currentMatch][1];
 
-const leftR1=document.getElementById("left-r1");
-leftTeams.forEach(t=>leftR1.appendChild(createMatch(t)));
+document.getElementById("progress").innerText =
+"Match " + (currentMatch+1) + " of " + matches.length;
 
-const rightR1=document.getElementById("right-r1");
-rightTeams.forEach(t=>rightR1.appendChild(createMatch(t)));
+}
 
+function vote(choice){
 
-// RONDA 2 (vacía)
+currentMatch++;
 
-const leftR2=document.getElementById("left-r2");
-for(let i=0;i<8;i++) leftR2.appendChild(createEmpty());
+loadMatch();
 
-const rightR2=document.getElementById("right-r2");
-for(let i=0;i<8;i++) rightR2.appendChild(createEmpty());
+}
 
-
-// RONDA 3
-
-const leftR3=document.getElementById("left-r3");
-for(let i=0;i<4;i++) leftR3.appendChild(createEmpty());
-
-const rightR3=document.getElementById("right-r3");
-for(let i=0;i<4;i++) rightR3.appendChild(createEmpty());
-
-
-// RONDA 4
-
-const leftR4=document.getElementById("left-r4");
-for(let i=0;i<2;i++) leftR4.appendChild(createEmpty());
-
-const rightR4=document.getElementById("right-r4");
-for(let i=0;i<2;i++) rightR4.appendChild(createEmpty());
+loadMatch();
 
 </script>
 
