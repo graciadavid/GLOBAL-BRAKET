@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
+
 <meta charset="UTF-8">
 <title>Duel</title>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
 <style>
 
@@ -30,33 +31,40 @@ margin-bottom:50px;
 
 .duel{
 display:flex;
-gap:100px;
+gap:120px;
 align-items:center;
 justify-content:center;
 }
 
 .player{
+
 background:white;
 color:black;
+
 padding:30px 60px;
+
 border-radius:14px;
+
 font-size:26px;
 font-weight:bold;
+
 cursor:pointer;
+
 transition:.2s;
+
 }
 
 .player:hover{
-transform:scale(1.05);
+transform:scale(1.06);
 }
 
 .percent{
-margin-top:10px;
+margin-top:12px;
 font-size:18px;
 }
 
 .vs{
-font-size:30px;
+font-size:32px;
 }
 
 .message{
@@ -65,6 +73,7 @@ font-size:18px;
 }
 
 </style>
+
 </head>
 
 <body>
@@ -97,7 +106,9 @@ font-size:18px;
 
 /* SUPABASE */
 
-const supabase = window.supabase.createClient(
+const { createClient } = supabase
+
+const supabaseClient = createClient(
 "https://okaprbdbtnyiutztibcs.supabase.co",
 "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9rYXByYmRidG55aXV0enRpYmNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzMDgyNjgsImV4cCI6MjA4ODg4NDI2OH0.8tfmypajrsLVbrD3-PUwkJvrM1h9aQ8UN2IP3btoNLE"
 )
@@ -107,27 +118,25 @@ const supabase = window.supabase.createClient(
 let session_id = localStorage.getItem("session_id")
 
 if(!session_id){
+
 session_id = crypto.randomUUID()
+
 localStorage.setItem("session_id",session_id)
+
 }
 
-/* LEER URL */
+/* LEER PARAMETROS URL */
 
 const params = new URLSearchParams(window.location.search)
 
 const name1 = params.get("name1")
 const name2 = params.get("name2")
 
-/* DEBUG */
-
-console.log("Player1:",name1)
-console.log("Player2:",name2)
-
-/* SI NO HAY PARAMETROS */
+/* MOSTRAR NOMBRES */
 
 if(!name1 || !name2){
 
-document.getElementById("title").innerText="Error: duel not found"
+document.getElementById("title").innerText="Error loading duel"
 
 }else{
 
@@ -138,7 +147,7 @@ document.getElementById("p2").innerText=name2
 
 }
 
-/* VOTOS */
+/* PORCENTAJE VISUAL */
 
 let v1=1
 let v2=1
@@ -161,7 +170,7 @@ updatePercent()
 
 async function vote(player){
 
-const { data:existing } = await supabase
+const { data:existing } = await supabaseClient
 .from("votes")
 .select("*")
 .eq("session_id",session_id)
@@ -174,12 +183,14 @@ return
 
 }
 
-await supabase
+await supabaseClient
 .from("votes")
 .insert({
+
 match_id:1,
 session_id:session_id,
 player_id:player
+
 })
 
 if(player==1) v1++
@@ -191,7 +202,7 @@ document.getElementById("message").innerText="Vote recorded!"
 
 }
 
-/* CLICK */
+/* EVENTOS CLICK */
 
 document.getElementById("p1").onclick=()=>vote(1)
 document.getElementById("p2").onclick=()=>vote(2)
