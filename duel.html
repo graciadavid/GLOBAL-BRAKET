@@ -14,6 +14,7 @@ display:flex;
 justify-content:center;
 align-items:center;
 height:100vh;
+margin:0;
 }
 
 .container{
@@ -21,15 +22,29 @@ text-align:center;
 }
 
 .name{
-font-size:40px;
-margin:30px;
+font-size:36px;
+margin:20px;
+}
+
+.vote-area{
+display:flex;
+justify-content:center;
+gap:40px;
+margin-top:40px;
 }
 
 button{
-padding:15px 40px;
-font-size:20px;
-margin:10px;
+padding:15px 30px;
+font-size:18px;
 cursor:pointer;
+border:none;
+border-radius:8px;
+background:#0070f3;
+color:white;
+}
+
+button:hover{
+background:#005ad1;
 }
 
 </style>
@@ -42,11 +57,19 @@ cursor:pointer;
 
 <h1>Who do you prefer?</h1>
 
-<div id="name1" class="name"></div>
-<div>VS</div>
-<div id="name2" class="name"></div>
+<div class="vote-area">
 
-<button>Vote</button>
+<div>
+<div id="name1" class="name"></div>
+<button onclick="vote(1)">Vote</button>
+</div>
+
+<div>
+<div id="name2" class="name"></div>
+<button onclick="vote(2)">Vote</button>
+</div>
+
+</div>
 
 </div>
 
@@ -54,8 +77,21 @@ cursor:pointer;
 
 const params = new URLSearchParams(window.location.search);
 
-document.getElementById("name1").innerText=params.get("name1");
-document.getElementById("name2").innerText=params.get("name2");
+const name1 = params.get("name1");
+const name2 = params.get("name2");
+
+document.getElementById("name1").innerText = name1;
+document.getElementById("name2").innerText = name2;
+
+function vote(choice){
+
+if(choice === 1){
+alert("You voted for " + name1);
+}else{
+alert("You voted for " + name2);
+}
+
+}
 
 </script>
 
