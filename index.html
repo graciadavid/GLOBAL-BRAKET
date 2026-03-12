@@ -16,7 +16,7 @@ overflow:hidden;
 
 .title{
 text-align:center;
-font-size:40px;
+font-size:42px;
 padding:30px;
 }
 
@@ -26,11 +26,11 @@ padding:30px;
 display:flex;
 justify-content:center;
 align-items:center;
-gap:80px;
 height:80vh;
+gap:90px;
 }
 
-/* SIDES */
+/* SIDE */
 
 .side{
 display:flex;
@@ -42,53 +42,39 @@ gap:40px;
 .round{
 display:flex;
 flex-direction:column;
-}
-
-.r1{ gap:10px; }
-
-.r2{
-gap:55px;
-margin-top:25px;
-}
-
-.r3{
-gap:140px;
-margin-top:80px;
-}
-
-.r4{
-gap:300px;
-margin-top:180px;
-}
-
-/* PLAYER BOX */
-
-.player{
-width:170px;
-padding:6px;
-display:flex;
 justify-content:space-between;
-background:linear-gradient(#eee,#bbb);
-border-radius:10px;
-color:black;
-font-size:13px;
 }
 
-.name{
-padding-left:8px;
-}
+/* ROUND HEIGHTS */
 
-.percent{
-padding-right:8px;
-font-weight:bold;
-}
+.r1{ height:520px; }
+.r2{ height:520px; }
+.r3{ height:520px; }
+.r4{ height:520px; }
 
-/* MATCH GROUP */
+/* MATCH */
 
 .match{
 display:flex;
 flex-direction:column;
-gap:4px;
+gap:6px;
+}
+
+/* PLAYER */
+
+.player{
+width:180px;
+display:flex;
+justify-content:space-between;
+background:linear-gradient(#eee,#bbb);
+padding:6px 10px;
+border-radius:8px;
+color:black;
+font-size:13px;
+}
+
+.percent{
+font-weight:bold;
 }
 
 /* CENTER */
@@ -100,8 +86,8 @@ align-items:center;
 
 .champion{
 background:gold;
-padding:18px 40px;
-border-radius:30px;
+padding:18px 50px;
+border-radius:40px;
 font-weight:bold;
 font-size:20px;
 color:black;
@@ -123,43 +109,43 @@ color:black;
 <div class="round r1">
 
 <div class="match">
-<div class="player"><span class="name">Alejandro</span><span class="percent">50%</span></div>
-<div class="player"><span class="name">Daniel</span><span class="percent">50%</span></div>
+<div class="player">Alejandro <span class="percent">50%</span></div>
+<div class="player">Daniel <span class="percent">50%</span></div>
 </div>
 
 <div class="match">
-<div class="player"><span class="name">Mateo</span><span class="percent">50%</span></div>
-<div class="player"><span class="name">Lucas</span><span class="percent">50%</span></div>
+<div class="player">Mateo <span class="percent">50%</span></div>
+<div class="player">Lucas <span class="percent">50%</span></div>
 </div>
 
 <div class="match">
-<div class="player"><span class="name">Hugo</span><span class="percent">50%</span></div>
-<div class="player"><span class="name">Adrian</span><span class="percent">50%</span></div>
+<div class="player">Hugo <span class="percent">50%</span></div>
+<div class="player">Adrian <span class="percent">50%</span></div>
 </div>
 
 <div class="match">
-<div class="player"><span class="name">Pablo</span><span class="percent">50%</span></div>
-<div class="player"><span class="name">Bruno</span><span class="percent">50%</span></div>
+<div class="player">Pablo <span class="percent">50%</span></div>
+<div class="player">Bruno <span class="percent">50%</span></div>
 </div>
 
 <div class="match">
-<div class="player"><span class="name">Diego</span><span class="percent">50%</span></div>
-<div class="player"><span class="name">Javier</span><span class="percent">50%</span></div>
+<div class="player">Diego <span class="percent">50%</span></div>
+<div class="player">Javier <span class="percent">50%</span></div>
 </div>
 
 <div class="match">
-<div class="player"><span class="name">Carlos</span><span class="percent">50%</span></div>
-<div class="player"><span class="name">Alvaro</span><span class="percent">50%</span></div>
+<div class="player">Carlos <span class="percent">50%</span></div>
+<div class="player">Alvaro <span class="percent">50%</span></div>
 </div>
 
 <div class="match">
-<div class="player"><span class="name">Marco</span><span class="percent">50%</span></div>
-<div class="player"><span class="name">Nicolas</span><span class="percent">50%</span></div>
+<div class="player">Marco <span class="percent">50%</span></div>
+<div class="player">Nicolas <span class="percent">50%</span></div>
 </div>
 
 <div class="match">
-<div class="player"><span class="name">Ivan</span><span class="percent">50%</span></div>
-<div class="player"><span class="name">Sergio</span><span class="percent">50%</span></div>
+<div class="player">Ivan <span class="percent">50%</span></div>
+<div class="player">Sergio <span class="percent">50%</span></div>
 </div>
 
 </div>
@@ -213,43 +199,43 @@ color:black;
 <div class="round r1">
 
 <div class="match">
-<div class="player"><span class="name">Gabriel</span><span class="percent">50%</span></div>
-<div class="player"><span class="name">Leo</span><span class="percent">50%</span></div>
+<div class="player">Gabriel <span class="percent">50%</span></div>
+<div class="player">Leo <span class="percent">50%</span></div>
 </div>
 
 <div class="match">
-<div class="player"><span class="name">Mario</span><span class="percent">50%</span></div>
-<div class="player"><span class="name">Andres</span><span class="percent">50%</span></div>
+<div class="player">Mario <span class="percent">50%</span></div>
+<div class="player">Andres <span class="percent">50%</span></div>
 </div>
 
 <div class="match">
-<div class="player"><span class="name">David</span><span class="percent">50%</span></div>
-<div class="player"><span class="name">Eric</span><span class="percent">50%</span></div>
+<div class="player">David <span class="percent">50%</span></div>
+<div class="player">Eric <span class="percent">50%</span></div>
 </div>
 
 <div class="match">
-<div class="player"><span class="name">Oscar</span><span class="percent">50%</span></div>
-<div class="player"><span class="name">Raul</span><span class="percent">50%</span></div>
+<div class="player">Oscar <span class="percent">50%</span></div>
+<div class="player">Raul <span class="percent">50%</span></div>
 </div>
 
 <div class="match">
-<div class="player"><span class="name">Martin</span><span class="percent">50%</span></div>
-<div class="player"><span class="name">Joel</span><span class="percent">50%</span></div>
+<div class="player">Martin <span class="percent">50%</span></div>
+<div class="player">Joel <span class="percent">50%</span></div>
 </div>
 
 <div class="match">
-<div class="player"><span class="name">Samuel</span><span class="percent">50%</span></div>
-<div class="player"><span class="name">Enzo</span><span class="percent">50%</span></div>
+<div class="player">Samuel <span class="percent">50%</span></div>
+<div class="player">Enzo <span class="percent">50%</span></div>
 </div>
 
 <div class="match">
-<div class="player"><span class="name">Tomas</span><span class="percent">50%</span></div>
-<div class="player"><span class="name">Gonzalo</span><span class="percent">50%</span></div>
+<div class="player">Tomas <span class="percent">50%</span></div>
+<div class="player">Gonzalo <span class="percent">50%</span></div>
 </div>
 
 <div class="match">
-<div class="player"><span class="name">Luis</span><span class="percent">50%</span></div>
-<div class="player"><span class="name">Ruben</span><span class="percent">50%</span></div>
+<div class="player">Luis <span class="percent">50%</span></div>
+<div class="player">Ruben <span class="percent">50%</span></div>
 </div>
 
 </div>
