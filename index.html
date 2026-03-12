@@ -20,7 +20,7 @@ margin-bottom:30px;
 
 .status{
 text-align:center;
-margin-bottom:30px;
+margin-bottom:20px;
 color:#93c5fd;
 font-weight:bold;
 }
@@ -40,8 +40,8 @@ flex-direction:column;
 background:#1e293b;
 padding:6px;
 border-radius:6px;
-width:150px;
-margin:10px 0;
+width:140px;
+margin:12px 0;
 }
 
 .team{
@@ -56,10 +56,8 @@ color:#38bdf8;
 }
 
 .round-1{gap:18px}
-
 .round-2 .match:first-child{margin-top:36px}
 .round-2 .match:last-child{margin-top:90px}
-
 .round-3 .match{margin-top:108px}
 
 .round-final .match{
@@ -79,33 +77,33 @@ font-weight:bold;
 
 <div class="bracket">
 
-<!-- OCTAVOS IZQUIERDA -->
+<!-- OCTAVOS LEFT -->
 
 <div class="round round-1">
 
 <div class="match">
-<div class="team" onclick="voteOct('madrid-barcelona')">Madrid <span id="madrid">50%</span></div>
-<div class="team" onclick="voteOct('madrid-barcelona')">Barcelona <span id="barcelona">50%</span></div>
+<div class="team" onclick="openOct('madrid-barcelona')">Madrid <span id="madrid">50%</span></div>
+<div class="team" onclick="openOct('madrid-barcelona')">Barcelona <span id="barcelona">50%</span></div>
 </div>
 
 <div class="match">
-<div class="team" onclick="voteOct('paris-rome')">Paris <span id="paris">50%</span></div>
-<div class="team" onclick="voteOct('paris-rome')">Rome <span id="rome">50%</span></div>
+<div class="team" onclick="openOct('paris-rome')">Paris <span id="paris">50%</span></div>
+<div class="team" onclick="openOct('paris-rome')">Rome <span id="rome">50%</span></div>
 </div>
 
 <div class="match">
-<div class="team" onclick="voteOct('london-berlin')">London <span id="london">50%</span></div>
-<div class="team" onclick="voteOct('london-berlin')">Berlin <span id="berlin">50%</span></div>
+<div class="team" onclick="openOct('london-berlin')">London <span id="london">50%</span></div>
+<div class="team" onclick="openOct('london-berlin')">Berlin <span id="berlin">50%</span></div>
 </div>
 
 <div class="match">
-<div class="team" onclick="voteOct('lisbon-amsterdam')">Lisbon <span id="lisbon">50%</span></div>
-<div class="team" onclick="voteOct('lisbon-amsterdam')">Amsterdam <span id="amsterdam">50%</span></div>
+<div class="team" onclick="openOct('lisbon-amsterdam')">Lisbon <span id="lisbon">50%</span></div>
+<div class="team" onclick="openOct('lisbon-amsterdam')">Amsterdam <span id="amsterdam">50%</span></div>
 </div>
 
 </div>
 
-<!-- CUARTOS IZQUIERDA -->
+<!-- QUARTERS LEFT -->
 
 <div class="round round-2">
 
@@ -121,7 +119,7 @@ font-weight:bold;
 
 </div>
 
-<!-- SEMI IZQUIERDA -->
+<!-- SEMI LEFT -->
 
 <div class="round round-3">
 <div class="match">
@@ -140,7 +138,7 @@ FINAL
 </div>
 </div>
 
-<!-- SEMI DERECHA -->
+<!-- SEMI RIGHT -->
 
 <div class="round round-3">
 <div class="match">
@@ -149,7 +147,7 @@ FINAL
 </div>
 </div>
 
-<!-- CUARTOS DERECHA -->
+<!-- QUARTERS RIGHT -->
 
 <div class="round round-2">
 
@@ -165,28 +163,28 @@ FINAL
 
 </div>
 
-<!-- OCTAVOS DERECHA -->
+<!-- OCTAVOS RIGHT -->
 
 <div class="round round-1">
 
 <div class="match">
-<div class="team" onclick="voteOct('prague-vienna')">Prague <span id="prague">50%</span></div>
-<div class="team" onclick="voteOct('prague-vienna')">Vienna <span id="vienna">50%</span></div>
+<div class="team" onclick="openOct('prague-vienna')">Prague <span id="prague">50%</span></div>
+<div class="team" onclick="openOct('prague-vienna')">Vienna <span id="vienna">50%</span></div>
 </div>
 
 <div class="match">
-<div class="team" onclick="voteOct('budapest-dublin')">Budapest <span id="budapest">50%</span></div>
-<div class="team" onclick="voteOct('budapest-dublin')">Dublin <span id="dublin">50%</span></div>
+<div class="team" onclick="openOct('budapest-dublin')">Budapest <span id="budapest">50%</span></div>
+<div class="team" onclick="openOct('budapest-dublin')">Dublin <span id="dublin">50%</span></div>
 </div>
 
 <div class="match">
-<div class="team" onclick="voteOct('copenhagen-florence')">Copenhagen <span id="copenhagen">50%</span></div>
-<div class="team" onclick="voteOct('copenhagen-florence')">Florence <span id="florence">50%</span></div>
+<div class="team" onclick="openOct('copenhagen-florence')">Copenhagen <span id="copenhagen">50%</span></div>
+<div class="team" onclick="openOct('copenhagen-florence')">Florence <span id="florence">50%</span></div>
 </div>
 
 <div class="match">
-<div class="team" onclick="voteOct('seville-milan')">Seville <span id="seville">50%</span></div>
-<div class="team" onclick="voteOct('seville-milan')">Milan <span id="milan">50%</span></div>
+<div class="team" onclick="openOct('seville-milan')">Seville <span id="seville">50%</span></div>
+<div class="team" onclick="openOct('seville-milan')">Milan <span id="milan">50%</span></div>
 </div>
 
 </div>
@@ -203,7 +201,7 @@ const supabaseClient = window.supabase.createClient(
 "TU_ANON_KEY"
 )
 
-function voteOct(match){
+function openOct(match){
 
 const cutoff=new Date()
 cutoff.setHours(19,5,0,0)
@@ -214,21 +212,41 @@ return
 }
 
 window.location.href="/duel.html?match="+match
+}
 
+async function update(){
+
+const {data}=await supabaseClient.from("votes").select("*")
+
+if(!data)return
+
+function count(match,team){
+
+let v=0
+
+data.forEach(x=>{
+if(x.match===match && x.choice===team)v++
+})
+
+return v
 }
 
 function percent(a,b){
-let total=a+b
-return[Math.round(a/total*100),Math.round(b/total*100)]
+
+let t=a+b
+
+if(t===0){
+a=1
+b=1
+t=2
 }
 
-async function updatePercentages(){
+return[
+Math.round(a/t*100),
+Math.round(b/t*100)
+]
 
-const {data}=await supabaseClient
-.from("votes")
-.select("*")
-
-if(!data)return
+}
 
 const matches={
 "madrid-barcelona":["madrid","barcelona"],
@@ -241,26 +259,14 @@ const matches={
 "seville-milan":["seville","milan"]
 }
 
-Object.keys(matches).forEach(match=>{
+Object.keys(matches).forEach(m=>{
 
-let[a,b]=matches[match]
+let[a,b]=matches[m]
 
-let votesA=0
-let votesB=0
+let va=count(m,a)
+let vb=count(m,b)
 
-data.forEach(v=>{
-if(v.match===match){
-if(v.choice===a)votesA++
-if(v.choice===b)votesB++
-}
-})
-
-if(votesA===0 && votesB===0){
-votesA=1
-votesB=1
-}
-
-let[pA,pB]=percent(votesA,votesB)
+let[pA,pB]=percent(va,vb)
 
 document.getElementById(a).innerText=pA+"%"
 document.getElementById(b).innerText=pB+"%"
@@ -269,8 +275,8 @@ document.getElementById(b).innerText=pB+"%"
 
 }
 
-updatePercentages()
-setInterval(updatePercentages,2000)
+update()
+setInterval(update,2000)
 
 </script>
 
