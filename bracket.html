@@ -8,13 +8,11 @@
 
 body{
 margin:0;
-background:linear-gradient(#3c3ccf,#000);
 font-family:Arial;
+background:linear-gradient(#3c3ccf,#000);
 overflow:hidden;
 color:white;
 }
-
-/* TITLE */
 
 .title{
 position:absolute;
@@ -23,8 +21,6 @@ width:100%;
 text-align:center;
 font-size:36px;
 }
-
-/* SCALE STAGE */
 
 .stage{
 position:absolute;
@@ -41,8 +37,8 @@ height:900px;
 
 display:grid;
 grid-template-columns:
-160px 160px 160px 160px 160px 220px
-160px 160px 160px 160px 160px;
+170px 170px 170px 170px 170px 240px
+170px 170px 170px 170px 170px;
 
 align-items:center;
 }
@@ -58,7 +54,7 @@ height:800px;
 
 .match{
 position:absolute;
-width:150px;
+width:160px;
 transform:translateY(-50%);
 }
 
@@ -68,15 +64,18 @@ transform:translateY(-50%);
 background:linear-gradient(#eee,#bbb);
 color:black;
 border-radius:8px;
-padding:5px 8px;
+padding:6px 8px;
 margin:3px 0;
 display:flex;
 justify-content:space-between;
 font-size:12px;
+}
+
+.clickable{
 cursor:pointer;
 }
 
-.player:hover{
+.clickable:hover{
 background:white;
 }
 
@@ -132,25 +131,41 @@ const players = [
 "Martin","Joel","Samuel","Enzo","Tomas","Gonzalo","Luis","Ruben"
 ]
 
-/* CREATE PLAYER */
+/* OPEN DUEL */
 
-function playerBox(name,opponent){
+function openDuel(a,b){
+
+window.location.href =
+"duel.html?name1="+encodeURIComponent(a)+"&name2="+encodeURIComponent(b)
+
+}
+
+/* PLAYER BOX */
+
+function player(name,opponent){
 
 return `
-<div class="player" onclick="openDuel('${name}','${opponent}')">
+<div class="player clickable"
+onclick="openDuel('${name}','${opponent}')">
 ${name}<span>50%</span>
 </div>
 `
 
 }
 
-/* CREATE MATCH */
+/* EMPTY */
 
-function matchBox(p1,p2){
+function emptyPlayer(){
+return `<div class="player">&nbsp;</div>`
+}
+
+/* MATCH */
+
+function match(p1,p2){
 
 return `
-<div class="player" onclick="openDuel('${p1}','${p2}')">${p1}<span>50%</span></div>
-<div class="player" onclick="openDuel('${p1}','${p2}')">${p2}<span>50%</span></div>
+<div class="player clickable" onclick="openDuel('${p1}','${p2}')">${p1}<span>50%</span></div>
+<div class="player clickable" onclick="openDuel('${p1}','${p2}')">${p2}<span>50%</span></div>
 `
 
 }
@@ -159,7 +174,7 @@ return `
 
 function centers(count,height){
 
-let space = height/count
+let space=height/count
 let arr=[]
 
 for(let i=0;i<count;i++)
@@ -169,20 +184,19 @@ return arr
 
 }
 
-/* RENDER */
+/* RENDER ROUND */
 
 function renderRound(id,matches){
 
-let container = document.getElementById(id)
-let h=800
-let c=centers(matches.length,h)
+let container=document.getElementById(id)
+let height=800
+let c=centers(matches.length,height)
 
 matches.forEach((m,i)=>{
 
 let el=document.createElement("div")
 el.className="match"
 el.style.top=c[i]+"px"
-
 el.innerHTML=m
 
 container.appendChild(el)
@@ -191,56 +205,49 @@ container.appendChild(el)
 
 }
 
-/* LEFT SIDE */
+/* BUILD LEFT */
 
 let left=players.slice(0,16)
 let right=players.slice(16)
 
-/* R1 */
+/* ROUND 1 */
 
 let r1L=[]
 let r1R=[]
 
-for(let i=0;i<16;i+=2)
-r1L.push(matchBox(left[i],left[i+1]))
+for(let i=0;i<16;i+=2){
+r1L.push(match(left[i],left[i+1]))
+}
 
-for(let i=0;i<16;i+=2)
-r1R.push(matchBox(right[i],right[i+1]))
+for(let i=0;i<16;i+=2){
+r1R.push(match(right[i],right[i+1]))
+}
 
 renderRound("r1L",r1L)
 renderRound("r1R",r1R)
 
-/* EMPTY ROUNDS */
+/* FUTURE ROUNDS */
 
-function empty(count){
+function emptyMatches(count){
 
 let arr=[]
 
 for(let i=0;i<count;i++)
-arr.push(`<div class="player">&nbsp;</div>`)
+arr.push(emptyPlayer())
 
 return arr
 
 }
 
-renderRound("r2L",empty(4))
-renderRound("r3L",empty(2))
-renderRound("r4L",empty(1))
-renderRound("r5L",empty(1))
+renderRound("r2L",emptyMatches(4))
+renderRound("r3L",emptyMatches(2))
+renderRound("r4L",emptyMatches(1))
+renderRound("r5L",emptyMatches(1))
 
-renderRound("r2R",empty(4))
-renderRound("r3R",empty(2))
-renderRound("r4R",empty(1))
-renderRound("r5R",empty(1))
-
-/* OPEN DUEL */
-
-function openDuel(a,b){
-
-window.location.href =
-"duel.html?name1="+encodeURIComponent(a)+"&name2="+encodeURIComponent(b)
-
-}
+renderRound("r2R",emptyMatches(4))
+renderRound("r3R",emptyMatches(2))
+renderRound("r4R",emptyMatches(1))
+renderRound("r5R",emptyMatches(1))
 
 /* SCALE */
 
