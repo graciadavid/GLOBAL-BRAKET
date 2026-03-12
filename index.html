@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Best Cities in Europe</title>
+<title>Bracket 16</title>
 
 <style>
 
@@ -10,20 +10,13 @@ body{
 font-family:Arial;
 background:#0f172a;
 color:white;
-padding:20px;
-zoom:0.9;
-}
-
-h1{
-text-align:center;
-margin-bottom:40px;
+padding:40px;
 }
 
 .bracket{
+position:relative;
 display:flex;
-justify-content:center;
-align-items:flex-start;
-gap:30px;
+gap:120px;
 }
 
 /* ROUNDS */
@@ -31,276 +24,133 @@ gap:30px;
 .round{
 display:flex;
 flex-direction:column;
-gap:20px;
+gap:60px;
 }
 
-/* MATCH BOX */
+/* BOX */
 
-.match{
-background:#1e293b;
-padding:6px;
-border-radius:6px;
-width:130px;
-font-size:12px;
-min-height:54px;
+.box{
+width:180px;
+height:60px;
+background:#888;
+border-radius:30px;
 display:flex;
-flex-direction:column;
+align-items:center;
 justify-content:center;
-position:relative;
+font-weight:bold;
 }
-
-.team{
-display:flex;
-justify-content:space-between;
-padding:4px;
-cursor:pointer;
-}
-
-.team:hover{
-color:#38bdf8;
-}
-
-/* FINAL */
 
 .final{
+width:220px;
+height:70px;
 background:#38bdf8;
 color:black;
-font-weight:bold;
-text-align:center;
 }
 
-/* SPACING */
+/* SVG LINES */
 
-.round-1{gap:18px}
-
-.round-2 .match:first-child{margin-top:36px}
-.round-2 .match:last-child{margin-top:90px}
-
-.round-3 .match{margin-top:108px}
-
-.round-final .match{margin-top:108px}
-
-/* CONNECTOR COLUMN */
-
-.connector{
-width:30px;
-position:relative;
-}
-
-/* HORIZONTAL */
-
-.h{
-height:2px;
-background:#475569;
+.lines{
 position:absolute;
-width:30px;
+left:0;
+top:0;
+width:1200px;
+height:800px;
+pointer-events:none;
 }
 
-/* VERTICAL */
-
-.v{
-width:2px;
-background:#475569;
-position:absolute;
-left:14px;
+.lines path{
+stroke:black;
+stroke-width:4;
+fill:none;
 }
-
-/* CONNECTOR POSITIONS */
-
-.c1{top:27px}
-.c2{top:99px}
-.c3{top:171px}
-.c4{top:243px}
-
-.v1{top:27px;height:72px}
-.v2{top:171px;height:72px}
-
-.v3{top:63px;height:144px}
 
 </style>
 </head>
 
 <body>
 
-<h1>Best Cities in Europe</h1>
-
 <div class="bracket">
 
-<!-- ROUND 1 LEFT -->
+<!-- ROUND 1 (16 teams) -->
 
-<div class="round round-1">
+<div class="round">
 
-<div class="match">
-<div class="team" onclick="openDuel('madrid-barcelona')">Madrid <span id="madrid">50%</span></div>
-<div class="team" onclick="openDuel('madrid-barcelona')">Barcelona <span id="barcelona">50%</span></div>
-</div>
+<div class="box">Team 1</div>
+<div class="box">Team 2</div>
 
-<div class="match">
-<div class="team" onclick="openDuel('paris-rome')">Paris <span id="paris">50%</span></div>
-<div class="team" onclick="openDuel('paris-rome')">Rome <span id="rome">50%</span></div>
-</div>
+<div class="box">Team 3</div>
+<div class="box">Team 4</div>
 
-<div class="match">
-<div class="team" onclick="openDuel('london-berlin')">London <span id="london">50%</span></div>
-<div class="team" onclick="openDuel('london-berlin')">Berlin <span id="berlin">50%</span></div>
-</div>
+<div class="box">Team 5</div>
+<div class="box">Team 6</div>
 
-<div class="match">
-<div class="team" onclick="openDuel('lisbon-amsterdam')">Lisbon <span id="lisbon">50%</span></div>
-<div class="team" onclick="openDuel('lisbon-amsterdam')">Amsterdam <span id="amsterdam">50%</span></div>
-</div>
-
-</div>
-
-<!-- CONNECTORS ROUND1→2 -->
-
-<div class="connector">
-
-<div class="h c1"></div>
-<div class="h c2"></div>
-<div class="h c3"></div>
-<div class="h c4"></div>
-
-<div class="v v1"></div>
-<div class="v v2"></div>
+<div class="box">Team 7</div>
+<div class="box">Team 8</div>
 
 </div>
 
 <!-- QUARTERS -->
 
-<div class="round round-2">
+<div class="round">
 
-<div class="match">
-<div class="team">TBD</div>
-<div class="team">TBD</div>
-</div>
-
-<div class="match">
-<div class="team">TBD</div>
-<div class="team">TBD</div>
-</div>
+<div class="box">Winner</div>
+<div class="box">Winner</div>
+<div class="box">Winner</div>
+<div class="box">Winner</div>
 
 </div>
 
-<!-- CONNECTORS QUARTERS→SEMI -->
+<!-- SEMIS -->
 
-<div class="connector">
+<div class="round">
 
-<div class="h c2"></div>
-<div class="h c3"></div>
-
-<div class="v v3"></div>
-
-</div>
-
-<!-- SEMI -->
-
-<div class="round round-3">
-
-<div class="match">
-<div class="team">TBD</div>
-<div class="team">TBD</div>
-</div>
+<div class="box">Winner</div>
+<div class="box">Winner</div>
 
 </div>
 
 <!-- FINAL -->
 
-<div class="round round-final">
+<div class="round">
 
-<div class="match final">
-FINAL
-<div class="team">TBD</div>
-<div class="team">TBD</div>
-</div>
+<div class="box final">FINAL</div>
 
 </div>
 
-<!-- SEMI RIGHT -->
+<!-- CONNECTOR LINES -->
 
-<div class="round round-3">
+<svg class="lines">
 
-<div class="match">
-<div class="team">TBD</div>
-<div class="team">TBD</div>
-</div>
+<!-- ROUND1 → QUARTERS -->
 
-</div>
+<path d="M180 50 H230 V110 H280" />
+<path d="M180 170 H230 V110 H280" />
 
-<!-- CONNECTORS RIGHT -->
+<path d="M180 290 H230 V350 H280" />
+<path d="M180 410 H230 V350 H280" />
 
-<div class="connector">
+<path d="M180 530 H230 V590 H280" />
+<path d="M180 650 H230 V590 H280" />
 
-<div class="h c2"></div>
-<div class="h c3"></div>
+<path d="M180 770 H230 V830 H280" />
+<path d="M180 890 H230 V830 H280" />
 
-<div class="v v3"></div>
+<!-- QUARTERS → SEMIS -->
 
-</div>
+<path d="M460 110 H510 V230 H560" />
+<path d="M460 350 H510 V230 H560" />
 
-<!-- QUARTERS RIGHT -->
+<path d="M460 590 H510 V710 H560" />
+<path d="M460 830 H510 V710 H560" />
 
-<div class="round round-2">
+<!-- SEMIS → FINAL -->
 
-<div class="match">
-<div class="team">TBD</div>
-<div class="team">TBD</div>
-</div>
+<path d="M740 230 H790 V470 H840" />
+<path d="M740 710 H790 V470 H840" />
 
-<div class="match">
-<div class="team">TBD</div>
-<div class="team">TBD</div>
-</div>
+</svg>
 
 </div>
-
-<!-- CONNECTORS -->
-
-<div class="connector">
-
-<div class="h c1"></div>
-<div class="h c2"></div>
-<div class="h c3"></div>
-<div class="h c4"></div>
-
-<div class="v v1"></div>
-<div class="v v2"></div>
-
-</div>
-
-<!-- ROUND 1 RIGHT -->
-
-<div class="round round-1">
-
-<div class="match">
-<div class="team" onclick="openDuel('prague-vienna')">Prague <span id="prague">50%</span></div>
-<div class="team" onclick="openDuel('prague-vienna')">Vienna <span id="vienna">50%</span></div>
-</div>
-
-<div class="match">
-<div class="team" onclick="openDuel('budapest-dublin')">Budapest <span id="budapest">50%</span></div>
-<div class="team" onclick="openDuel('budapest-dublin')">Dublin <span id="dublin">50%</span></div>
-</div>
-
-<div class="match">
-<div class="team" onclick="openDuel('copenhagen-florence')">Copenhagen <span id="copenhagen">50%</span></div>
-<div class="team" onclick="openDuel('copenhagen-florence')">Florence <span id="florence">50%</span></div>
-</div>
-
-<div class="match">
-<div class="team" onclick="openDuel('seville-milan')">Seville <span id="seville">50%</span></div>
-<div class="team" onclick="openDuel('seville-milan')">Milan <span id="milan">50%</span></div>
-</div>
-
-</div>
-
-</div>
-
-<script>
-function openDuel(slug){
-window.location.href="/duel.html?match="+slug
-}
-</script>
 
 </body>
 </html>
