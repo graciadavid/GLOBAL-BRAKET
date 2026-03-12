@@ -1,37 +1,21 @@
 <!DOCTYPE html>
 <html>
-
 <head>
 
-<meta charset="UTF-8">
-<title>Duel</title>
-
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<title>Vote</title>
 
 <style>
 
 body{
-margin:0;
 font-family:Arial;
-background:linear-gradient(#3c3ccf,#000);
-color:white;
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
-}
-
-.container{
 text-align:center;
+padding:60px;
 }
 
-.player{
-background:white;
-color:black;
+button{
 padding:20px;
+font-size:20px;
 margin:20px;
-border-radius:12px;
-font-size:22px;
 cursor:pointer;
 }
 
@@ -41,75 +25,32 @@ cursor:pointer;
 
 <body>
 
-<div class="container">
+<h1>Vote</h1>
 
-<h1 id="title">Loading...</h1>
+<h2 id="teamA"></h2>
+<button onclick="vote('A')">Vote</button>
 
-<div id="p1" class="player"></div>
-<div id="p2" class="player"></div>
-
-</div>
+<h2 id="teamB"></h2>
+<button onclick="vote('B')">Vote</button>
 
 <script>
 
-const { createClient } = supabase
-
-const supabaseClient = createClient(
-"https://okaprbdbtnyiutztibcs.supabase.co",
-"TU_ANON_KEY"
-)
-
 const params = new URLSearchParams(window.location.search)
-const matchId = params.get("match")
+const match = params.get("match")
 
-async function load(){
-
-const { data:match } = await supabaseClient
-.from("matches")
-.select("*")
-.eq("id",matchId)
-.single()
-
-const { data:p1 } = await supabaseClient
-.from("participants")
-.select("name")
-.eq("id",match.player1_id)
-.single()
-
-const { data:p2 } = await supabaseClient
-.from("participants")
-.select("name")
-.eq("id",match.player2_id)
-.single()
-
-document.getElementById("title").innerText = p1.name + " vs " + p2.name
-
-document.getElementById("p1").innerText = p1.name
-document.getElementById("p2").innerText = p2.name
-
-document.getElementById("p1").onclick = ()=>vote(1)
-document.getElementById("p2").onclick = ()=>vote(2)
-
-async function vote(player){
-
-let v1 = match.votes1 || 1
-let v2 = match.votes2 || 1
-
-if(player==1) v1++
-if(player==2) v2++
-
-await supabaseClient
-.from("matches")
-.update({votes1:v1,votes2:v2})
-.eq("id",matchId)
-
-window.location = document.referrer
-
+const teams = {
+"madrid-barcelona":["Madrid","Barcelona"],
+"paris-rome":["Paris","Rome"]
 }
 
-}
+document.getElementById("teamA").innerText = teams[match][0]
+document.getElementById("teamB").innerText = teams[match][1]
 
-load()
+function vote(team){
+
+alert("Vote registered")
+
+}
 
 </script>
 
