@@ -1,248 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Best Male Name</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Champions Votes</title>
+  <style>
+    *{
+      box-sizing:border-box;
+    }
 
-<style>
+    body{
+      margin:0;
+      font-family:Arial, Helvetica, sans-serif;
+      background:linear-gradient(180deg,#3c3ccf 0%, #111 100%);
+      color:white;
+      min-height:100vh;
+    }
 
-body{
-margin:0;
-font-family:Arial;
-background:linear-gradient(#3c3ccf,#000);
-color:white;
-overflow:hidden;
-}
+    .page{
+      max-width:1100px;
+      margin:0 auto;
+      padding:40px 20px 60px;
+    }
 
-.title{
-text-align:center;
-font-size:42px;
-padding:30px;
-}
+    h1{
+      text-align:center;
+      font-size:48px;
+      margin:0 0 10px;
+      font-weight:300;
+      letter-spacing:1px;
+    }
 
-/* BRACKET */
+    .subtitle{
+      text-align:center;
+      color:#d8d8ff;
+      margin-bottom:40px;
+      font-size:18px;
+    }
 
-.bracket{
-display:flex;
-justify-content:center;
-align-items:center;
-height:80vh;
-gap:90px;
-}
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));
+      gap:20px;
+    }
 
-/* SIDE */
+    .card{
+      background:rgba(255,255,255,0.1);
+      border:1px solid rgba(255,255,255,0.18);
+      border-radius:18px;
+      padding:24px;
+      backdrop-filter:blur(8px);
+      cursor:pointer;
+      transition:transform .15s ease, background .15s ease;
+    }
 
-.side{
-display:flex;
-gap:40px;
-}
+    .card:hover{
+      transform:translateY(-4px);
+      background:rgba(255,255,255,0.16);
+    }
 
-/* ROUNDS */
+    .card h2{
+      margin:0 0 10px;
+      font-size:26px;
+      font-weight:700;
+    }
 
-.round{
-display:flex;
-flex-direction:column;
-justify-content:space-between;
-}
-
-/* ROUND HEIGHTS */
-
-.r1{ height:520px; }
-.r2{ height:520px; }
-.r3{ height:520px; }
-.r4{ height:520px; }
-
-/* MATCH */
-
-.match{
-display:flex;
-flex-direction:column;
-gap:6px;
-}
-
-/* PLAYER */
-
-.player{
-width:180px;
-display:flex;
-justify-content:space-between;
-background:linear-gradient(#eee,#bbb);
-padding:6px 10px;
-border-radius:8px;
-color:black;
-font-size:13px;
-}
-
-.percent{
-font-weight:bold;
-}
-
-/* CENTER */
-
-.center{
-display:flex;
-align-items:center;
-}
-
-.champion{
-background:gold;
-padding:18px 50px;
-border-radius:40px;
-font-weight:bold;
-font-size:20px;
-color:black;
-}
-
-</style>
+    .card p{
+      margin:0;
+      color:#e9e9ff;
+      line-height:1.4;
+    }
+  </style>
 </head>
-
 <body>
+  <div class="page">
+    <h1>CHAMPIONS VOTES</h1>
+    <div class="subtitle">Choose a competition</div>
 
-<div class="title">BEST MALE NAME</div>
+    <div class="grid">
+      <div class="card" onclick="openBracket('names')">
+        <h2>Best Male Name</h2>
+        <p>32 names. Full bracket. Click to open the tournament.</p>
+      </div>
 
-<div class="bracket">
+      <div class="card" onclick="openBracket('female-names')">
+        <h2>Best Female Name</h2>
+        <p>Another 32-player bracket.</p>
+      </div>
 
-<!-- LEFT -->
+      <div class="card" onclick="openBracket('cities')">
+        <h2>Best City</h2>
+        <p>Cities compete in direct elimination duels.</p>
+      </div>
+    </div>
+  </div>
 
-<div class="side">
-
-<div class="round r1">
-
-<div class="match">
-<div class="player">Alejandro <span class="percent">50%</span></div>
-<div class="player">Daniel <span class="percent">50%</span></div>
-</div>
-
-<div class="match">
-<div class="player">Mateo <span class="percent">50%</span></div>
-<div class="player">Lucas <span class="percent">50%</span></div>
-</div>
-
-<div class="match">
-<div class="player">Hugo <span class="percent">50%</span></div>
-<div class="player">Adrian <span class="percent">50%</span></div>
-</div>
-
-<div class="match">
-<div class="player">Pablo <span class="percent">50%</span></div>
-<div class="player">Bruno <span class="percent">50%</span></div>
-</div>
-
-<div class="match">
-<div class="player">Diego <span class="percent">50%</span></div>
-<div class="player">Javier <span class="percent">50%</span></div>
-</div>
-
-<div class="match">
-<div class="player">Carlos <span class="percent">50%</span></div>
-<div class="player">Alvaro <span class="percent">50%</span></div>
-</div>
-
-<div class="match">
-<div class="player">Marco <span class="percent">50%</span></div>
-<div class="player">Nicolas <span class="percent">50%</span></div>
-</div>
-
-<div class="match">
-<div class="player">Ivan <span class="percent">50%</span></div>
-<div class="player">Sergio <span class="percent">50%</span></div>
-</div>
-
-</div>
-
-<div class="round r2">
-<div class="player"></div>
-<div class="player"></div>
-<div class="player"></div>
-<div class="player"></div>
-</div>
-
-<div class="round r3">
-<div class="player"></div>
-<div class="player"></div>
-</div>
-
-<div class="round r4">
-<div class="player"></div>
-</div>
-
-</div>
-
-
-<!-- CENTER -->
-
-<div class="center">
-<div class="champion">Champion</div>
-</div>
-
-
-<!-- RIGHT -->
-
-<div class="side">
-
-<div class="round r4">
-<div class="player"></div>
-</div>
-
-<div class="round r3">
-<div class="player"></div>
-<div class="player"></div>
-</div>
-
-<div class="round r2">
-<div class="player"></div>
-<div class="player"></div>
-<div class="player"></div>
-<div class="player"></div>
-</div>
-
-<div class="round r1">
-
-<div class="match">
-<div class="player">Gabriel <span class="percent">50%</span></div>
-<div class="player">Leo <span class="percent">50%</span></div>
-</div>
-
-<div class="match">
-<div class="player">Mario <span class="percent">50%</span></div>
-<div class="player">Andres <span class="percent">50%</span></div>
-</div>
-
-<div class="match">
-<div class="player">David <span class="percent">50%</span></div>
-<div class="player">Eric <span class="percent">50%</span></div>
-</div>
-
-<div class="match">
-<div class="player">Oscar <span class="percent">50%</span></div>
-<div class="player">Raul <span class="percent">50%</span></div>
-</div>
-
-<div class="match">
-<div class="player">Martin <span class="percent">50%</span></div>
-<div class="player">Joel <span class="percent">50%</span></div>
-</div>
-
-<div class="match">
-<div class="player">Samuel <span class="percent">50%</span></div>
-<div class="player">Enzo <span class="percent">50%</span></div>
-</div>
-
-<div class="match">
-<div class="player">Tomas <span class="percent">50%</span></div>
-<div class="player">Gonzalo <span class="percent">50%</span></div>
-</div>
-
-<div class="match">
-<div class="player">Luis <span class="percent">50%</span></div>
-<div class="player">Ruben <span class="percent">50%</span></div>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
+  <script>
+    function openBracket(competition){
+      window.location.href = "bracket.html?competition=" + encodeURIComponent(competition);
+    }
+  </script>
 </body>
 </html>
