@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Vote</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#111;
+color:white;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+}
+
+.container{
+text-align:center;
+}
+
+.name{
+font-size:40px;
+margin:30px;
+}
+
+button{
+padding:15px 40px;
+font-size:20px;
+margin:10px;
+cursor:pointer;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Who do you prefer?</h1>
+
+<div id="name1" class="name"></div>
+<div>VS</div>
+<div id="name2" class="name"></div>
+
+<button>Vote</button>
+
+</div>
+
+<script>
+
+const params = new URLSearchParams(window.location.search);
+
+document.getElementById("name1").innerText=params.get("name1");
+document.getElementById("name2").innerText=params.get("name2");
+
+</script>
+
+</body>
+</html>
