@@ -1,59 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="UTF-8">
+<title>Best Cities in Europe</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#0f172a;
+color:white;
+padding:40px;
+}
+
+h1{
+text-align:center;
+margin-bottom:50px;
+}
+
+.bracket{
+display:flex;
+justify-content:center;
+align-items:center;
+gap:50px;
+}
+
+.round{
+display:flex;
+flex-direction:column;
+gap:30px;
+}
+
+.match{
+background:#1e293b;
+padding:10px;
+border-radius:8px;
+width:200px;
+}
+
+.team{
+display:flex;
+justify-content:space-between;
+padding:6px;
+cursor:pointer;
+}
+
+.team:hover{
+color:#38bdf8;
+}
+
+.center{
+display:flex;
+flex-direction:column;
+gap:80px;
+}
+
+.final{
+background:#38bdf8;
+color:black;
+font-weight:bold;
+text-align:center;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>Best Cities in Europe</h1>
+
 <div class="bracket">
 
-<div class="round">
-
-<div class="match">Madrid vs Barcelona</div>
-<div class="match">Paris vs Rome</div>
-<div class="match">London vs Berlin</div>
-<div class="match">Lisbon vs Amsterdam</div>
-
-</div>
-
+<!-- ROUND 1 LEFT -->
 
 <div class="round">
 
-<div class="match">TBD</div>
-<div class="match">TBD</div>
+<div class="match">
+<div class="team" onclick="openDuel('madrid-barcelona')">Madrid <span>50%</span></div>
+<div class="team" onclick="openDuel('madrid-barcelona')">Barcelona <span>50%</span></div>
+</div>
+
+<div class="match">
+<div class="team" onclick="openDuel('paris-rome')">Paris <span>50%</span></div>
+<div class="team" onclick="openDuel('paris-rome')">Rome <span>50%</span></div>
+</div>
+
+<div class="match">
+<div class="team" onclick="openDuel('london-berlin')">London <span>50%</span></div>
+<div class="team" onclick="openDuel('london-berlin')">Berlin <span>50%</span></div>
+</div>
+
+<div class="match">
+<div class="team" onclick="openDuel('lisbon-amsterdam')">Lisbon <span>50%</span></div>
+<div class="team" onclick="openDuel('lisbon-amsterdam')">Amsterdam <span>50%</span></div>
+</div>
 
 </div>
 
+
+<!-- QUARTERS LEFT -->
 
 <div class="round">
 
-<div class="match">TBD</div>
+<div class="match">
+<div class="team">TBD</div>
+<div class="team">TBD</div>
+</div>
+
+<div class="match">
+<div class="team">TBD</div>
+<div class="team">TBD</div>
+</div>
 
 </div>
 
+
+<!-- SEMIFINAL LEFT -->
 
 <div class="round">
 
-<div class="match">FINAL</div>
+<div class="match">
+<div class="team">TBD</div>
+<div class="team">TBD</div>
+</div>
 
 </div>
 
+
+<!-- FINAL -->
+
+<div class="round center">
+
+<div class="match final">
+FINAL
+<div class="team">TBD</div>
+<div class="team">TBD</div>
+</div>
+
+</div>
+
+
+<!-- SEMIFINAL RIGHT -->
 
 <div class="round">
 
-<div class="match">TBD</div>
+<div class="match">
+<div class="team">TBD</div>
+<div class="team">TBD</div>
+</div>
 
 </div>
 
+
+<!-- QUARTERS RIGHT -->
 
 <div class="round">
 
-<div class="match">TBD</div>
-<div class="match">TBD</div>
+<div class="match">
+<div class="team">TBD</div>
+<div class="team">TBD</div>
+</div>
+
+<div class="match">
+<div class="team">TBD</div>
+<div class="team">TBD</div>
+</div>
 
 </div>
 
+
+<!-- ROUND 1 RIGHT -->
 
 <div class="round">
 
-<div class="match">Prague vs Vienna</div>
-<div class="match">Budapest vs Dublin</div>
-<div class="match">Copenhagen vs Florence</div>
-<div class="match">Seville vs Milan</div>
+<div class="match">
+<div class="team" onclick="openDuel('prague-vienna')">Prague <span>50%</span></div>
+<div class="team" onclick="openDuel('prague-vienna')">Vienna <span>50%</span></div>
+</div>
 
+<div class="match">
+<div class="team" onclick="openDuel('budapest-dublin')">Budapest <span>50%</span></div>
+<div class="team" onclick="openDuel('budapest-dublin')">Dublin <span>50%</span></div>
+</div>
+
+<div class="match">
+<div class="team" onclick="openDuel('copenhagen-florence')">Copenhagen <span>50%</span></div>
+<div class="team" onclick="openDuel('copenhagen-florence')">Florence <span>50%</span></div>
+</div>
+
+<div class="match">
+<div class="team" onclick="openDuel('seville-milan')">Seville <span>50%</span></div>
+<div class="team" onclick="openDuel('seville-milan')">Milan <span>50%</span></div>
 </div>
 
 </div>
+
+</div>
+
+<script>
+
+function openDuel(slug){
+window.location.href="/duel.html?match="+slug
+}
+
+</script>
+
+</body>
+</html>
