@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 
 <meta charset="UTF-8">
@@ -67,7 +68,9 @@ font-weight:bold;
 }
 
 </style>
+
 </head>
+
 
 <body>
 
@@ -142,6 +145,8 @@ return div
 
 async function loadBracket(){
 
+/* cargar matches */
+
 const { data:matches } = await supabaseClient
 .from("matches")
 .select("*")
@@ -149,54 +154,86 @@ const { data:matches } = await supabaseClient
 .order("round")
 .order("position")
 
+/* cargar participantes */
+
 const { data:players } = await supabaseClient
 .from("participants")
 .select("*")
 
-const names={}
-players.forEach(p=>names[p.id]=p.name)
+/* proteger null */
 
-function name(id){
+const safeMatches = matches || []
+const safePlayers = players || []
+
+/* mapa nombres */
+
+const names={}
+
+safePlayers.forEach(p=>{
+names[p.id]=p.name
+})
+
+function getName(id){
 return names[id] || "TBD"
 }
 
-function pct(m){
-return percent(m.votes1,m.votes2)
-}
+/* separar rondas */
 
-const r1=matches.filter(m=>m.round===1)
-const r2=matches.filter(m=>m.round===2)
-const r3=matches.filter(m=>m.round===3)
-const r4=matches.filter(m=>m.round===4)
+const r1 = safeMatches.filter(m=>m.round===1)
+const r2 = safeMatches.filter(m=>m.round===2)
+const r3 = safeMatches.filter(m=>m.round===3)
+const r4 = safeMatches.filter(m=>m.round===4)
 
-document.querySelectorAll(".round").forEach(r=>r.innerHTML="")
+/* limpiar */
 
-/* ROUND 1 */
-
-r1.slice(0,4).forEach(m=>{
-const p=pct(m)
-document.getElementById("r1l").appendChild(createBox(name(m.player1_id),p[0],m.id))
-document.getElementById("r1l").appendChild(createBox(name(m.player2_id),p[1],m.id))
+document.querySelectorAll(".round").forEach(r=>{
+r.innerHTML=""
 })
 
+/* ROUND 1 izquierda */
+
+r1.slice(0,4).forEach(m=>{
+
+const p = percent(m.votes1,m.votes2)
+
+document.getElementById("r1l")
+.appendChild(createBox(getName(m.player1_id),p[0],m.id))
+
+document.getElementById("r1l")
+.appendChild(createBox(getName(m.player2_id),p[1],m.id))
+
+})
+
+/* ROUND 1 derecha */
+
 r1.slice(4,8).forEach(m=>{
-const p=pct(m)
-document.getElementById("r1r").appendChild(createBox(name(m.player1_id),p[0],m.id))
-document.getElementById("r1r").appendChild(createBox(name(m.player2_id),p[1],m.id))
+
+const p = percent(m.votes1,m.votes2)
+
+document.getElementById("r1r")
+.appendChild(createBox(getName(m.player1_id),p[0],m.id))
+
+document.getElementById("r1r")
+.appendChild(createBox(getName(m.player2_id),p[1],m.id))
+
 })
 
 /* ROUND 2 */
 
 for(let i=0;i<4;i++){
+
 document.getElementById("r2l").appendChild(createBox("TBD"))
 document.getElementById("r2r").appendChild(createBox("TBD"))
+
 }
 
 /* ROUND 3 */
 
 for(let i=0;i<2;i++){
+
 document.getElementById("r3l").appendChild(createBox("TBD"))
 document.getElementById("r3r").appendChild(createBox("TBD"))
+
 }
 
 /* FINAL */
