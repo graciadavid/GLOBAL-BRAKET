@@ -23,6 +23,13 @@ font-size:40px;
 padding:30px;
 }
 
+.debug{
+text-align:center;
+color:yellow;
+padding:10px;
+font-size:14px;
+}
+
 .bracket{
 display:flex;
 justify-content:center;
@@ -43,7 +50,7 @@ padding:12px 20px;
 border-radius:10px;
 text-align:center;
 cursor:pointer;
-min-width:180px;
+min-width:160px;
 }
 
 .match:hover{
@@ -51,15 +58,12 @@ background:#eee;
 }
 
 .empty{
-opacity:.3;
+opacity:.4;
 cursor:default;
 }
 
-.debug{
-text-align:center;
-padding:10px;
-color:yellow;
-font-size:14px;
+.final{
+font-weight:bold;
 }
 
 </style>
@@ -90,8 +94,6 @@ font-size:14px;
 
 <script>
 
-/* SUPABASE */
-
 const { createClient } = supabase
 
 const supabaseClient = createClient(
@@ -99,58 +101,54 @@ const supabaseClient = createClient(
 "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9rYXByYmRidG55aXV0enRpYmNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzMDgyNjgsImV4cCI6MjA4ODg4NDI2OH0.8tfmypajrsLVbrD3-PUwkJvrM1h9aQ8UN2IP3btoNLE"
 )
 
-/* LOAD BRACKET */
-
 async function loadBracket(){
 
 const debug = document.getElementById("debug")
 
-const { data:matches, error:mError } = await supabaseClient
+const { data:matches } = await supabaseClient
 .from("matches")
 .select("*")
 .order("id")
 
-const { data:participants, error:pError } = await supabaseClient
+const { data:participants } = await supabaseClient
 .from("participants")
 .select("*")
 
-if(mError){
-debug.innerText = "Matches error: " + mError.message
-return
-}
-
-if(pError){
-debug.innerText = "Participants error: " + pError.message
-return
-}
-
-if(!matches || !participants){
-debug.innerText = "Supabase returned empty data"
-return
-}
-
-debug.innerText = "Matches loaded: " + matches.length + " | Participants loaded: " + participants.length
-
-/* MAP PLAYERS */
+debug.innerText =
+"Matches loaded: " + (matches?.length || 0) +
+" | Participants loaded: " + (participants?.length || 0)
 
 const players = {}
+
+if(participants){
 
 participants.forEach(p=>{
 players[p.id] = p.name
 })
 
-/* ROUND 1 */
+}
 
-const r1 = matches.filter(m=>m.round_number == 1)
+/* ROUND GROUPS */
 
-const left = r1.slice(0,4)
-const right = r1.slice(4,8)
+const r1 = matches.filter(m=>m.round_number==1)
+const r2 = matches.filter(m=>m.round_number==2)
+const r3 = matches.filter(m=>m.round_number==3)
+const r4 = matches.filter(m=>m.round_number==4)
 
-/* RENDER FUNCTION */
+/* SPLIT LEFT RIGHT */
+
+const r1l = r1.slice(0,4)
+const r1r = r1.slice(4,8)
+
+const r2l = r2.slice(0,2)
+const r2r = r2.slice(2,4)
+
+const r3l = r3.slice(0,1)
+const r3r = r3.slice(1,2)
 
 function render(round, container){
 
-container.innerHTML = ""
+container.innerHTML=""
 
 round.forEach(match=>{
 
@@ -158,24 +156,21 @@ const div = document.createElement("div")
 
 if(match.player1_id && match.player2_id){
 
-const name1 = players[match.player1_id]
-const name2 = players[match.player2_id]
+const name1 = players[match.player1_id] || "TBD"
+const name2 = players[match.player2_id] || "TBD"
 
-div.className = "match"
+div.className="match"
 
-div.innerText = name1 + " vs " + name2
+div.innerText=name1+" vs "+name2
 
-div.onclick = () => {
-
-window.location.href =
-"/names/" + match.seo_slug
-
+div.onclick=()=>{
+window.location.href="/names/"+match.seo_slug
 }
 
 }else{
 
-div.className = "match empty"
-div.innerText = "TBD"
+div.className="match empty"
+div.innerText="TBD"
 
 }
 
@@ -187,8 +182,16 @@ container.appendChild(div)
 
 /* DRAW */
 
-render(left, document.getElementById("r1l"))
-render(right, document.getElementById("r1r"))
+render(r1l,document.getElementById("r1l"))
+render(r2l,document.getElementById("r2l"))
+render(r3l,document.getElementById("r3l"))
+render(r4,document.getElementById("r4l"))
+
+render(r4,document.getElementById("final"))
+
+render(r3r,document.getElementById("r3r"))
+render(r2r,document.getElementById("r2r"))
+render(r1r,document.getElementById("r1r"))
 
 }
 
