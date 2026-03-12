@@ -1,124 +1,195 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Duel</title>
-  <style>
-    *{
-      box-sizing:border-box;
-    }
+<meta charset="UTF-8">
+<title>Duel</title>
 
-    body{
-      margin:0;
-      min-height:100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-family:Arial, Helvetica, sans-serif;
-      background:linear-gradient(180deg,#3c3ccf 0%, #111 100%);
-      color:white;
-      padding:20px;
-    }
+<style>
 
-    .card{
-      width:min(700px, 100%);
-      background:rgba(255,255,255,0.08);
-      border:1px solid rgba(255,255,255,0.18);
-      border-radius:24px;
-      padding:30px;
-      text-align:center;
-      backdrop-filter:blur(8px);
-    }
+body{
+margin:0;
+font-family:Arial;
+background:linear-gradient(#3c3ccf,#000);
+color:white;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+}
 
-    h1{
-      margin-top:0;
-      font-size:40px;
-      font-weight:300;
-    }
+.container{
+text-align:center;
+}
 
-    .competition{
-      color:#d8d8ff;
-      margin-bottom:24px;
-    }
+.title{
+font-size:36px;
+margin-bottom:40px;
+}
 
-    .players{
-      display:grid;
-      grid-template-columns:1fr auto 1fr;
-      gap:20px;
-      align-items:center;
-      margin-top:20px;
-    }
+.duel{
+display:flex;
+gap:80px;
+align-items:center;
+justify-content:center;
+}
 
-    .player{
-      background:white;
-      color:#111;
-      border-radius:16px;
-      padding:30px 20px;
-      font-size:28px;
-      font-weight:700;
-      cursor:pointer;
-      transition:transform .15s ease;
-    }
+.player{
 
-    .player:hover{
-      transform:translateY(-3px);
-    }
+background:white;
+color:black;
 
-    .vs{
-      font-size:32px;
-      font-weight:700;
-    }
+padding:30px 40px;
 
-    .back{
-      margin-top:30px;
-      background:gold;
-      color:#111;
-      border:none;
-      border-radius:999px;
-      padding:12px 20px;
-      font-weight:700;
-      cursor:pointer;
-    }
+border-radius:12px;
 
-    @media (max-width: 700px){
-      .players{
-        grid-template-columns:1fr;
-      }
+font-size:22px;
+font-weight:bold;
 
-      .vs{
-        display:none;
-      }
-    }
-  </style>
+cursor:pointer;
+
+transition:transform .2s;
+
+}
+
+.player:hover{
+transform:scale(1.05);
+}
+
+.vs{
+font-size:30px;
+}
+
+.percent{
+margin-top:10px;
+font-size:16px;
+}
+
+.message{
+margin-top:30px;
+font-size:18px;
+}
+
+.back{
+margin-top:40px;
+cursor:pointer;
+}
+
+</style>
+
 </head>
+
 <body>
-  <div class="card">
-    <h1>DUEL</h1>
-    <div class="competition" id="competition"></div>
 
-    <div class="players">
-      <div class="player" id="p1"></div>
-      <div class="vs">VS</div>
-      <div class="player" id="p2"></div>
-    </div>
+<div class="container">
 
-    <button class="back" onclick="goBack()">← Back to bracket</button>
-  </div>
+<div class="title" id="title"></div>
 
-  <script>
-    const params = new URLSearchParams(window.location.search);
-    const competition = params.get("competition") || "names";
-    const name1 = decodeURIComponent(params.get("name1") || "");
-    const name2 = decodeURIComponent(params.get("name2") || "");
+<div class="duel">
 
-    document.getElementById("competition").textContent = "Competition: " + competition;
-    document.getElementById("p1").textContent = name1;
-    document.getElementById("p2").textContent = name2;
+<div>
+<div class="player" id="p1"></div>
+<div class="percent" id="percent1"></div>
+</div>
 
-    function goBack(){
-      window.location.href = "bracket.html?competition=" + encodeURIComponent(competition);
-    }
-  </script>
+<div class="vs">VS</div>
+
+<div>
+<div class="player" id="p2"></div>
+<div class="percent" id="percent2"></div>
+</div>
+
+</div>
+
+<div class="message" id="message"></div>
+
+<div class="back" onclick="goBack()">← Back to bracket</div>
+
+</div>
+
+<script>
+
+/* READ URL */
+
+const params = new URLSearchParams(window.location.search)
+
+const name1 = params.get("name1")
+const name2 = params.get("name2")
+
+document.getElementById("title").innerText =
+name1 + " vs " + name2
+
+document.getElementById("p1").innerText = name1
+document.getElementById("p2").innerText = name2
+
+/* MATCH KEY */
+
+const matchKey = name1 + "_vs_" + name2
+
+/* LOAD VOTES */
+
+let votes = JSON.parse(localStorage.getItem(matchKey)) || {
+v1:1,
+v2:1
+}
+
+/* CHECK IF USER ALREADY VOTED */
+
+const voted = localStorage.getItem("voted_"+matchKey)
+
+/* UPDATE PERCENTAGES */
+
+function updatePercent(){
+
+let total = votes.v1 + votes.v2
+
+let p1 = Math.round(votes.v1/total*100)
+let p2 = Math.round(votes.v2/total*100)
+
+document.getElementById("percent1").innerText = p1+"%"
+document.getElementById("percent2").innerText = p2+"%"
+
+}
+
+updatePercent()
+
+/* VOTE */
+
+function vote(choice){
+
+if(voted){
+
+document.getElementById("message").innerText =
+"You already voted in this duel"
+
+return
+}
+
+if(choice==1) votes.v1++
+if(choice==2) votes.v2++
+
+localStorage.setItem(matchKey,JSON.stringify(votes))
+
+localStorage.setItem("voted_"+matchKey,true)
+
+updatePercent()
+
+document.getElementById("message").innerText =
+"Vote recorded!"
+
+}
+
+/* CLICK EVENTS */
+
+document.getElementById("p1").onclick = ()=>vote(1)
+document.getElementById("p2").onclick = ()=>vote(2)
+
+/* BACK */
+
+function goBack(){
+window.history.back()
+}
+
+</script>
+
 </body>
 </html>
