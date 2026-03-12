@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 
 <meta charset="UTF-8">
@@ -11,13 +12,13 @@
 
 body{
 margin:0;
-height:100vh;
+font-family:Arial;
+background:linear-gradient(#3c3ccf,#000);
+color:white;
 display:flex;
 justify-content:center;
 align-items:center;
-background:linear-gradient(#3c3ccf,#000);
-color:white;
-font-family:Arial;
+height:100vh;
 }
 
 .container{
@@ -29,13 +30,9 @@ background:white;
 color:black;
 padding:20px;
 margin:20px;
-border-radius:14px;
+border-radius:12px;
+font-size:22px;
 cursor:pointer;
-font-size:24px;
-}
-
-.percent{
-font-weight:bold;
 }
 
 </style>
@@ -62,8 +59,8 @@ const supabaseClient = createClient(
 "TU_ANON_KEY"
 )
 
-const params=new URLSearchParams(location.search)
-const matchId=params.get("match")
+const params = new URLSearchParams(window.location.search)
+const matchId = params.get("match")
 
 async function load(){
 
@@ -75,48 +72,40 @@ const { data:match } = await supabaseClient
 
 const { data:p1 } = await supabaseClient
 .from("participants")
-.select("*")
+.select("name")
 .eq("id",match.player1_id)
 .single()
 
 const { data:p2 } = await supabaseClient
 .from("participants")
-.select("*")
+.select("name")
 .eq("id",match.player2_id)
 .single()
 
-const v1=match.votes1||1
-const v2=match.votes2||1
+document.getElementById("title").innerText = p1.name + " vs " + p2.name
 
-const total=v1+v2
+document.getElementById("p1").innerText = p1.name
+document.getElementById("p2").innerText = p2.name
 
-const pct1=Math.round(v1*100/total)
-const pct2=Math.round(v2*100/total)
+document.getElementById("p1").onclick = ()=>vote(1)
+document.getElementById("p2").onclick = ()=>vote(2)
 
-document.getElementById("title").innerText=`${p1.name} vs ${p2.name}`
+async function vote(player){
 
-document.getElementById("p1").innerHTML=`${p1.name} <span class="percent">${pct1}%</span>`
-document.getElementById("p2").innerHTML=`${p2.name} <span class="percent">${pct2}%</span>`
+let v1 = match.votes1 || 1
+let v2 = match.votes2 || 1
 
-document.getElementById("p1").onclick=()=>vote(match,1)
-document.getElementById("p2").onclick=()=>vote(match,2)
-
-}
-
-async function vote(match,player){
-
-let v1=match.votes1||1
-let v2=match.votes2||1
-
-if(player===1) v1++
-if(player===2) v2++
+if(player==1) v1++
+if(player==2) v2++
 
 await supabaseClient
 .from("matches")
 .update({votes1:v1,votes2:v2})
-.eq("id",match.id)
+.eq("id",matchId)
 
-window.location="bracket.html"
+window.location = document.referrer
+
+}
 
 }
 
