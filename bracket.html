@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
 <title>Bracket</title>
@@ -32,43 +32,49 @@ transform-origin:center;
 /* GRID */
 
 .bracket{
-width:1700px;
+
+width:1800px;
 height:900px;
 
 display:grid;
+
 grid-template-columns:
-170px 170px 170px 170px 170px 240px
-170px 170px 170px 170px 170px;
+140px 140px 140px 140px 140px
+200px
+140px 140px 140px 140px 140px;
 
 align-items:center;
+
 }
 
-/* ROUND */
+/* COLUMN */
 
-.round{
+.col{
 position:relative;
 height:800px;
 }
 
-/* MATCH */
-
-.match{
-position:absolute;
-width:160px;
-transform:translateY(-50%);
-}
-
-/* PLAYER */
+/* PLAYER BOX */
 
 .player{
+
+position:absolute;
+width:120px;
+
 background:linear-gradient(#eee,#bbb);
 color:black;
+
 border-radius:8px;
+
 padding:6px 8px;
-margin:3px 0;
+
 display:flex;
 justify-content:space-between;
+
 font-size:12px;
+
+transform:translateY(-50%);
+
 }
 
 .clickable{
@@ -82,12 +88,17 @@ background:white;
 /* CHAMPION */
 
 .champion{
+
 background:gold;
-padding:18px 40px;
-border-radius:30px;
 color:black;
+
+padding:18px 40px;
+
+border-radius:30px;
+
 font-weight:bold;
 text-align:center;
+
 }
 
 </style>
@@ -101,21 +112,21 @@ text-align:center;
 
 <div class="bracket">
 
-<div class="round" id="r1L"></div>
-<div class="round" id="r2L"></div>
-<div class="round" id="r3L"></div>
-<div class="round" id="r4L"></div>
-<div class="round" id="r5L"></div>
+<div class="col" id="c1"></div>
+<div class="col" id="c2"></div>
+<div class="col" id="c3"></div>
+<div class="col" id="c4"></div>
+<div class="col" id="c5"></div>
 
 <div style="display:flex;align-items:center;justify-content:center;">
 <div class="champion">Champion</div>
 </div>
 
-<div class="round" id="r5R"></div>
-<div class="round" id="r4R"></div>
-<div class="round" id="r3R"></div>
-<div class="round" id="r2R"></div>
-<div class="round" id="r1R"></div>
+<div class="col" id="c7"></div>
+<div class="col" id="c8"></div>
+<div class="col" id="c9"></div>
+<div class="col" id="c10"></div>
+<div class="col" id="c11"></div>
 
 </div>
 </div>
@@ -124,57 +135,56 @@ text-align:center;
 
 /* PLAYERS */
 
-const players = [
+const players=[
+
 "Alejandro","Daniel","Mateo","Lucas","Hugo","Adrian","Pablo","Bruno",
 "Diego","Javier","Carlos","Alvaro","Marco","Nicolas","Ivan","Sergio",
+
 "Gabriel","Leo","Mario","Andres","David","Eric","Oscar","Raul",
 "Martin","Joel","Samuel","Enzo","Tomas","Gonzalo","Luis","Ruben"
+
 ]
 
 /* OPEN DUEL */
 
 function openDuel(a,b){
 
-window.location.href =
+window.location.href=
 "duel.html?name1="+encodeURIComponent(a)+"&name2="+encodeURIComponent(b)
 
 }
 
-/* PLAYER BOX */
+/* CREATE PLAYER */
 
-function player(name,opponent){
+function playerBox(name,opponent,top){
 
-return `
-<div class="player clickable"
-onclick="openDuel('${name}','${opponent}')">
-${name}<span>50%</span>
-</div>
-`
+let div=document.createElement("div")
 
-}
+div.className="player"
 
-/* EMPTY */
+div.style.top=top+"px"
 
-function emptyPlayer(){
-return `<div class="player">&nbsp;</div>`
-}
+div.innerHTML=`${name}<span>50%</span>`
 
-/* MATCH */
+if(opponent){
 
-function match(p1,p2){
+div.classList.add("clickable")
 
-return `
-<div class="player clickable" onclick="openDuel('${p1}','${p2}')">${p1}<span>50%</span></div>
-<div class="player clickable" onclick="openDuel('${p1}','${p2}')">${p2}<span>50%</span></div>
-`
+div.onclick=()=>openDuel(name,opponent)
 
 }
 
-/* CENTERS */
+return div
 
-function centers(count,height){
+}
 
+/* CALCULATE POSITIONS */
+
+function positions(count){
+
+let height=800
 let space=height/count
+
 let arr=[]
 
 for(let i=0;i<count;i++)
@@ -184,81 +194,91 @@ return arr
 
 }
 
-/* RENDER ROUND */
+/* RENDER COLUMN */
 
-function renderRound(id,matches){
+function renderColumn(id,names,opponents){
 
-let container=document.getElementById(id)
-let height=800
-let c=centers(matches.length,height)
+let col=document.getElementById(id)
 
-matches.forEach((m,i)=>{
+let pos=positions(names.length)
 
-let el=document.createElement("div")
-el.className="match"
-el.style.top=c[i]+"px"
-el.innerHTML=m
+names.forEach((name,i)=>{
 
-container.appendChild(el)
+let opponent=opponents?opponents[i]:null
+
+col.appendChild(playerBox(name,opponent,pos[i]))
 
 })
 
 }
 
-/* BUILD LEFT */
+/* LEFT SIDE */
 
 let left=players.slice(0,16)
+
+/* RIGHT SIDE */
+
 let right=players.slice(16)
 
-/* ROUND 1 */
+/* R1 */
 
-let r1L=[]
-let r1R=[]
+renderColumn("c1",left,[
+"Daniel","Alejandro",
+"Lucas","Mateo",
+"Adrian","Hugo",
+"Bruno","Pablo",
+"Javier","Diego",
+"Alvaro","Carlos",
+"Nicolas","Marco",
+"Sergio","Ivan"
+])
 
-for(let i=0;i<16;i+=2){
-r1L.push(match(left[i],left[i+1]))
-}
+renderColumn("c11",right,[
+"Leo","Gabriel",
+"Andres","Mario",
+"Eric","David",
+"Raul","Oscar",
+"Joel","Martin",
+"Enzo","Samuel",
+"Gonzalo","Tomas",
+"Ruben","Luis"
+])
 
-for(let i=0;i<16;i+=2){
-r1R.push(match(right[i],right[i+1]))
-}
+/* EMPTY FUTURE ROUNDS */
 
-renderRound("r1L",r1L)
-renderRound("r1R",r1R)
-
-/* FUTURE ROUNDS */
-
-function emptyMatches(count){
+function empty(count){
 
 let arr=[]
 
 for(let i=0;i<count;i++)
-arr.push(emptyPlayer())
+arr.push("")
 
 return arr
 
 }
 
-renderRound("r2L",emptyMatches(4))
-renderRound("r3L",emptyMatches(2))
-renderRound("r4L",emptyMatches(1))
-renderRound("r5L",emptyMatches(1))
+renderColumn("c2",empty(8))
+renderColumn("c3",empty(4))
+renderColumn("c4",empty(2))
+renderColumn("c5",empty(1))
 
-renderRound("r2R",emptyMatches(4))
-renderRound("r3R",emptyMatches(2))
-renderRound("r4R",emptyMatches(1))
-renderRound("r5R",emptyMatches(1))
+renderColumn("c7",empty(1))
+renderColumn("c8",empty(2))
+renderColumn("c9",empty(4))
+renderColumn("c10",empty(8))
 
 /* SCALE */
 
 function scale(){
 
-let w=1700
+let w=1800
 let h=900
 
 let s=Math.min(
+
 window.innerWidth/w,
 window.innerHeight/h
+
 )
 
 document.getElementById("stage").style.transform=
@@ -267,6 +287,7 @@ document.getElementById("stage").style.transform=
 }
 
 window.addEventListener("resize",scale)
+
 scale()
 
 </script>
