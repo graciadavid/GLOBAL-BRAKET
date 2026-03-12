@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Bracket 32</title>
+<title>Best Male Name</title>
 
 <style>
 
@@ -15,62 +15,88 @@ color:white;
 
 .title{
 text-align:center;
-font-size:40px;
-padding:30px;
+font-size:32px;
+padding:20px;
 }
 
 .bracket{
 display:flex;
 justify-content:center;
 align-items:center;
+height:85vh;
 gap:40px;
 }
 
-.column{
+.side{
+display:flex;
+gap:20px;
+}
+
+.round{
 display:flex;
 flex-direction:column;
-gap:25px;
+justify-content:space-around;
+height:70vh;
 }
 
 .match{
-width:180px;
-height:40px;
+width:140px;
+padding:6px;
+background:linear-gradient(#eee,#bbb);
+border-radius:10px;
+margin:5px 0;
+text-align:center;
+font-size:13px;
+color:black;
+cursor:pointer;
+}
+
+.match:hover{
+background:white;
+}
+
+.champion{
+width:160px;
+padding:10px;
 background:linear-gradient(#eee,#bbb);
 border-radius:20px;
+text-align:center;
+color:black;
 }
 
 .center{
 display:flex;
-flex-direction:column;
 align-items:center;
-gap:40px;
-}
-
-.champion{
-width:200px;
-height:50px;
-background:linear-gradient(#eee,#bbb);
-border-radius:25px;
 }
 
 </style>
-
 </head>
 
 <body>
 
-<div class="title">CHAMPION</div>
+<div class="title">BEST MALE NAME</div>
 
 <div class="bracket">
 
 <!-- LEFT SIDE -->
 
-<div class="column">
+<div class="side">
 
-<div class="match"></div>
-<div class="match"></div>
-<div class="match"></div>
-<div class="match"></div>
+<div class="round">
+
+<div class="match" onclick="openDuel('Alejandro','Daniel')">Alejandro vs Daniel</div>
+<div class="match" onclick="openDuel('Mateo','Lucas')">Mateo vs Lucas</div>
+<div class="match" onclick="openDuel('Hugo','Adrian')">Hugo vs Adrian</div>
+<div class="match" onclick="openDuel('Pablo','Bruno')">Pablo vs Bruno</div>
+<div class="match" onclick="openDuel('Diego','Javier')">Diego vs Javier</div>
+<div class="match" onclick="openDuel('Carlos','Alvaro')">Carlos vs Alvaro</div>
+<div class="match" onclick="openDuel('Marco','Nicolas')">Marco vs Nicolas</div>
+<div class="match" onclick="openDuel('Ivan','Sergio')">Ivan vs Sergio</div>
+
+</div>
+
+<div class="round">
+
 <div class="match"></div>
 <div class="match"></div>
 <div class="match"></div>
@@ -78,25 +104,18 @@ border-radius:25px;
 
 </div>
 
-<div class="column">
-
-<div class="match"></div>
-<div class="match"></div>
-<div class="match"></div>
-<div class="match"></div>
-
-</div>
-
-<div class="column">
+<div class="round">
 
 <div class="match"></div>
 <div class="match"></div>
 
 </div>
 
-<div class="column">
+<div class="round">
 
 <div class="match"></div>
+
+</div>
 
 </div>
 
@@ -104,40 +123,29 @@ border-radius:25px;
 
 <div class="center">
 
-<div class="champion"></div>
+<div class="champion">Champion</div>
 
 </div>
 
 <!-- RIGHT SIDE -->
 
-<div class="column">
+<div class="side">
+
+<div class="round">
 
 <div class="match"></div>
 
 </div>
 
-<div class="column">
+<div class="round">
 
 <div class="match"></div>
 <div class="match"></div>
 
 </div>
 
-<div class="column">
+<div class="round">
 
-<div class="match"></div>
-<div class="match"></div>
-<div class="match"></div>
-<div class="match"></div>
-
-</div>
-
-<div class="column">
-
-<div class="match"></div>
-<div class="match"></div>
-<div class="match"></div>
-<div class="match"></div>
 <div class="match"></div>
 <div class="match"></div>
 <div class="match"></div>
@@ -145,7 +153,33 @@ border-radius:25px;
 
 </div>
 
+<div class="round">
+
+<div class="match" onclick="openDuel('Gabriel','Leo')">Gabriel vs Leo</div>
+<div class="match" onclick="openDuel('Mario','Andres')">Mario vs Andres</div>
+<div class="match" onclick="openDuel('David','Eric')">David vs Eric</div>
+<div class="match" onclick="openDuel('Oscar','Raul')">Oscar vs Raul</div>
+<div class="match" onclick="openDuel('Martin','Joel')">Martin vs Joel</div>
+<div class="match" onclick="openDuel('Samuel','Enzo')">Samuel vs Enzo</div>
+<div class="match" onclick="openDuel('Tomas','Gonzalo')">Tomas vs Gonzalo</div>
+<div class="match" onclick="openDuel('Luis','Ruben')">Luis vs Ruben</div>
+
 </div>
+
+</div>
+
+</div>
+
+<script>
+
+function openDuel(name1,name2){
+
+window.location.href =
+"duel.html?name1="+encodeURIComponent(name1)+"&name2="+encodeURIComponent(name2);
+
+}
+
+</script>
 
 </body>
 </html>
