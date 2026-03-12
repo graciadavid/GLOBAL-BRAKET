@@ -5,6 +5,8 @@
 <meta charset="UTF-8">
 <title>Bracket</title>
 
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+
 <style>
 
 body{
@@ -37,17 +39,23 @@ height:600px;
 }
 
 .box{
-width:140px;
+width:160px;
 padding:10px;
 background:linear-gradient(#eee,#bbb);
 border-radius:10px;
 text-align:center;
 color:black;
-font-size:13px;
+font-size:14px;
+cursor:pointer;
+}
+
+.box.empty{
+opacity:.4;
+cursor:default;
 }
 
 .final{
-width:160px;
+width:180px;
 padding:14px;
 background:gold;
 border-radius:20px;
@@ -65,63 +73,116 @@ font-weight:bold;
 
 <div class="bracket">
 
-<div class="round">
-<div class="box">Player</div>
-<div class="box">Player</div>
-<div class="box">Player</div>
-<div class="box">Player</div>
-<div class="box">Player</div>
-<div class="box">Player</div>
-<div class="box">Player</div>
-<div class="box">Player</div>
-</div>
-
-<div class="round">
-<div class="box">TBD</div>
-<div class="box">TBD</div>
-<div class="box">TBD</div>
-<div class="box">TBD</div>
-</div>
-
-<div class="round">
-<div class="box">TBD</div>
-<div class="box">TBD</div>
-</div>
-
-<div class="round">
-<div class="box">TBD</div>
-</div>
+<div class="round" id="left1"></div>
+<div class="round" id="left2"></div>
+<div class="round" id="left3"></div>
+<div class="round" id="left4"></div>
 
 <div class="final">Champion</div>
 
-<div class="round">
-<div class="box">TBD</div>
-</div>
-
-<div class="round">
-<div class="box">TBD</div>
-<div class="box">TBD</div>
-</div>
-
-<div class="round">
-<div class="box">TBD</div>
-<div class="box">TBD</div>
-<div class="box">TBD</div>
-<div class="box">TBD</div>
-</div>
-
-<div class="round">
-<div class="box">Player</div>
-<div class="box">Player</div>
-<div class="box">Player</div>
-<div class="box">Player</div>
-<div class="box">Player</div>
-<div class="box">Player</div>
-<div class="box">Player</div>
-<div class="box">Player</div>
-</div>
+<div class="round" id="right4"></div>
+<div class="round" id="right3"></div>
+<div class="round" id="right2"></div>
+<div class="round" id="right1"></div>
 
 </div>
+
+<script>
+
+const { createClient } = supabase
+
+const supabaseClient = createClient(
+"https://okaprbdbtnyiutztibcs.supabase.co",
+"TU_ANON_KEY_AQUI"
+)
+
+async function loadBracket(){
+
+// cargar matches del torneo 1 (ejemplo)
+const { data: matches } = await supabaseClient
+.from("matches")
+.select("*")
+.eq("tournament_id",1)
+.order("match_number")
+
+// cargar participantes
+const { data: participants } = await supabaseClient
+.from("participants")
+.select("*")
+
+const names = {}
+
+participants.forEach(p=>{
+names[p.id] = p.name
+})
+
+const round1 = matches.filter(m=>m.round_number==1)
+
+const left = round1.slice(0,4)
+const right = round1.slice(4,8)
+
+function createBox(name){
+
+const div=document.createElement("div")
+
+if(!name){
+div.className="box empty"
+div.innerText="TBD"
+}else{
+div.className="box"
+div.innerText=name
+}
+
+return div
+}
+
+function renderMatches(matches,container){
+
+const el=document.getElementById(container)
+
+matches.forEach(m=>{
+
+el.appendChild(createBox(names[m.player1_id]))
+el.appendChild(createBox(names[m.player2_id]))
+
+})
+
+}
+
+renderMatches(left,"left1")
+renderMatches(right,"right1")
+
+// rondas futuras
+
+function renderEmpty(container,count){
+
+const el=document.getElementById(container)
+
+for(let i=0;i<count;i++){
+
+const div=document.createElement("div")
+div.className="box empty"
+div.innerText="TBD"
+
+el.appendChild(div)
+
+}
+
+}
+
+renderEmpty("left2",4)
+renderEmpty("left3",2)
+renderEmpty("left4",1)
+
+renderEmpty("right2",4)
+renderEmpty("right3",2)
+renderEmpty("right4",1)
+
+}
+
+loadBracket()
+
+</script>
 
 </body>
 </html>
