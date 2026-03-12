@@ -4,7 +4,7 @@
 <head>
 
 <meta charset="UTF-8">
-<title>Best Male Name</title>
+<title>Bracket</title>
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
@@ -73,7 +73,7 @@ font-weight:bold;
 
 <body>
 
-<div class="title">Best Male Name</div>
+<div class="title" id="title">Bracket</div>
 
 <div class="bracket">
 
@@ -100,8 +100,6 @@ const supabaseClient = createClient(
 "TU_ANON_KEY"
 )
 
-
-
 function percent(v1,v2){
 
 v1 = v1 || 1
@@ -115,8 +113,6 @@ Math.round(v2*100/total)
 ]
 
 }
-
-
 
 function createBox(name,pct,matchId){
 
@@ -146,38 +142,52 @@ return div
 
 }
 
-
-
 async function loadBracket(){
+
+/* leer slug de la URL */
+
+const params = new URLSearchParams(window.location.search)
+const slug = params.get("competition")
+
+document.getElementById("title").innerText = slug
+
+
+/***** buscar competition *****/
+
+const { data:competition } = await supabaseClient
+.from("competitions")
+.select("*")
+.eq("slug",slug)
+.single()
+
+if(!competition){
+
+alert("Competition not found")
+return
+
+}
+
+const competitionId = competition.id
+
+
+/***** cargar matches *****/
 
 const { data:matches } = await supabaseClient
 .from("matches")
 .select("*")
-.eq("tournament_id",1)
+.eq("competition_id",competitionId)
+
+
+/***** cargar participantes *****/
 
 const { data:players } = await supabaseClient
 .from("participants")
 .select("id,name")
 
 
-const safeMatches = matches || []
-const safePlayers = players || []
-
-
-/* ordenar matches */
-
-safeMatches.sort((a,b)=>{
-if(a.round===b.round){
-return a.position-b.position
-}
-return a.round-b.round
-})
-
-
-/* mapa nombres */
-
 const names={}
-safePlayers.forEach(p=>{
+
+players.forEach(p=>{
 names[p.id]=p.name
 })
 
@@ -187,20 +197,28 @@ return names[id] || "TBD"
 }
 
 
-/* separar rondas */
+matches.sort((a,b)=>{
 
-const round1 = safeMatches.filter(m=>m.round==1)
-const round2 = safeMatches.filter(m=>m.round==2)
-const round3 = safeMatches.filter(m=>m.round==3)
-const round4 = safeMatches.filter(m=>m.round==4)
+if(a.round===b.round){
+return a.position-b.position
+}
 
+return a.round-b.round
+
+})
+
+
+const round1 = matches.filter(m=>m.round==1)
+const round2 = matches.filter(m=>m.round==2)
+const round3 = matches.filter(m=>m.round==3)
+const round4 = matches.filter(m=>m.round==4)
 
 
 document.querySelectorAll(".round").forEach(r=>r.innerHTML="")
 
 
 
-/* ROUND 1 */
+/***** ROUND 1 *****/
 
 round1.forEach((m,i)=>{
 
@@ -227,8 +245,7 @@ document.getElementById("r1r")
 })
 
 
-
-/* ROUND 2 */
+/***** ROUND 2 *****/
 
 for(let i=0;i<4;i++){
 
@@ -238,8 +255,7 @@ document.getElementById("r2r").appendChild(createBox("TBD"))
 }
 
 
-
-/* ROUND 3 */
+/***** ROUND 3 *****/
 
 for(let i=0;i<2;i++){
 
@@ -249,8 +265,7 @@ document.getElementById("r3r").appendChild(createBox("TBD"))
 }
 
 
-
-/* FINAL */
+/***** FINAL *****/
 
 document.getElementById("r4l").appendChild(createBox("TBD"))
 document.getElementById("r4r").appendChild(createBox("TBD"))
