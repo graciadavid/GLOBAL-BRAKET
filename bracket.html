@@ -3,7 +3,7 @@
 <head>
 
 <meta charset="UTF-8">
-<title>Bracket</title>
+<title>Best Male Name</title>
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
@@ -14,7 +14,6 @@ margin:0;
 font-family:Arial;
 background:linear-gradient(#3c3ccf,#000);
 color:white;
-overflow:hidden;
 }
 
 .title{
@@ -28,34 +27,33 @@ display:flex;
 justify-content:center;
 align-items:center;
 gap:40px;
-height:80vh;
+height:70vh;
 }
 
 .round{
 display:flex;
 flex-direction:column;
 justify-content:space-around;
-height:600px;
+height:520px;
 }
 
 .box{
-width:160px;
+width:170px;
 padding:10px;
 background:linear-gradient(#eee,#bbb);
 border-radius:10px;
 text-align:center;
 color:black;
 font-size:14px;
-cursor:pointer;
+margin:6px;
 }
 
-.box.empty{
+.empty{
 opacity:.4;
-cursor:default;
 }
 
 .final{
-width:180px;
+width:200px;
 padding:14px;
 background:gold;
 border-radius:20px;
@@ -93,30 +91,26 @@ const { createClient } = supabase
 
 const supabaseClient = createClient(
 "https://okaprbdbtnyiutztibcs.supabase.co",
-"TU_ANON_KEY_AQUI"
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9rYXByYmRidG55aXV0enRpYmNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzMDgyNjgsImV4cCI6MjA4ODg4NDI2OH0.8tfmypajrsLVbrD3-PUwkJvrM1h9aQ8UN2IP3btoNLE"
 )
 
 async function loadBracket(){
 
-// cargar matches del torneo 1 (ejemplo)
 const { data: matches } = await supabaseClient
 .from("matches")
-.select("*")
+.select(`
+id,
+round_number,
+match_number,
+player1:player1_id(name),
+player2:player2_id(name)
+`)
 .eq("tournament_id",1)
 .order("match_number")
 
-// cargar participantes
-const { data: participants } = await supabaseClient
-.from("participants")
-.select("*")
+console.log(matches)
 
-const names = {}
-
-participants.forEach(p=>{
-names[p.id] = p.name
-})
-
-const round1 = matches.filter(m=>m.round_number==1)
+const round1 = matches.filter(m => m.round_number == 1)
 
 const left = round1.slice(0,4)
 const right = round1.slice(4,8)
@@ -125,58 +119,57 @@ function createBox(name){
 
 const div=document.createElement("div")
 
+div.className="box"
+
 if(!name){
-div.className="box empty"
+div.classList.add("empty")
 div.innerText="TBD"
 }else{
-div.className="box"
 div.innerText=name
 }
 
 return div
 }
 
-function renderMatches(matches,container){
+function render(matches,container){
 
 const el=document.getElementById(container)
 
 matches.forEach(m=>{
 
-el.appendChild(createBox(names[m.player1_id]))
-el.appendChild(createBox(names[m.player2_id]))
+el.appendChild(createBox(m.player1?.name))
+el.appendChild(createBox(m.player2?.name))
 
 })
 
 }
 
-renderMatches(left,"left1")
-renderMatches(right,"right1")
+render(left,"left1")
+render(right,"right1")
 
-// rondas futuras
-
-function renderEmpty(container,count){
+function empty(container,count){
 
 const el=document.getElementById(container)
 
 for(let i=0;i<count;i++){
 
-const div=document.createElement("div")
-div.className="box empty"
-div.innerText="TBD"
+const d=document.createElement("div")
+d.className="box empty"
+d.innerText="TBD"
 
-el.appendChild(div)
-
-}
+el.appendChild(d)
 
 }
 
-renderEmpty("left2",4)
-renderEmpty("left3",2)
-renderEmpty("left4",1)
+}
 
-renderEmpty("right2",4)
-renderEmpty("right3",2)
-renderEmpty("right4",1)
+empty("left2",4)
+empty("left3",2)
+empty("left4",1)
+
+empty("right2",4)
+empty("right3",2)
+empty("right4",1)
 
 }
 
