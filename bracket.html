@@ -98,27 +98,27 @@ async function loadBracket(){
 
 const { data: matches } = await supabaseClient
 .from("matches")
-.select(`
-id,
-round_number,
-match_number,
-player1:player1_id(name),
-player2:player2_id(name)
-`)
+.select("*")
 .eq("tournament_id",1)
-.order("match_number")
 
-console.log(matches)
+const { data: players } = await supabaseClient
+.from("participants")
+.select("*")
 
-const round1 = matches.filter(m => m.round_number == 1)
+const names = {}
+
+players.forEach(p=>{
+names[p.id] = p.name
+})
+
+const round1 = matches.slice(0,8)
 
 const left = round1.slice(0,4)
 const right = round1.slice(4,8)
 
-function createBox(name){
+function box(name){
 
 const div=document.createElement("div")
-
 div.className="box"
 
 if(!name){
@@ -129,6 +129,7 @@ div.innerText=name
 }
 
 return div
+
 }
 
 function render(matches,container){
@@ -137,8 +138,8 @@ const el=document.getElementById(container)
 
 matches.forEach(m=>{
 
-el.appendChild(createBox(m.player1?.name))
-el.appendChild(createBox(m.player2?.name))
+el.appendChild(box(names[m.player1_id]))
+el.appendChild(box(names[m.player2_id]))
 
 })
 
