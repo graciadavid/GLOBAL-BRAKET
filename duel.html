@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
 <meta charset="UTF-8">
-<title>Vote</title>
+<title>Best Male Name</title>
 
 <style>
 
@@ -17,23 +18,22 @@ overflow-x:hidden;
 .title{
 text-align:center;
 font-size:28px;
-padding:10px;
+padding:15px;
+letter-spacing:2px;
 }
 
 .bracket{
 display:flex;
 justify-content:center;
 align-items:center;
-width:100vw;
-height:90vh;
-gap:12px;
-transform:scale(0.95);
-transform-origin:center;
+width:100%;
+height:88vh;
+gap:14px;
 }
 
 .side{
 display:flex;
-gap:8px;
+gap:10px;
 }
 
 .round{
@@ -44,10 +44,10 @@ gap:6px;
 
 .match{
 width:95px;
-height:20px;
+height:22px;
 background:linear-gradient(#eee,#bbb);
 border-radius:8px;
-font-size:10px;
+font-size:11px;
 color:black;
 display:flex;
 align-items:center;
@@ -70,10 +70,10 @@ padding:0 10px;
 
 .champion{
 width:110px;
-height:24px;
+height:26px;
 background:linear-gradient(#eee,#bbb);
-border-radius:12px;
-font-size:11px;
+border-radius:14px;
+font-size:12px;
 color:black;
 display:flex;
 align-items:center;
@@ -83,7 +83,7 @@ justify-content:center;
 @media (max-width:1200px){
 
 .bracket{
-transform:scale(0.85);
+transform:scale(0.9);
 }
 
 }
@@ -96,55 +96,113 @@ transform:none;
 height:auto;
 }
 
+.side{
+flex-direction:column;
+}
+
 }
 
 </style>
-
 </head>
 
 <body>
 
-<div class="container">
+<div class="title">BEST MALE NAME</div>
 
-<h1>Who do you prefer?</h1>
+<div class="bracket">
 
-<div class="vote-area">
+<!-- LEFT SIDE -->
 
-<div>
-<div id="name1" class="name"></div>
-<button onclick="vote(1)">Vote</button>
+<div class="side">
+
+<div class="round">
+
+<div class="match" onclick="openDuel('Alejandro','Daniel')">Alejandro vs Daniel</div>
+<div class="match" onclick="openDuel('Mateo','Lucas')">Mateo vs Lucas</div>
+<div class="match" onclick="openDuel('Hugo','Adrian')">Hugo vs Adrian</div>
+<div class="match" onclick="openDuel('Pablo','Bruno')">Pablo vs Bruno</div>
+<div class="match" onclick="openDuel('Diego','Javier')">Diego vs Javier</div>
+<div class="match" onclick="openDuel('Carlos','Alvaro')">Carlos vs Alvaro</div>
+<div class="match" onclick="openDuel('Marco','Nicolas')">Marco vs Nicolas</div>
+<div class="match" onclick="openDuel('Ivan','Sergio')">Ivan vs Sergio</div>
+
 </div>
 
-<div>
-<div id="name2" class="name"></div>
-<button onclick="vote(2)">Vote</button>
+<div class="round">
+<div class="match"></div>
+<div class="match"></div>
+<div class="match"></div>
+<div class="match"></div>
+</div>
+
+<div class="round">
+<div class="match"></div>
+<div class="match"></div>
+</div>
+
+<div class="round">
+<div class="match"></div>
 </div>
 
 </div>
 
+
+<!-- CENTER -->
+
+<div class="center">
+<div class="champion">Champion</div>
 </div>
+
+
+<!-- RIGHT SIDE -->
+
+<div class="side">
+
+<div class="round">
+<div class="match"></div>
+</div>
+
+<div class="round">
+<div class="match"></div>
+<div class="match"></div>
+</div>
+
+<div class="round">
+<div class="match"></div>
+<div class="match"></div>
+<div class="match"></div>
+<div class="match"></div>
+</div>
+
+<div class="round">
+
+<div class="match" onclick="openDuel('Gabriel','Leo')">Gabriel vs Leo</div>
+<div class="match" onclick="openDuel('Mario','Andres')">Mario vs Andres</div>
+<div class="match" onclick="openDuel('David','Eric')">David vs Eric</div>
+<div class="match" onclick="openDuel('Oscar','Raul')">Oscar vs Raul</div>
+<div class="match" onclick="openDuel('Martin','Joel')">Martin vs Joel</div>
+<div class="match" onclick="openDuel('Samuel','Enzo')">Samuel vs Enzo</div>
+<div class="match" onclick="openDuel('Tomas','Gonzalo')">Tomas vs Gonzalo</div>
+<div class="match" onclick="openDuel('Luis','Ruben')">Luis vs Ruben</div>
+
+</div>
+
+</div>
+
+</div>
+
 
 <script>
 
-const params = new URLSearchParams(window.location.search);
+function openDuel(name1,name2){
 
-const name1 = params.get("name1");
-const name2 = params.get("name2");
-
-document.getElementById("name1").innerText = name1;
-document.getElementById("name2").innerText = name2;
-
-function vote(choice){
-
-if(choice === 1){
-alert("You voted for " + name1);
-}else{
-alert("You voted for " + name2);
-}
+window.location.href =
+"duel.html?name1="+encodeURIComponent(name1)+"&name2="+encodeURIComponent(name2);
 
 }
 
 </script>
 
 </body>
+
 </html>
