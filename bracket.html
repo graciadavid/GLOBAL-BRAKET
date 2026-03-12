@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
-<head>
 
+<head>
 <meta charset="UTF-8">
 <title>Best Male Name</title>
 
@@ -27,39 +27,39 @@ display:flex;
 justify-content:center;
 align-items:center;
 gap:40px;
-height:70vh;
+height:80vh;
 }
 
 .round{
 display:flex;
 flex-direction:column;
 justify-content:space-around;
-height:520px;
+height:500px;
 }
 
 .box{
-width:170px;
+width:160px;
 padding:10px;
-background:linear-gradient(#eee,#bbb);
 border-radius:10px;
-text-align:center;
+background:linear-gradient(#eee,#bbb);
 color:black;
+text-align:center;
+margin:5px;
 font-size:14px;
-margin:6px;
 }
 
-.empty{
+.tbd{
 opacity:.4;
 }
 
 .final{
-width:200px;
-padding:14px;
 background:gold;
+padding:14px;
 border-radius:20px;
-text-align:center;
 color:black;
 font-weight:bold;
+text-align:center;
+width:180px;
 }
 
 </style>
@@ -100,6 +100,7 @@ const { data: matches } = await supabaseClient
 .from("matches")
 .select("*")
 .eq("tournament_id",1)
+.order("id")
 
 const { data: players } = await supabaseClient
 .from("participants")
@@ -108,7 +109,7 @@ const { data: players } = await supabaseClient
 const names = {}
 
 players.forEach(p=>{
-names[p.id] = p.name
+names[p.id]=p.name
 })
 
 const round1 = matches.slice(0,8)
@@ -116,20 +117,20 @@ const round1 = matches.slice(0,8)
 const left = round1.slice(0,4)
 const right = round1.slice(4,8)
 
-function box(name){
+function create(name){
 
 const div=document.createElement("div")
+
 div.className="box"
 
 if(!name){
-div.classList.add("empty")
+div.classList.add("tbd")
 div.innerText="TBD"
 }else{
 div.innerText=name
 }
 
 return div
-
 }
 
 function render(matches,container){
@@ -138,8 +139,8 @@ const el=document.getElementById(container)
 
 matches.forEach(m=>{
 
-el.appendChild(box(names[m.player1_id]))
-el.appendChild(box(names[m.player2_id]))
+el.appendChild(create(names[m.player1_id]))
+el.appendChild(create(names[m.player2_id]))
 
 })
 
@@ -148,14 +149,14 @@ el.appendChild(box(names[m.player2_id]))
 render(left,"left1")
 render(right,"right1")
 
-function empty(container,count){
+function empty(container,n){
 
 const el=document.getElementById(container)
 
-for(let i=0;i<count;i++){
+for(let i=0;i<n;i++){
 
 const d=document.createElement("div")
-d.className="box empty"
+d.className="box tbd"
 d.innerText="TBD"
 
 el.appendChild(d)
