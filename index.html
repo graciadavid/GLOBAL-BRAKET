@@ -1,253 +1,251 @@
 <!DOCTYPE html>
 <html>
-
 <head>
 <meta charset="UTF-8">
-<title>Best Cities Tournament</title>
+<title>Best Cities -Tournament</title>
 
 <style>
-
 body{
-font-family:Arial;
-background:#0f172a;
-color:white;
-padding:20px;
+  font-family:Arial,sans-serif;
+  background:#0f172a;
+  color:white;
+  padding:20px;
 }
 
 h1{
-text-align:center;
-margin-bottom:10px;
+  text-align:center;
+  margin-bottom:8px;
+}
+
+#roundLabel{
+  text-align:center;
+  font-size:18px;
+  color:#93c5fd;
+  margin-bottom:8px;
+  font-weight:bold;
 }
 
 #countdown{
-text-align:center;
-font-size:40px;
-margin-bottom:25px;
-color:#38bdf8;
-font-weight:bold;
+  text-align:center;
+  font-size:40px;
+  margin-bottom:28px;
+  color:#38bdf8;
+  font-weight:bold;
 }
 
 .bracket{
-display:flex;
-justify-content:center;
-gap:40px;
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  gap:28px;
 }
 
 .round{
-display:flex;
-flex-direction:column;
+  display:flex;
+  flex-direction:column;
 }
 
 .match{
-background:#1e293b;
-padding:8px;
-border-radius:8px;
-width:170px;
-margin:12px 0;
+  background:#1e293b;
+  padding:8px;
+  border-radius:8px;
+  width:170px;
+  min-height:58px;
+  margin:12px 0;
+  box-sizing:border-box;
 }
 
 .team{
-display:flex;
-justify-content:space-between;
-padding:6px;
-cursor:pointer;
+  display:flex;
+  justify-content:space-between;
+  padding:6px;
+  cursor:pointer;
 }
 
 .team:hover{
-color:#38bdf8;
+  color:#38bdf8;
 }
 
 .closed{
-opacity:0.5;
-cursor:default;
+  opacity:0.55;
+  cursor:default;
 }
+
+.round-1{gap:18px;}
+.round-2 .match:first-child{margin-top:36px;}
+.round-2 .match:last-child{margin-top:90px;}
+.round-3 .match{margin-top:108px;}
+.round-final .match{margin-top:108px;}
 
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 </head>
 
 <body>
 
 <h1>Best Cities in Europe</h1>
-
+<div id="roundLabel">Loading round...</div>
 <div id="countdown">Loading...</div>
 
 <div class="bracket" id="bracket"></div>
 
 <script>
-
-const ROUND_DURATION = 180
-
 const supabaseClient = window.supabase.createClient(
-"https://okaprbdbtnyiutztibcs.supabase.co",
-"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9rYXByYmRidG55aXV0enRpYmNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzMDgyNjgsImV4cCI6MjA4ODg4NDI2OH0.8tfmypajrsLVbrD3-PUwkJvrM1h9aQ8UN2IP3btoNLE"
-)
+  "https://okaprbdbtnyiutztibcs.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9rYXByYmRidG55aXV0enRpYmNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzMDgyNjgsImV4cCI6MjA4ODg4NDI2OH0.8tfmypajrsLVbrD3-PUwkJvrM1h9aQ8UN2IP3btoNLE"
+);
 
-let roundStart = 0
+const ROUND_LABELS = {
+  round16: "ROUND OF 16",
+  qf: "QUARTERFINALS",
+  sf: "SEMIFINALS",
+  final: "FINAL"
+};
 
-async function loadRoundStart(){
+const ROUND_ORDER = {
+  round16: 1,
+  qf: 2,
+  sf: 3,
+  final: 4
+};
 
-const {data} = await supabaseClient
-.from("matches")
-.select("opens_at")
-.eq("status","open")
-.order("opens_at",{ascending:true})
-.limit(1)
+async function updateTimer(){
+  const { data, error } = await supabaseClient.rpc("get_active_round_info");
 
-if(!data || data.length === 0){
+  if (error) {
+    document.getElementById("roundLabel").innerText = "TIMER ERROR";
+    document.getElementById("countdown").innerText = "Check Supabase function";
+    console.error(error);
+    return;
+  }
 
-document.getElementById("countdown").innerText = "Tournament finished"
-return
+  if (!data || data.length === 0) {
+    document.getElementById("roundLabel").innerText = "TOURNAMENT";
+    document.getElementById("countdown").innerText = "Tournament finished";
+    return;
+  }
 
+  const row = data[0];
+  const secs = Math.max(0, Number(row.remaining_seconds || 0));
+  const round = row.round || "";
+
+  const minutes = Math.floor(secs / 60);
+  const seconds = secs % 60;
+
+  const mm = String(minutes).padStart(2, "0");
+  const ss = String(seconds).padStart(2, "0");
+
+  document.getElementById("roundLabel").innerText = ROUND_LABELS[round] || round.toUpperCase();
+  document.getElementById("countdown").innerText = `${mm}:${ss}`;
 }
 
-roundStart = new Date(data[0].opens_at).getTime()
-
+function countVotes(votes, matchId, team){
+  let total = 0;
+  for (const v of votes) {
+    if (v.match_id === matchId && v.choice === team) {
+      total++;
+    }
+  }
+  return total;
 }
 
-function updateTimer(){
+function getPercentages(a, b){
+  if (a === 0 && b === 0) return [50, 50];
+  const total = a + b;
+  return [
+    Math.round((a / total) * 100),
+    Math.round((b / total) * 100)
+  ];
+}
 
-if(roundStart === 0) return
-
-let now = Date.now()
-
-let seconds = ROUND_DURATION - Math.floor((now - roundStart)/1000)
-
-if(seconds < 0) seconds = 0
-
-let m = Math.floor(seconds/60)
-let s = seconds % 60
-
-let mm = String(m).padStart(2,"0")
-let ss = String(s).padStart(2,"0")
-
-document.getElementById("countdown").innerText =
-`Round closes in ${mm}:${ss}`
-
+function openDuel(matchId, status){
+  if (status !== "open") {
+    alert("Match closed");
+    return;
+  }
+  window.location.href = "/duel.html?match_id=" + matchId;
 }
 
 async function loadBracket(){
+  const { data: matches, error: matchesError } = await supabaseClient
+    .from("matches")
+    .select("*");
 
-const {data:matches} = await supabaseClient
-.from("matches")
-.select("*")
-.order("position",{ascending:true})
+  const { data: votes, error: votesError } = await supabaseClient
+    .from("votes")
+    .select("*");
 
-const {data:votes} = await supabaseClient
-.from("votes")
-.select("*")
+  if (matchesError || votesError) {
+    console.error(matchesError || votesError);
+    return;
+  }
 
-const rounds={
-round16:[],
-qf:[],
-sf:[],
-final:[]
+  matches.sort((a, b) => {
+    const roundDiff = (ROUND_ORDER[a.round] || 99) - (ROUND_ORDER[b.round] || 99);
+    if (roundDiff !== 0) return roundDiff;
+    return (a.position || 0) - (b.position || 0);
+  });
+
+  const grouped = {
+    round16: [],
+    qf: [],
+    sf: [],
+    final: []
+  };
+
+  for (const m of matches) {
+    if (!grouped[m.round]) grouped[m.round] = [];
+    grouped[m.round].push(m);
+  }
+
+  const bracket = document.getElementById("bracket");
+  bracket.innerHTML = "";
+
+  for (const round of ["round16", "qf", "sf", "final"]) {
+    const column = document.createElement("div");
+    column.className =
+      round === "round16" ? "round round-1" :
+      round === "qf" ? "round round-2" :
+      round === "sf" ? "round round-3" :
+      "round round-final";
+
+    for (const match of grouped[round]) {
+      const box = document.createElement("div");
+      box.className = "match";
+
+      const teamA = match.team_a || "TBD";
+      const teamB = match.team_b || "TBD";
+
+      const votesA = teamA === "TBD" ? 0 : countVotes(votes, match.id, teamA);
+      const votesB = teamB === "TBD" ? 0 : countVotes(votes, match.id, teamB);
+
+      const [pctA, pctB] = getPercentages(votesA, votesB);
+
+      const classA = match.status === "open" ? "team" : "team closed";
+      const classB = match.status === "open" ? "team" : "team closed";
+
+      box.innerHTML = `
+        <div class="${classA}" onclick="openDuel('${match.id}','${match.status}')">
+          ${teamA} <span>${pctA}%</span>
+        </div>
+        <div class="${classB}" onclick="openDuel('${match.id}','${match.status}')">
+          ${teamB} <span>${pctB}%</span>
+        </div>
+      `;
+
+      column.appendChild(box);
+    }
+
+    bracket.appendChild(column);
+  }
 }
 
-matches.forEach(m=>{
-rounds[m.round].push(m)
-})
+updateTimer();
+loadBracket();
 
-function countVotes(match,team){
-
-let total=0
-
-votes.forEach(v=>{
-if(v.match_id===match.id && v.choice===team){
-total++
-}
-})
-
-return total
-
-}
-
-function percent(a,b){
-
-if(a===0 && b===0){
-return [50,50]
-}
-
-let t=a+b
-
-return[
-Math.round((a/t)*100),
-Math.round((b/t)*100)
-]
-
-}
-
-const bracket=document.getElementById("bracket")
-bracket.innerHTML=""
-
-Object.keys(rounds).forEach(round=>{
-
-const column=document.createElement("div")
-column.className="round"
-
-rounds[round].forEach(match=>{
-
-const box=document.createElement("div")
-box.className="match"
-
-let teamA=match.team_a || "TBD"
-let teamB=match.team_b || "TBD"
-
-let votesA=countVotes(match,teamA)
-let votesB=countVotes(match,teamB)
-
-let[pA,pB]=percent(votesA,votesB)
-
-let classA="team"
-let classB="team"
-
-if(match.status!=="open"){
-classA+=" closed"
-classB+=" closed"
-}
-
-box.innerHTML=`
-
-<div class="${classA}" onclick="openDuel('${match.id}','${match.status}')">
-${teamA} <span>${pA}%</span>
-</div>
-
-<div class="${classB}" onclick="openDuel('${match.id}','${match.status}')">
-${teamB} <span>${pB}%</span>
-</div>
-
-`
-
-column.appendChild(box)
-
-})
-
-bracket.appendChild(column)
-
-})
-
-}
-
-function openDuel(matchId,status){
-
-if(status!=="open"){
-alert("Match closed")
-return
-}
-
-window.location.href="/duel.html?match_id="+matchId
-
-}
-
-loadRoundStart()
-loadBracket()
-
-setInterval(updateTimer,1000)
-setInterval(loadRoundStart,15000)
-setInterval(loadBracket,3000)
-
+setInterval(updateTimer, 1000);
+setInterval(loadBracket, 3000);
 </script>
 
 </body>
