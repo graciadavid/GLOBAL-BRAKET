@@ -30,21 +30,40 @@ font-weight:bold;
 #countdown{
 text-align:center;
 font-size:42px;
-margin-bottom:28px;
+margin-bottom:40px;
 color:#38bdf8;
 font-weight:bold;
 }
 
+
+/* BRACKET */
+
 .bracket{
 display:flex;
 justify-content:center;
+align-items:center;
+gap:40px;
+}
+
+.side{
+display:flex;
 gap:30px;
 }
 
 .round{
 display:flex;
 flex-direction:column;
+justify-content:center;
+gap:40px;
 }
+
+.final{
+display:flex;
+align-items:center;
+}
+
+
+/* MATCH BOX */
 
 .match{
 background:#1e293b;
@@ -78,12 +97,50 @@ cursor:default;
 
 <body>
 
-<h1>Best Cities in Europe</h1>
+<h1>Best Cities in Europpe</h1>
 
 <div id="roundLabel">Loading round...</div>
 <div id="countdown">Loading...</div>
 
-<div class="bracket" id="bracket"></div>
+
+<div class="bracket">
+
+<!-- LEFT SIDE -->
+
+<div class="side">
+
+<div class="round" id="round16-left"></div>
+
+<div class="round" id="qf-left"></div>
+
+<div class="round" id="sf-left"></div>
+
+</div>
+
+
+<!-- FINAL -->
+
+<div class="final">
+
+<div class="round" id="final"></div>
+
+</div>
+
+
+<!-- RIGHT SIDE -->
+
+<div class="side">
+
+<div class="round" id="sf-right"></div>
+
+<div class="round" id="qf-right"></div>
+
+<div class="round" id="round16-right"></div>
+
+</div>
+
+</div>
+
 
 <script>
 
@@ -99,16 +156,10 @@ sf:"SEMIFINALS",
 final:"FINAL"
 }
 
-let advancing=false
 
 async function updateTimer(){
 
-const {data,error}=await supabaseClient.rpc("get_active_round_info")
-
-if(error){
-console.log(error)
-return
-}
+const {data}=await supabaseClient.rpc("get_active_round_info")
 
 if(!data || data.length===0){
 document.getElementById("countdown").innerText="Tournament finished"
@@ -128,91 +179,14 @@ let ss=String(s).padStart(2,"0")
 document.getElementById("roundLabel").innerText=ROUND_LABELS[row.round]
 document.getElementById("countdown").innerText=`${mm}:${ss}`
 
-if(secs===0 && !advancing){
-
-advancing=true
-
+if(secs===0){
 await supabaseClient.rpc("advance_tournament")
-
-setTimeout(()=>{
-advancing=false
-},3000)
-
 }
 
 }
 
-function countVotes(votes,matchId,team){
 
-let total=0
-
-votes.forEach(v=>{
-if(v.match_id===matchId && v.choice===team){
-total++
-}
-})
-
-return total
-
-}
-
-function percent(a,b){
-
-if(a===0 && b===0){
-return[50,50]
-}
-
-let total=a+b
-
-return[
-Math.round((a/total)*100),
-Math.round((b/total)*100)
-]
-
-}
-
-function openDuel(matchId,status){
-
-if(status!=="open"){
-alert("Match closed")
-return
-}
-
-window.location.href="/duel.html?match_id="+matchId
-
-}
-
-async function loadBracket(){
-
-const {data:matches}=await supabaseClient
-.from("matches")
-.select("*")
-.order("position",{ascending:true})
-
-const {data:votes}=await supabaseClient
-.from("votes")
-.select("*")
-
-const rounds={
-round16:[],
-qf:[],
-sf:[],
-final:[]
-}
-
-matches.forEach(m=>{
-rounds[m.round].push(m)
-})
-
-const bracket=document.getElementById("bracket")
-bracket.innerHTML=""
-
-Object.keys(rounds).forEach(round=>{
-
-const column=document.createElement("div")
-column.className="round"
-
-rounds[round].forEach(match=>{
+function createMatch(match,votes){
 
 const box=document.createElement("div")
 box.className="match"
@@ -220,10 +194,13 @@ box.className="match"
 let teamA=match.team_a||"TBD"
 let teamB=match.team_b||"TBD"
 
-let votesA=countVotes(votes,match.id,teamA)
-let votesB=countVotes(votes,match.id,teamB)
+let votesA=votes.filter(v=>v.match_id===match.id && v.choice===teamA).length
+let votesB=votes.filter(v=>v.match_id===match.id && v.choice===teamB).length
 
-let[pA,pB]=percent(votesA,votesB)
+let total=votesA+votesB
+
+let pA=total?Math.round(votesA/total*100):50
+let pB=total?Math.round(votesB/total*100):50
 
 let classA="team"
 let classB="team"
@@ -245,15 +222,76 @@ ${teamB} <span>${pB}%</span>
 
 `
 
-column.appendChild(box)
+return box
 
+}
+
+
+function openDuel(matchId,status){
+
+if(status!=="open"){
+alert("Match closed")
+return
+}
+
+window.location.href="/duel.html?match_id="+matchId
+
+}
+
+
+async function loadBracket(){
+
+const {data:matches}=await supabaseClient.from("matches").select("*")
+const {data:votes}=await supabaseClient.from("votes").select("*")
+
+const round16=matches.filter(m=>m.round==="round16")
+const qf=matches.filter(m=>m.round==="qf")
+const sf=matches.filter(m=>m.round==="sf")
+const final=matches.filter(m=>m.round==="final")
+
+
+document.getElementById("round16-left").innerHTML=""
+document.getElementById("round16-right").innerHTML=""
+document.getElementById("qf-left").innerHTML=""
+document.getElementById("qf-right").innerHTML=""
+document.getElementById("sf-left").innerHTML=""
+document.getElementById("sf-right").innerHTML=""
+document.getElementById("final").innerHTML=""
+
+
+round16.slice(0,4).forEach(m=>{
+document.getElementById("round16-left").appendChild(createMatch(m,votes))
 })
 
-bracket.appendChild(column)
+round16.slice(4,8).forEach(m=>{
+document.getElementById("round16-right").appendChild(createMatch(m,votes))
+})
 
+
+qf.slice(0,2).forEach(m=>{
+document.getElementById("qf-left").appendChild(createMatch(m,votes))
+})
+
+qf.slice(2,4).forEach(m=>{
+document.getElementById("qf-right").appendChild(createMatch(m,votes))
+})
+
+
+sf.slice(0,1).forEach(m=>{
+document.getElementById("sf-left").appendChild(createMatch(m,votes))
+})
+
+sf.slice(1,2).forEach(m=>{
+document.getElementById("sf-right").appendChild(createMatch(m,votes))
+})
+
+
+final.forEach(m=>{
+document.getElementById("final").appendChild(createMatch(m,votes))
 })
 
 }
+
 
 updateTimer()
 loadBracket()
