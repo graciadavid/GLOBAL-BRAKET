@@ -12,11 +12,12 @@ font-family:Arial,sans-serif;
 background:#0f172a;
 color:white;
 padding:20px;
+margin:0;
 }
 
 h1{
 text-align:center;
-margin-bottom:8px;
+margin-bottom:6px;
 }
 
 #roundLabel{
@@ -36,30 +37,21 @@ font-weight:bold;
 }
 
 
-/* BRACKET */
+/* BRACKET LAYOUT */
 
 .bracket{
-display:flex;
+display:grid;
+grid-template-columns: repeat(7, 180px);
 justify-content:center;
-align-items:center;
-gap:40px;
-}
-
-.side{
-display:flex;
 gap:30px;
 }
+
+
+/* ROUND COLUMNS */
 
 .round{
 display:flex;
 flex-direction:column;
-justify-content:center;
-gap:40px;
-}
-
-.final{
-display:flex;
-align-items:center;
 }
 
 
@@ -89,6 +81,54 @@ opacity:0.5;
 cursor:default;
 }
 
+
+/* ALIGNMENT BETWEEN ROUNDS */
+
+.qf-left{
+margin-top:70px;
+}
+
+.qf-right{
+margin-top:70px;
+}
+
+.qf-left .match{
+margin-bottom:130px;
+}
+
+.qf-right .match{
+margin-bottom:130px;
+}
+
+.sf-left{
+margin-top:160px;
+}
+
+.sf-right{
+margin-top:160px;
+}
+
+.final{
+margin-top:240px;
+}
+
+
+/* MOBILE */
+
+@media (max-width:900px){
+
+.bracket{
+display:flex;
+flex-direction:column;
+align-items:center;
+}
+
+.round{
+margin-bottom:40px;
+}
+
+}
+
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -97,7 +137,7 @@ cursor:default;
 
 <body>
 
-<h1>Best Cities in Europpe</h1>
+<h1>Best Cities in Europe</h1>
 
 <div id="roundLabel">Loading round...</div>
 <div id="countdown">Loading...</div>
@@ -105,39 +145,19 @@ cursor:default;
 
 <div class="bracket">
 
-<!-- LEFT SIDE -->
-
-<div class="side">
-
 <div class="round" id="round16-left"></div>
 
-<div class="round" id="qf-left"></div>
+<div class="round qf-left" id="qf-left"></div>
 
-<div class="round" id="sf-left"></div>
+<div class="round sf-left" id="sf-left"></div>
 
-</div>
+<div class="round final" id="final"></div>
 
+<div class="round sf-right" id="sf-right"></div>
 
-<!-- FINAL -->
-
-<div class="final">
-
-<div class="round" id="final"></div>
-
-</div>
-
-
-<!-- RIGHT SIDE -->
-
-<div class="side">
-
-<div class="round" id="sf-right"></div>
-
-<div class="round" id="qf-right"></div>
+<div class="round qf-right" id="qf-right"></div>
 
 <div class="round" id="round16-right"></div>
-
-</div>
 
 </div>
 
@@ -184,6 +204,7 @@ await supabaseClient.rpc("advance_tournament")
 }
 
 }
+
 
 
 function createMatch(match,votes){
