@@ -2,147 +2,53 @@
 <html>
 
 <head>
+
 <meta charset="UTF-8">
-<title>Best Cities Tournament</title>
+
+<title>Best Cities in Europe</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
 
 <style>
 
 body{
-font-family:Arial;
-background:#0f172a;
+background:black;
 color:white;
-padding:20px;
+text-align:center;
+font-family:'Bebas Neue',sans-serif;
 margin:0;
 }
 
 h1{
-text-align:center;
-margin-bottom:5px;
-}
-
-#roundLabel{
-text-align:center;
-font-size:20px;
-color:#93c5fd;
-margin-bottom:6px;
-font-weight:bold;
+margin-top:20px;
+letter-spacing:2px;
 }
 
 #countdown{
-text-align:center;
-font-size:42px;
-margin-bottom:40px;
-color:#38bdf8;
-font-weight:bold;
+font-size:50px;
+margin-bottom:20px;
+}
+
+.bracket-container{
+position:relative;
+width:1600px;
+margin:auto;
+}
+
+.bracket-img{
+width:100%;
 }
 
 
-/* BRACKET */
-
-.bracket{
-display:grid;
-grid-template-columns: repeat(7, 180px);
-justify-content:center;
-gap:35px;
-align-items:start;
-}
-
-
-/* ROUNDS */
-
-.round{
-display:flex;
-flex-direction:column;
-}
-
-
-/* MATCH BOX */
-
-.match{
-background:#1e293b;
-padding:8px;
-border-radius:8px;
-width:170px;
-margin:14px 0;
-}
+/* TEAM BOX */
 
 .team{
+position:absolute;
+width:150px;
 display:flex;
 justify-content:space-between;
-padding:6px;
-cursor:pointer;
-}
-
-.team:hover{
-color:#38bdf8;
-}
-
-.closed{
-opacity:0.5;
-cursor:default;
-}
-
-
-/* ALIGNMENT */
-
-.qf-left{
-margin-top:90px;
-}
-
-.qf-right{
-margin-top:90px;
-}
-
-.qf-left .match{
-margin-bottom:160px;
-}
-
-.qf-right .match{
-margin-bottom:160px;
-}
-
-.sf-left{
-margin-top:200px;
-}
-
-.sf-right{
-margin-top:200px;
-}
-
-.final{
-margin-top:120px;
-}
-
-
-/* TROPHY */
-
-.trophy{
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:60px;
-margin-top:260px;
-}
-
-
-/* MOBILE */
-
-@media (max-width:900px){
-
-.bracket{
-display:flex;
-flex-direction:column;
-align-items:center;
-}
-
-.round{
-margin-bottom:30px;
-}
-
-.trophy{
-margin-top:20px;
-}
-
+font-size:22px;
+text-transform:uppercase;
 }
 
 </style>
@@ -153,186 +59,96 @@ margin-top:20px;
 
 <body>
 
-<h1>Best Cities in Europe</h1>
+<h1>BEST CITIES IN EUROPE</h1>
 
-<div id="roundLabel">Loading round...</div>
-<div id="countdown">Loading...</div>
+<div id="countdown">--:--</div>
+
+<div class="bracket-container">
+
+<img src="bracket.png" class="bracket-img">
 
 
-<div class="bracket">
+<!-- ROUND 8 LEFT -->
 
-<div class="round" id="round16-left"></div>
+<div class="team" id="m1a" style="top:240px; left:130px"></div>
+<div class="team" id="m1b" style="top:300px; left:130px"></div>
 
-<div class="round qf-left" id="qf-left"></div>
+<div class="team" id="m2a" style="top:420px; left:130px"></div>
+<div class="team" id="m2b" style="top:480px; left:130px"></div>
 
-<div class="round sf-left" id="sf-left"></div>
+<div class="team" id="m3a" style="top:600px; left:130px"></div>
+<div class="team" id="m3b" style="top:660px; left:130px"></div>
 
-<div class="round final" id="final"></div>
+<div class="team" id="m4a" style="top:780px; left:130px"></div>
+<div class="team" id="m4b" style="top:840px; left:130px"></div>
 
-<div class="trophy">🏆</div>
 
-<div class="round sf-right" id="sf-right"></div>
+<!-- ROUND 8 RIGHT -->
 
-<div class="round qf-right" id="qf-right"></div>
+<div class="team" id="m5a" style="top:240px; right:130px"></div>
+<div class="team" id="m5b" style="top:300px; right:130px"></div>
 
-<div class="round" id="round16-right"></div>
+<div class="team" id="m6a" style="top:420px; right:130px"></div>
+<div class="team" id="m6b" style="top:480px; right:130px"></div>
+
+<div class="team" id="m7a" style="top:600px; right:130px"></div>
+<div class="team" id="m7b" style="top:660px; right:130px"></div>
+
+<div class="team" id="m8a" style="top:780px; right:130px"></div>
+<div class="team" id="m8b" style="top:840px; right:130px"></div>
+
 
 </div>
 
 
 <script>
 
-const supabaseClient = window.supabase.createClient(
+const supabase = window.supabase.createClient(
 "https://okaprbdbtnyiutztibcs.supabase.co",
-"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9rYXByYmRidG55aXV0enRpYmNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzMDgyNjgsImV4cCI6MjA4ODg4NDI2OH0.8tfmypajrsLVbrD3-PUwkJvrM1h9aQ8UN2IP3btoNLE"
+"YOUR_ANON_KEY"
 )
 
-const ROUND_LABELS={
-round16:"ROUND OF 16",
-qf:"QUARTERFINALS",
-sf:"SEMIFINALS",
-final:"FINAL"
-}
-
-
-async function updateTimer(){
-
-const {data}=await supabaseClient.rpc("get_active_round_info")
-
-if(!data || data.length===0){
-document.getElementById("countdown").innerText="Tournament finished"
-return
-}
-
-const row=data[0]
-
-let secs=Math.max(0,row.remaining_seconds)
-
-let m=Math.floor(secs/60)
-let s=secs%60
-
-let mm=String(m).padStart(2,"0")
-let ss=String(s).padStart(2,"0")
-
-document.getElementById("roundLabel").innerText=ROUND_LABELS[row.round]
-document.getElementById("countdown").innerText=`${mm}:${ss}`
-
-if(secs===0){
-await supabaseClient.rpc("advance_tournament")
-}
-
-}
-
-
-
-function createMatch(match,votes){
-
-const box=document.createElement("div")
-box.className="match"
-
-let teamA=match.team_a||"TBD"
-let teamB=match.team_b||"TBD"
-
-let votesA=votes.filter(v=>v.match_id===match.id && v.choice===teamA).length
-let votesB=votes.filter(v=>v.match_id===match.id && v.choice===teamB).length
-
-let total=votesA+votesB
-
-let pA=total?Math.round(votesA/total*100):50
-let pB=total?Math.round(votesB/total*100):50
-
-let classA="team"
-let classB="team"
-
-if(match.status!=="open"){
-classA+=" closed"
-classB+=" closed"
-}
-
-box.innerHTML=`
-
-<div class="${classA}" onclick="openDuel('${match.id}','${match.status}')">
-${teamA} <span>${pA}%</span>
-</div>
-
-<div class="${classB}" onclick="openDuel('${match.id}','${match.status}')">
-${teamB} <span>${pB}%</span>
-</div>
-
-`
-
-return box
-
-}
-
-
-function openDuel(matchId,status){
-
-if(status!=="open"){
-alert("Match closed")
-return
-}
-
-window.location.href="/duel.html?match_id="+matchId
-
-}
 
 
 async function loadBracket(){
 
-const {data:matches}=await supabaseClient.from("matches").select("*")
-const {data:votes}=await supabaseClient.from("votes").select("*")
+const {data:matches} = await supabase
+.from("matches")
+.select("*")
+.order("position",{ascending:true})
 
-const round16=matches.filter(m=>m.round==="round16")
-const qf=matches.filter(m=>m.round==="qf")
-const sf=matches.filter(m=>m.round==="sf")
-const final=matches.filter(m=>m.round==="final")
 
-document.getElementById("round16-left").innerHTML=""
-document.getElementById("round16-right").innerHTML=""
-document.getElementById("qf-left").innerHTML=""
-document.getElementById("qf-right").innerHTML=""
-document.getElementById("sf-left").innerHTML=""
-document.getElementById("sf-right").innerHTML=""
-document.getElementById("final").innerHTML=""
+const {data:votes} = await supabase
+.from("votes")
+.select("*")
 
-round16.slice(0,4).forEach(m=>{
-document.getElementById("round16-left").appendChild(createMatch(m,votes))
-})
 
-round16.slice(4,8).forEach(m=>{
-document.getElementById("round16-right").appendChild(createMatch(m,votes))
-})
+matches.forEach((match,i)=>{
 
-qf.slice(0,2).forEach(m=>{
-document.getElementById("qf-left").appendChild(createMatch(m,votes))
-})
+let teamA = match.team_a || "TBD"
+let teamB = match.team_b || "TBD"
 
-qf.slice(2,4).forEach(m=>{
-document.getElementById("qf-right").appendChild(createMatch(m,votes))
-})
+let votesA = votes.filter(v=>v.match_id===match.id && v.choice===teamA).length
+let votesB = votes.filter(v=>v.match_id===match.id && v.choice===teamB).length
 
-sf.slice(0,1).forEach(m=>{
-document.getElementById("sf-left").appendChild(createMatch(m,votes))
-})
+let total = votesA + votesB
 
-sf.slice(1,2).forEach(m=>{
-document.getElementById("sf-right").appendChild(createMatch(m,votes))
-})
+let pA = total ? Math.round(votesA/total*100) : 50
+let pB = total ? Math.round(votesB/total*100) : 50
 
-final.forEach(m=>{
-document.getElementById("final").appendChild(createMatch(m,votes))
+document.getElementById("m"+(i+1)+"a").innerText = teamA+" "+pA+"%"
+document.getElementById("m"+(i+1)+"b").innerText = teamB+" "+pB+"%"
+
 })
 
 }
 
-updateTimer()
 loadBracket()
 
-setInterval(updateTimer,1000)
 setInterval(loadBracket,3000)
 
 </script>
 
 </body>
+
 </html>
