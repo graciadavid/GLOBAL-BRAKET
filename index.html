@@ -31,16 +31,16 @@ flex-direction:column;
 
 .match{
 background:#1e293b;
-padding:6px;
-border-radius:6px;
-width:160px;
-margin:10px 0;
+padding:8px;
+border-radius:8px;
+width:170px;
+margin:12px 0;
 }
 
 .team{
 display:flex;
 justify-content:space-between;
-padding:4px;
+padding:6px;
 cursor:pointer;
 }
 
@@ -48,10 +48,9 @@ cursor:pointer;
 color:#38bdf8;
 }
 
-.final{
-background:#38bdf8;
-color:black;
-font-weight:bold;
+.closed{
+opacity:0.6;
+cursor:default;
 }
 
 </style>
@@ -78,7 +77,6 @@ async function loadBracket(){
 const {data:matches} = await supabaseClient
 .from("matches")
 .select("*")
-.order("round",{ascending:true})
 .order("position",{ascending:true})
 
 const {data:votes} = await supabaseClient
@@ -92,31 +90,35 @@ sf:[],
 final:[]
 }
 
-matches.forEach(m=>rounds[m.round].push(m))
-
-function getVotes(match,team){
-
-let count=0
-
-votes.forEach(v=>{
-if(v.match_id===match.id && v.choice===team) count++
+matches.forEach(m=>{
+rounds[m.round].push(m)
 })
 
-return count
+function countVotes(match,team){
+
+let total=0
+
+votes.forEach(v=>{
+if(v.match_id===match.id && v.choice===team){
+total++
+}
+})
+
+return total
 
 }
 
 function percent(a,b){
 
 if(a===0 && b===0){
-return[50,50]
+return [50,50]
 }
 
-let total=a+b
+let t=a+b
 
 return[
-Math.round((a/total)*100),
-Math.round((b/total)*100)
+Math.round((a/t)*100),
+Math.round((b/t)*100)
 ]
 
 }
@@ -135,21 +137,29 @@ rounds[round].forEach(match=>{
 const box=document.createElement("div")
 box.className="match"
 
-let teamA=match.team_a||"TBD"
-let teamB=match.team_b||"TBD"
+let teamA=match.team_a || "TBD"
+let teamB=match.team_b || "TBD"
 
-let votesA=getVotes(match,teamA)
-let votesB=getVotes(match,teamB)
+let votesA=countVotes(match,teamA)
+let votesB=countVotes(match,teamB)
 
 let[pA,pB]=percent(votesA,votesB)
 
+let classA="team"
+let classB="team"
+
+if(match.status!=="open"){
+classA+=" closed"
+classB+=" closed"
+}
+
 box.innerHTML=`
 
-<div class="team" onclick="openDuel('${match.id}')">
+<div class="${classA}" onclick="openDuel('${match.id}','${match.status}')">
 ${teamA} <span>${pA}%</span>
 </div>
 
-<div class="team" onclick="openDuel('${match.id}')">
+<div class="${classB}" onclick="openDuel('${match.id}','${match.status}')">
 ${teamB} <span>${pB}%</span>
 </div>
 
@@ -165,7 +175,12 @@ bracket.appendChild(column)
 
 }
 
-function openDuel(matchId){
+function openDuel(matchId,status){
+
+if(status!=="open"){
+alert("Match closed")
+return
+}
 
 window.location.href="/duel.html?match_id="+matchId
 
