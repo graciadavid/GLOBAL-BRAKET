@@ -1,26 +1,267 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<title>Best Cities Tournament</title>
+
+<style>
+
+body{
+font-family:Arial,sans-serif;
+background:#0f172a;
+color:white;
+padding:20px;
+}
+
+h1{
+text-align:center;
+margin-bottom:8px;
+}
+
+#roundLabel{
+text-align:center;
+font-size:20px;
+color:#93c5fd;
+margin-bottom:6px;
+font-weight:bold;
+}
+
+#countdown{
+text-align:center;
+font-size:42px;
+margin-bottom:28px;
+color:#38bdf8;
+font-weight:bold;
+}
+
+.bracket{
+display:flex;
+justify-content:center;
+gap:30px;
+}
+
+.round{
+display:flex;
+flex-direction:column;
+}
+
+.match{
+background:#1e293b;
+padding:8px;
+border-radius:8px;
+width:170px;
+margin:12px 0;
+}
+
+.team{
+display:flex;
+justify-content:space-between;
+padding:6px;
+cursor:pointer;
+}
+
+.team:hover{
+color:#38bdf8;
+}
+
+.closed{
+opacity:0.5;
+cursor:default;
+}
+
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+</head>
+
+<body>
+
+<h1>Best Cities in Europe</h1>
+
+<div id="roundLabel">Loading round...</div>
+<div id="countdown">Loading...</div>
+
+<div class="bracket" id="bracket"></div>
+
+<script>
+
+const supabaseClient = window.supabase.createClient(
+"https://okaprbdbtnyiutztibcs.supabase.co",
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9rYXByYmRidG55aXV0enRpYmNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzMDgyNjgsImV4cCI6MjA4ODg4NDI2OH0.8tfmypajrsLVbrD3-PUwkJvrM1h9aQ8UN2IP3btoNLE"
+)
+
+const ROUND_LABELS={
+round16:"ROUND OF 16",
+qf:"QUARTERFINALS",
+sf:"SEMIFINALS",
+final:"FINAL"
+}
+
+let advancing=false
+
 async function updateTimer(){
 
-  const { data } = await supabaseClient.rpc("get_active_round_info")
+const {data,error}=await supabaseClient.rpc("get_active_round_info")
 
-  if(!data || data.length === 0){
-    document.getElementById("countdown").innerText="Tournament finished"
-    return
-  }
+if(error){
+console.log(error)
+return
+}
 
-  const secs = Math.max(0, data[0].remaining_seconds)
-  const round = data[0].round
+if(!data || data.length===0){
+document.getElementById("countdown").innerText="Tournament finished"
+return
+}
 
-  const m = Math.floor(secs/60)
-  const s = secs%60
+const row=data[0]
 
-  const mm = String(m).padStart(2,"0")
-  const ss = String(s).padStart(2,"0")
+let secs=Math.max(0,row.remaining_seconds)
 
-  document.getElementById("countdown").innerText=`${mm}:${ss}`
+let m=Math.floor(secs/60)
+let s=secs%60
 
-  // 👇 CLAVE: si llega a 0, forzamos avance
-  if(secs===0){
-    await supabaseClient.rpc("advance_tournament")
-  }
+let mm=String(m).padStart(2,"0")
+let ss=String(s).padStart(2,"0")
+
+document.getElementById("roundLabel").innerText=ROUND_LABELS[row.round]
+document.getElementById("countdown").innerText=`${mm}:${ss}`
+
+if(secs===0 && !advancing){
+
+advancing=true
+
+await supabaseClient.rpc("advance_tournament")
+
+setTimeout(()=>{
+advancing=false
+},3000)
 
 }
+
+}
+
+function countVotes(votes,matchId,team){
+
+let total=0
+
+votes.forEach(v=>{
+if(v.match_id===matchId && v.choice===team){
+total++
+}
+})
+
+return total
+
+}
+
+function percent(a,b){
+
+if(a===0 && b===0){
+return[50,50]
+}
+
+let total=a+b
+
+return[
+Math.round((a/total)*100),
+Math.round((b/total)*100)
+]
+
+}
+
+function openDuel(matchId,status){
+
+if(status!=="open"){
+alert("Match closed")
+return
+}
+
+window.location.href="/duel.html?match_id="+matchId
+
+}
+
+async function loadBracket(){
+
+const {data:matches}=await supabaseClient
+.from("matches")
+.select("*")
+.order("position",{ascending:true})
+
+const {data:votes}=await supabaseClient
+.from("votes")
+.select("*")
+
+const rounds={
+round16:[],
+qf:[],
+sf:[],
+final:[]
+}
+
+matches.forEach(m=>{
+rounds[m.round].push(m)
+})
+
+const bracket=document.getElementById("bracket")
+bracket.innerHTML=""
+
+Object.keys(rounds).forEach(round=>{
+
+const column=document.createElement("div")
+column.className="round"
+
+rounds[round].forEach(match=>{
+
+const box=document.createElement("div")
+box.className="match"
+
+let teamA=match.team_a||"TBD"
+let teamB=match.team_b||"TBD"
+
+let votesA=countVotes(votes,match.id,teamA)
+let votesB=countVotes(votes,match.id,teamB)
+
+let[pA,pB]=percent(votesA,votesB)
+
+let classA="team"
+let classB="team"
+
+if(match.status!=="open"){
+classA+=" closed"
+classB+=" closed"
+}
+
+box.innerHTML=`
+
+<div class="${classA}" onclick="openDuel('${match.id}','${match.status}')">
+${teamA} <span>${pA}%</span>
+</div>
+
+<div class="${classB}" onclick="openDuel('${match.id}','${match.status}')">
+${teamB} <span>${pB}%</span>
+</div>
+
+`
+
+column.appendChild(box)
+
+})
+
+bracket.appendChild(column)
+
+})
+
+}
+
+updateTimer()
+loadBracket()
+
+setInterval(updateTimer,1000)
+setInterval(loadBracket,3000)
+
+</script>
+
+</body>
+</html>
