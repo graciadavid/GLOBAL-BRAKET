@@ -84,7 +84,10 @@ const supabaseClient = window.supabase.createClient(
 )
 
 
-async function updateTimer(){
+let roundEnd = 0
+
+
+async function loadTimer(){
 
 const {data} = await supabaseClient
 .from("matches")
@@ -96,27 +99,33 @@ const {data} = await supabaseClient
 if(!data || data.length===0){
 
 document.getElementById("countdown").innerText="Tournament finished"
-
 return
+
 }
 
-const end = new Date(data[0].closes_at).getTime()
-const now = Date.now()
+roundEnd = new Date(data[0].closes_at).getTime()
 
-let diff = Math.floor((end-now)/1000)
+}
+
+
+function updateTimer(){
+
+if(roundEnd===0) return
+
+let now = Date.now()
+
+let diff = Math.floor((roundEnd-now)/1000)
 
 if(diff < 0) diff = 0
 
-const h=Math.floor(diff/3600)
-const m=Math.floor((diff%3600)/60)
-const s=diff%60
+const minutes = Math.floor(diff/60)
+const seconds = diff % 60
 
-const hh=String(h).padStart(2,"0")
-const mm=String(m).padStart(2,"0")
-const ss=String(s).padStart(2,"0")
+const mm = String(minutes).padStart(2,"0")
+const ss = String(seconds).padStart(2,"0")
 
 document.getElementById("countdown").innerText =
-`Round closes in ${hh}:${mm}:${ss}`
+`Round closes in ${mm}:${ss}`
 
 }
 
@@ -143,7 +152,6 @@ matches.forEach(m=>{
 rounds[m.round].push(m)
 })
 
-
 function countVotes(match,team){
 
 let total=0
@@ -157,7 +165,6 @@ total++
 return total
 
 }
-
 
 function percent(a,b){
 
@@ -174,9 +181,7 @@ Math.round((b/t)*100)
 
 }
 
-
 const bracket=document.getElementById("bracket")
-
 bracket.innerHTML=""
 
 Object.keys(rounds).forEach(round=>{
@@ -240,10 +245,11 @@ window.location.href="/duel.html?match_id="+matchId
 }
 
 
-updateTimer()
+loadTimer()
 loadBracket()
 
 setInterval(updateTimer,1000)
+setInterval(loadTimer,15000)
 setInterval(loadBracket,3000)
 
 </script>
