@@ -99,7 +99,10 @@ const {data} = await supabaseClient
 .limit(1)
 
 if(!data || data.length===0){
-document.getElementById("countdown").innerText="Waiting next round..."
+
+document.getElementById("countdown").innerText="Tournament finished"
+
+roundEndTime=null
 return
 }
 
@@ -119,8 +122,6 @@ let diff=Math.floor((roundEndTime-now)/1000)
 if(diff<=0){
 
 document.getElementById("countdown").innerText="Closing round..."
-
-loadTimer()
 
 return
 }
