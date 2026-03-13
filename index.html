@@ -8,7 +8,7 @@
 <style>
 
 body{
-font-family:Arial,sans-serif;
+font-family:Arial;
 background:#0f172a;
 color:white;
 padding:20px;
@@ -17,7 +17,7 @@ margin:0;
 
 h1{
 text-align:center;
-margin-bottom:6px;
+margin-bottom:5px;
 }
 
 #roundLabel{
@@ -37,17 +37,18 @@ font-weight:bold;
 }
 
 
-/* BRACKET LAYOUT */
+/* BRACKET */
 
 .bracket{
 display:grid;
 grid-template-columns: repeat(7, 180px);
 justify-content:center;
-gap:30px;
+gap:35px;
+align-items:start;
 }
 
 
-/* ROUND COLUMNS */
+/* ROUNDS */
 
 .round{
 display:flex;
@@ -62,7 +63,7 @@ background:#1e293b;
 padding:8px;
 border-radius:8px;
 width:170px;
-margin:12px 0;
+margin:14px 0;
 }
 
 .team{
@@ -82,34 +83,45 @@ cursor:default;
 }
 
 
-/* ALIGNMENT BETWEEN ROUNDS */
+/* ALIGNMENT */
 
 .qf-left{
-margin-top:70px;
+margin-top:90px;
 }
 
 .qf-right{
-margin-top:70px;
+margin-top:90px;
 }
 
 .qf-left .match{
-margin-bottom:130px;
+margin-bottom:160px;
 }
 
 .qf-right .match{
-margin-bottom:130px;
+margin-bottom:160px;
 }
 
 .sf-left{
-margin-top:160px;
+margin-top:200px;
 }
 
 .sf-right{
-margin-top:160px;
+margin-top:200px;
 }
 
 .final{
-margin-top:240px;
+margin-top:120px;
+}
+
+
+/* TROPHY */
+
+.trophy{
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:60px;
+margin-top:260px;
 }
 
 
@@ -124,7 +136,11 @@ align-items:center;
 }
 
 .round{
-margin-bottom:40px;
+margin-bottom:30px;
+}
+
+.trophy{
+margin-top:20px;
 }
 
 }
@@ -152,6 +168,8 @@ margin-bottom:40px;
 <div class="round sf-left" id="sf-left"></div>
 
 <div class="round final" id="final"></div>
+
+<div class="trophy">🏆</div>
 
 <div class="round sf-right" id="sf-right"></div>
 
@@ -270,7 +288,6 @@ const qf=matches.filter(m=>m.round==="qf")
 const sf=matches.filter(m=>m.round==="sf")
 const final=matches.filter(m=>m.round==="final")
 
-
 document.getElementById("round16-left").innerHTML=""
 document.getElementById("round16-right").innerHTML=""
 document.getElementById("qf-left").innerHTML=""
@@ -278,7 +295,6 @@ document.getElementById("qf-right").innerHTML=""
 document.getElementById("sf-left").innerHTML=""
 document.getElementById("sf-right").innerHTML=""
 document.getElementById("final").innerHTML=""
-
 
 round16.slice(0,4).forEach(m=>{
 document.getElementById("round16-left").appendChild(createMatch(m,votes))
@@ -288,7 +304,6 @@ round16.slice(4,8).forEach(m=>{
 document.getElementById("round16-right").appendChild(createMatch(m,votes))
 })
 
-
 qf.slice(0,2).forEach(m=>{
 document.getElementById("qf-left").appendChild(createMatch(m,votes))
 })
@@ -296,7 +311,6 @@ document.getElementById("qf-left").appendChild(createMatch(m,votes))
 qf.slice(2,4).forEach(m=>{
 document.getElementById("qf-right").appendChild(createMatch(m,votes))
 })
-
 
 sf.slice(0,1).forEach(m=>{
 document.getElementById("sf-left").appendChild(createMatch(m,votes))
@@ -306,13 +320,11 @@ sf.slice(1,2).forEach(m=>{
 document.getElementById("sf-right").appendChild(createMatch(m,votes))
 })
 
-
 final.forEach(m=>{
 document.getElementById("final").appendChild(createMatch(m,votes))
 })
 
 }
-
 
 updateTimer()
 loadBracket()
