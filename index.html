@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 <meta charset="UTF-8">
 <title>Best Cities Tournament</title>
@@ -15,7 +16,14 @@ padding:20px;
 
 h1{
 text-align:center;
-margin-bottom:30px;
+margin-bottom:10px;
+}
+
+#countdown{
+text-align:center;
+font-size:28px;
+margin-bottom:25px;
+color:#38bdf8;
 }
 
 .bracket{
@@ -49,7 +57,7 @@ color:#38bdf8;
 }
 
 .closed{
-opacity:0.6;
+opacity:0.5;
 cursor:default;
 }
 
@@ -59,11 +67,17 @@ cursor:default;
 
 </head>
 
+
 <body>
 
 <h1>Best Cities in Europe</h1>
 
+<div id="countdown">
+Loading timer...
+</div>
+
 <div class="bracket" id="bracket"></div>
+
 
 <script>
 
@@ -71,6 +85,51 @@ const supabaseClient = window.supabase.createClient(
 "https://okaprbdbtnyiutztibcs.supabase.co",
 "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9rYXByYmRidG55aXV0enRpYmNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzMDgyNjgsImV4cCI6MjA4ODg4NDI2OH0.8tfmypajrsLVbrD3-PUwkJvrM1h9aQ8UN2IP3btoNLE"
 )
+
+let roundEndTime=null
+
+
+async function loadTimer(){
+
+const {data} = await supabaseClient
+.from("matches")
+.select("closes_at")
+.eq("status","open")
+.order("closes_at",{ascending:true})
+.limit(1)
+
+if(!data || data.length===0){
+document.getElementById("countdown").innerText="No active round"
+return
+}
+
+roundEndTime=new Date(data[0].closes_at)
+
+}
+
+
+function updateTimer(){
+
+if(!roundEndTime) return
+
+const now=new Date()
+let diff=Math.floor((roundEndTime-now)/1000)
+
+if(diff<0) diff=0
+
+const h=Math.floor(diff/3600)
+const m=Math.floor((diff%3600)/60)
+const s=diff%60
+
+const hh=String(h).padStart(2,"0")
+const mm=String(m).padStart(2,"0")
+const ss=String(s).padStart(2,"0")
+
+document.getElementById("countdown").innerText=
+`Round closes in ${hh}:${mm}:${ss}`
+
+}
+
 
 async function loadBracket(){
 
@@ -94,6 +153,7 @@ matches.forEach(m=>{
 rounds[m.round].push(m)
 })
 
+
 function countVotes(match,team){
 
 let total=0
@@ -107,6 +167,7 @@ total++
 return total
 
 }
+
 
 function percent(a,b){
 
@@ -122,6 +183,7 @@ Math.round((b/t)*100)
 ]
 
 }
+
 
 const bracket=document.getElementById("bracket")
 
@@ -175,6 +237,7 @@ bracket.appendChild(column)
 
 }
 
+
 function openDuel(matchId,status){
 
 if(status!=="open"){
@@ -186,8 +249,11 @@ window.location.href="/duel.html?match_id="+matchId
 
 }
 
+
+loadTimer()
 loadBracket()
 
+setInterval(updateTimer,1000)
 setInterval(loadBracket,3000)
 
 </script>
