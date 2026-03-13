@@ -5,173 +5,119 @@
 <title>Vote</title>
 
 <style>
+
 body{
-  font-family:Arial;
-  background:#0f172a;
-  color:white;
-  text-align:center;
-  padding:60px;
+font-family:Arial;
+background:#0f172a;
+color:white;
+text-align:center;
+padding:40px;
+}
+
+.team{
+background:#1e293b;
+padding:20px;
+margin:20px;
+border-radius:10px;
+cursor:pointer;
+font-size:20px;
+}
+
+.team:hover{
+background:#38bdf8;
+color:black;
 }
 
 button{
-  padding:18px 36px;
-  font-size:18px;
-  margin:20px;
-  cursor:pointer;
-  border-radius:8px;
-  border:none;
-  background:#38bdf8;
-  color:black;
-  font-weight:bold;
+margin-top:30px;
+padding:10px 20px;
 }
 
-button:hover{
-  background:#0ea5e9;
-}
-
-.back{
-  background:#1e293b;
-  color:white;
-}
-
-.back:hover{
-  background:#334155;
-}
-
-.status{
-  margin-bottom:25px;
-  color:#93c5fd;
-  font-weight:bold;
-}
 </style>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 </head>
 
 <body>
 
 <h1>Vote</h1>
-<div class="status" id="duelStatus">Loading...</div>
 
-<h2 id="teamA">Loading...</h2>
-<button id="voteA">Vote</button>
+<div id="teams"></div>
 
-<h2 id="teamB">Loading...</h2>
-<button id="voteB">Vote</button>
-
-<br><br>
-<button class="back" onclick="goBack()">Back to Bracket</button>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<button onclick="goBack()">Back to bracket</button>
 
 <script>
+
 const supabaseClient = window.supabase.createClient(
-  "https://okaprbdbtnyiutztibcs.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9rYXByYmRidG55aXV0enRpYmNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzMDgyNjgsImV4cCI6MjA4ODg4NDI2OH0.8tfmypajrsLVbrD3-PUwkJvrM1h9aQ8UN2IP3btoNLE"
+"https://okaprbdbtnyiutztibcs.supabase.co",
+"TU_ANON_KEY"
 )
 
 const params = new URLSearchParams(window.location.search)
-const match = params.get("match")
-const round = params.get("round")
+const matchId = params.get("match_id")
 
-const fixedTeams = {
-  "madrid-barcelona":["Madrid","Barcelona"],
-  "paris-rome":["Paris","Rome"],
-  "london-berlin":["London","Berlin"],
-  "lisbon-amsterdam":["Lisbon","Amsterdam"],
-  "prague-vienna":["Prague","Vienna"],
-  "budapest-dublin":["Budapest","Dublin"],
-  "copenhagen-florence":["Copenhagen","Florence"],
-  "seville-milan":["Seville","Milan"]
+async function loadMatch(){
+
+const {data} = await supabaseClient
+.from("matches")
+.select("*")
+.eq("id",matchId)
+.single()
+
+if(!data){
+
+document.body.innerHTML="Match not found"
+return
+
 }
 
-function getCutoffTime(){
-  const cutoff = new Date()
-  cutoff.setHours(19, 5, 0, 0)
-  return cutoff
+if(data.status!=="open"){
+
+document.body.innerHTML="Match closed"
+return
+
 }
 
-function isRound16Closed(){
-  return new Date() >= getCutoffTime()
+const teamsDiv=document.getElementById("teams")
+
+teamsDiv.innerHTML=`
+
+<div class="team" onclick="vote('${data.team_a}')">
+${data.team_a}
+</div>
+
+<div class="team" onclick="vote('${data.team_b}')">
+${data.team_b}
+</div>
+
+`
+
+}
+
+async function vote(team){
+
+await supabaseClient
+.from("votes")
+.insert({
+match_id:matchId,
+choice:team
+})
+
+alert("Vote registered")
+
+window.location.href="/"
+
 }
 
 function goBack(){
-  window.location.href="/index.html"
+
+window.location.href="/"
+
 }
 
-function getTeamsFromMatch(matchSlug){
-  if(fixedTeams[matchSlug]) return fixedTeams[matchSlug]
+loadMatch()
 
-  const parts = matchSlug.split("-")
-  return [
-    parts[0].charAt(0).toUpperCase() + parts[0].slice(1),
-    parts[1].charAt(0).toUpperCase() + parts[1].slice(1)
-  ]
-}
-
-function updateStatus(){
-  const status = document.getElementById("duelStatus")
-
-  if(round === "round16"){
-    if(isRound16Closed()){
-      status.innerText = "Round of 16 is closed. Voting is disabled."
-      document.getElementById("voteA").disabled = true
-      document.getElementById("voteB").disabled = true
-    } else {
-      status.innerText = "Round of 16 voting is open until 19:05."
-      document.getElementById("voteA").disabled = false
-      document.getElementById("voteB").disabled = false
-    }
-  }
-
-  if(round === "quarterfinals"){
-    if(isRound16Closed()){
-      status.innerText = "Quarterfinal voting is open."
-      document.getElementById("voteA").disabled = false
-      document.getElementById("voteB").disabled = false
-    } else {
-      status.innerText = "Quarterfinals are locked until 19:05."
-      document.getElementById("voteA").disabled = true
-      document.getElementById("voteB").disabled = true
-    }
-  }
-}
-
-const teams = getTeamsFromMatch(match)
-const teamA = teams[0]
-const teamB = teams[1]
-
-document.getElementById("teamA").innerText = teamA
-document.getElementById("teamB").innerText = teamB
-
-document.getElementById("voteA").addEventListener("click", () => vote(teamA))
-document.getElementById("voteB").addEventListener("click", () => vote(teamB))
-
-async function vote(team){
-  if(round === "round16" && isRound16Closed()){
-    alert("Round of 16 is closed.")
-    return
-  }
-
-  if(round === "quarterfinals" && !isRound16Closed()){
-    alert("Quarterfinals are not open yet.")
-    return
-  }
-
-  const { error } = await supabaseClient
-    .from("votes")
-    .insert({
-      match: match.toLowerCase(),
-      choice: team.toLowerCase()
-    })
-
-  if(error){
-    alert("Error saving vote")
-  } else {
-    window.location.href="/index.html"
-  }
-}
-
-updateStatus()
-setInterval(updateStatus, 1000)
 </script>
 
 </body>
