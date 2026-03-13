@@ -99,7 +99,7 @@ const {data} = await supabaseClient
 .limit(1)
 
 if(!data || data.length===0){
-document.getElementById("countdown").innerText="No active round"
+document.getElementById("countdown").innerText="Waiting next round..."
 return
 }
 
@@ -113,9 +113,17 @@ function updateTimer(){
 if(!roundEndTime) return
 
 const now=new Date()
+
 let diff=Math.floor((roundEndTime-now)/1000)
 
-if(diff<0) diff=0
+if(diff<=0){
+
+document.getElementById("countdown").innerText="Closing round..."
+
+loadTimer()
+
+return
+}
 
 const h=Math.floor(diff/3600)
 const m=Math.floor((diff%3600)/60)
@@ -254,6 +262,7 @@ loadTimer()
 loadBracket()
 
 setInterval(updateTimer,1000)
+setInterval(loadTimer,10000)
 setInterval(loadBracket,3000)
 
 </script>
