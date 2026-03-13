@@ -20,7 +20,7 @@ padding:20px;
 margin:20px;
 border-radius:10px;
 cursor:pointer;
-font-size:20px;
+font-size:22px;
 }
 
 .team:hover{
@@ -43,7 +43,7 @@ padding:10px 20px;
 
 <h1>Vote</h1>
 
-<div id="teams"></div>
+<div id="teams">Loading...</div>
 
 <button onclick="goBack()">Back to bracket</button>
 
@@ -51,7 +51,7 @@ padding:10px 20px;
 
 const supabaseClient = window.supabase.createClient(
 "https://okaprbdbtnyiutztibcs.supabase.co",
-"TU_ANON_KEY"
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9rYXByYmRidG55aXV0enRpYmNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzMDgyNjgsImV4cCI6MjA4ODg4NDI2OH0.8tfmypajrsLVbrD3-PUwkJvrM1h9aQ8UN2IP3btoNLE"
 )
 
 const params = new URLSearchParams(window.location.search)
@@ -59,24 +59,25 @@ const matchId = params.get("match_id")
 
 async function loadMatch(){
 
-const {data} = await supabaseClient
+if(!matchId){
+document.getElementById("teams").innerHTML="Match not found"
+return
+}
+
+const {data,error} = await supabaseClient
 .from("matches")
 .select("*")
 .eq("id",matchId)
 .single()
 
-if(!data){
-
-document.body.innerHTML="Match not found"
+if(error || !data){
+document.getElementById("teams").innerHTML="Match not found"
 return
-
 }
 
 if(data.status!=="open"){
-
-document.body.innerHTML="Match closed"
+document.getElementById("teams").innerHTML="Match closed"
 return
-
 }
 
 const teamsDiv=document.getElementById("teams")
@@ -111,9 +112,7 @@ window.location.href="/"
 }
 
 function goBack(){
-
 window.location.href="/"
-
 }
 
 loadMatch()
