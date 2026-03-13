@@ -21,9 +21,10 @@ margin-bottom:10px;
 
 #countdown{
 text-align:center;
-font-size:28px;
+font-size:32px;
 margin-bottom:25px;
 color:#38bdf8;
+font-weight:bold;
 }
 
 .bracket{
@@ -93,19 +94,18 @@ const {data} = await supabaseClient
 .limit(1)
 
 if(!data || data.length===0){
+
 document.getElementById("countdown").innerText="Tournament finished"
+
 return
 }
 
-const end=new Date(data[0].closes_at)
-const now=new Date()
+const end = new Date(data[0].closes_at).getTime()
+const now = Date.now()
 
-let diff=Math.floor((end-now)/1000)
+let diff = Math.floor((end-now)/1000)
 
-if(diff<=0){
-document.getElementById("countdown").innerText="Closing round..."
-return
-}
+if(diff < 0) diff = 0
 
 const h=Math.floor(diff/3600)
 const m=Math.floor((diff%3600)/60)
@@ -115,11 +115,10 @@ const hh=String(h).padStart(2,"0")
 const mm=String(m).padStart(2,"0")
 const ss=String(s).padStart(2,"0")
 
-document.getElementById("countdown").innerText=
+document.getElementById("countdown").innerText =
 `Round closes in ${hh}:${mm}:${ss}`
 
 }
-
 
 
 async function loadBracket(){
@@ -177,6 +176,7 @@ Math.round((b/t)*100)
 
 
 const bracket=document.getElementById("bracket")
+
 bracket.innerHTML=""
 
 Object.keys(rounds).forEach(round=>{
@@ -228,7 +228,6 @@ bracket.appendChild(column)
 }
 
 
-
 function openDuel(matchId,status){
 
 if(status!=="open"){
@@ -239,7 +238,6 @@ return
 window.location.href="/duel.html?match_id="+matchId
 
 }
-
 
 
 updateTimer()
