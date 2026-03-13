@@ -67,17 +67,13 @@ cursor:default;
 
 </head>
 
-
 <body>
 
 <h1>Best Cities in Europe</h1>
 
-<div id="countdown">
-Loading timer...
-</div>
+<div id="countdown">Loading...</div>
 
 <div class="bracket" id="bracket"></div>
-
 
 <script>
 
@@ -86,10 +82,8 @@ const supabaseClient = window.supabase.createClient(
 "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9rYXByYmRidG55aXV0enRpYmNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzMDgyNjgsImV4cCI6MjA4ODg4NDI2OH0.8tfmypajrsLVbrD3-PUwkJvrM1h9aQ8UN2IP3btoNLE"
 )
 
-let roundEndTime=null
 
-
-async function loadTimer(){
+async function updateTimer(){
 
 const {data} = await supabaseClient
 .from("matches")
@@ -99,30 +93,17 @@ const {data} = await supabaseClient
 .limit(1)
 
 if(!data || data.length===0){
-
 document.getElementById("countdown").innerText="Tournament finished"
-
-roundEndTime=null
 return
 }
 
-roundEndTime=new Date(data[0].closes_at)
-
-}
-
-
-function updateTimer(){
-
-if(!roundEndTime) return
-
+const end=new Date(data[0].closes_at)
 const now=new Date()
 
-let diff=Math.floor((roundEndTime-now)/1000)
+let diff=Math.floor((end-now)/1000)
 
 if(diff<=0){
-
 document.getElementById("countdown").innerText="Closing round..."
-
 return
 }
 
@@ -138,6 +119,7 @@ document.getElementById("countdown").innerText=
 `Round closes in ${hh}:${mm}:${ss}`
 
 }
+
 
 
 async function loadBracket(){
@@ -195,7 +177,6 @@ Math.round((b/t)*100)
 
 
 const bracket=document.getElementById("bracket")
-
 bracket.innerHTML=""
 
 Object.keys(rounds).forEach(round=>{
@@ -247,6 +228,7 @@ bracket.appendChild(column)
 }
 
 
+
 function openDuel(matchId,status){
 
 if(status!=="open"){
@@ -259,11 +241,11 @@ window.location.href="/duel.html?match_id="+matchId
 }
 
 
-loadTimer()
+
+updateTimer()
 loadBracket()
 
 setInterval(updateTimer,1000)
-setInterval(loadTimer,10000)
 setInterval(loadBracket,3000)
 
 </script>
