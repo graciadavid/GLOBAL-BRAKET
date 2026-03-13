@@ -5,7 +5,7 @@
 
 <meta charset="UTF-8">
 
-<title>Best Cities in Europe</title>
+<title>BEST CITIES IN EUROPE</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
 
@@ -14,18 +14,19 @@
 body{
 background:black;
 color:white;
-text-align:center;
 font-family:'Bebas Neue',sans-serif;
+text-align:center;
 margin:0;
 }
 
 h1{
 margin-top:20px;
+font-size:70px;
 letter-spacing:2px;
 }
 
 #countdown{
-font-size:50px;
+font-size:40px;
 margin-bottom:20px;
 }
 
@@ -39,16 +40,20 @@ margin:auto;
 width:100%;
 }
 
-
-/* TEAM BOX */
+/* TEAM TEXT */
 
 .team{
 position:absolute;
-width:150px;
+width:180px;
 display:flex;
 justify-content:space-between;
-font-size:22px;
+font-size:26px;
 text-transform:uppercase;
+cursor:pointer;
+}
+
+.team:hover{
+color:#00eaff;
 }
 
 </style>
@@ -65,37 +70,37 @@ text-transform:uppercase;
 
 <div class="bracket-container">
 
-<img src="bracket.png" class="bracket-img">
+<img src="/bracket.png" class="bracket-img">
 
 
-<!-- ROUND 8 LEFT -->
+<!-- ROUND LEFT -->
 
-<div class="team" id="m1a" style="top:240px; left:130px"></div>
-<div class="team" id="m1b" style="top:300px; left:130px"></div>
+<div class="team" id="m1a" style="top:250px; left:140px"></div>
+<div class="team" id="m1b" style="top:310px; left:140px"></div>
 
-<div class="team" id="m2a" style="top:420px; left:130px"></div>
-<div class="team" id="m2b" style="top:480px; left:130px"></div>
+<div class="team" id="m2a" style="top:420px; left:140px"></div>
+<div class="team" id="m2b" style="top:480px; left:140px"></div>
 
-<div class="team" id="m3a" style="top:600px; left:130px"></div>
-<div class="team" id="m3b" style="top:660px; left:130px"></div>
+<div class="team" id="m3a" style="top:590px; left:140px"></div>
+<div class="team" id="m3b" style="top:650px; left:140px"></div>
 
-<div class="team" id="m4a" style="top:780px; left:130px"></div>
-<div class="team" id="m4b" style="top:840px; left:130px"></div>
+<div class="team" id="m4a" style="top:760px; left:140px"></div>
+<div class="team" id="m4b" style="top:820px; left:140px"></div>
 
 
-<!-- ROUND 8 RIGHT -->
+<!-- ROUND RIGHT -->
 
-<div class="team" id="m5a" style="top:240px; right:130px"></div>
-<div class="team" id="m5b" style="top:300px; right:130px"></div>
+<div class="team" id="m5a" style="top:250px; right:140px"></div>
+<div class="team" id="m5b" style="top:310px; right:140px"></div>
 
-<div class="team" id="m6a" style="top:420px; right:130px"></div>
-<div class="team" id="m6b" style="top:480px; right:130px"></div>
+<div class="team" id="m6a" style="top:420px; right:140px"></div>
+<div class="team" id="m6b" style="top:480px; right:140px"></div>
 
-<div class="team" id="m7a" style="top:600px; right:130px"></div>
-<div class="team" id="m7b" style="top:660px; right:130px"></div>
+<div class="team" id="m7a" style="top:590px; right:140px"></div>
+<div class="team" id="m7b" style="top:650px; right:140px"></div>
 
-<div class="team" id="m8a" style="top:780px; right:130px"></div>
-<div class="team" id="m8b" style="top:840px; right:130px"></div>
+<div class="team" id="m8a" style="top:760px; right:140px"></div>
+<div class="team" id="m8b" style="top:820px; right:140px"></div>
 
 
 </div>
@@ -105,43 +110,47 @@ text-transform:uppercase;
 
 const supabase = window.supabase.createClient(
 "https://okaprbdbtnyiutztibcs.supabase.co",
-"YOUR_ANON_KEY"
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9rYXByYmRidG55aXV0enRpYmNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzMDgyNjgsImV4cCI6MjA4ODg4NDI2OH0.8tfmypajrsLVbrD3-PUwkJvrM1h9aQ8UN2IP3btoNLE"
 )
-
 
 
 async function loadBracket(){
 
-const {data:matches} = await supabase
+const {data:matches}=await supabase
 .from("matches")
 .select("*")
-.order("position",{ascending:true})
+.order("position")
 
-
-const {data:votes} = await supabase
+const {data:votes}=await supabase
 .from("votes")
 .select("*")
 
 
 matches.forEach((match,i)=>{
 
-let teamA = match.team_a || "TBD"
-let teamB = match.team_b || "TBD"
+let teamA=match.team_a||"TBD"
+let teamB=match.team_b||"TBD"
 
-let votesA = votes.filter(v=>v.match_id===match.id && v.choice===teamA).length
-let votesB = votes.filter(v=>v.match_id===match.id && v.choice===teamB).length
+let votesA=votes.filter(v=>v.match_id===match.id && v.choice===teamA).length
+let votesB=votes.filter(v=>v.match_id===match.id && v.choice===teamB).length
 
-let total = votesA + votesB
+let total=votesA+votesB
 
-let pA = total ? Math.round(votesA/total*100) : 50
-let pB = total ? Math.round(votesB/total*100) : 50
+let pA=total?Math.round(votesA/total*100):50
+let pB=total?Math.round(votesB/total*100):50
 
-document.getElementById("m"+(i+1)+"a").innerText = teamA+" "+pA+"%"
-document.getElementById("m"+(i+1)+"b").innerText = teamB+" "+pB+"%"
+document.getElementById("m"+(i+1)+"a").innerText=teamA+" "+pA+"%"
+document.getElementById("m"+(i+1)+"b").innerText=teamB+" "+pB+"%"
 
 })
 
 }
+
+
+function openMatch(matchId){
+window.location.href="/duel.html?match="+matchId
+}
+
 
 loadBracket()
 
@@ -150,5 +159,4 @@ setInterval(loadBracket,3000)
 </script>
 
 </body>
-
 </html>
